@@ -23,6 +23,7 @@ class Members extends Component
         'role' => 'user',
         'group_id' => null,
         'active' => true,
+        'password' => '',
     ];
 
     protected $paginationTheme = 'bootstrap'; // możesz zmienić na 'tailwind' lub custom
@@ -45,6 +46,7 @@ class Members extends Component
             'role' => 'user',
             'group_id' => null,
             'active' => true,
+            'password' => '',
         ];
         $this->showModal = true;
     }
@@ -59,27 +61,49 @@ class Members extends Component
             'role' => $user->role,
             'group_id' => $user->group_id,
             'active' => $user->active,
+            'password' => '',
         ];
         $this->showModal = true;
     }
 
     public function saveUser()
     {
-        $this->validate([
+        $rules = [
             'editingUser.name' => 'required|string|max:255',
             'editingUser.email' => 'required|email|unique:users,email,' . ($this->editingUser['id'] ?? 'NULL'),
             'editingUser.role' => 'required|string|in:user,admin,instructor',
             'editingUser.group_id' => 'nullable|exists:groups,id',
             'editingUser.active' => 'required|boolean',
-        ]);
+        ];
+
+        // Hasło wymagane tylko przy tworzeniu nowego użytkownika
+        if (!$this->editingUser['id']) {
+            $rules['editingUser.password'] = 'required|string|min:8';
+        } else {
+            // Przy edycji hasło jest opcjonalne
+            $rules['editingUser.password'] = 'nullable|string|min:8';
+        }
+
+        $this->validate($rules);
 
         if ($this->editingUser['id']) {
             $user = User::find($this->editingUser['id']);
-            $user->update($this->editingUser);
+            $data = $this->editingUser;
+            
+            // Jeśli hasło jest puste przy edycji, usuń je z danych
+            if (empty($data['password'])) {
+                unset($data['password']);
+            } else {
+                $data['password'] = bcrypt($data['password']);
+            }
+            
+            $user->update($data);
             $msg = 'Zaktualizowano dane użytkownika!';
             $type = 'success';
         } else {
-            User::create($this->editingUser);
+            $data = $this->editingUser;
+            $data['password'] = bcrypt($data['password']);
+            User::create($data);
             $msg = 'Dodano użytkownika!';
             $type = 'success';
         }
@@ -93,6 +117,7 @@ class Members extends Component
             'role' => 'user',
             'group_id' => null,
             'active' => true,
+            'password' => '',
         ];
     }
 
@@ -106,6 +131,7 @@ class Members extends Component
             'role' => 'user',
             'group_id' => null,
             'active' => true,
+            'password' => '',
         ];
         $this->resetValidation();
     }

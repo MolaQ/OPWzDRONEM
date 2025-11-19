@@ -155,6 +155,22 @@
                             @error('editingUser.group_id')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>
 
+                        <!-- Hasło -->
+                        <div class="md:col-span-2">
+                            <label for="password" class="block mb-2 text-sm font-semibold text-neutral-300">
+                                Hasło @if(!$editingUser['id'])<span class="text-red-500">*</span>@endif
+                                @if($editingUser['id'])<span class="text-neutral-500 text-xs">(pozostaw puste, aby nie zmieniać)</span>@endif
+                            </label>
+                            <input 
+                                id="password" 
+                                type="password" 
+                                wire:model.defer="editingUser.password"
+                                placeholder="{{ $editingUser['id'] ? 'Pozostaw puste, aby nie zmieniać hasła' : 'Minimum 8 znaków' }}"
+                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition" 
+                            />
+                            @error('editingUser.password')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
+                        </div>
+
                         <!-- Status konta -->
                         <div class="md:col-span-2">
                             <label class="block mb-2 text-sm font-semibold text-neutral-300">
