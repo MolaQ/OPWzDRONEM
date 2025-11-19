@@ -16,10 +16,12 @@
                     <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
 
 
-                {{-- Przycisk Użytkownicy widoczny dla admina i instruktora --}}
+                {{-- Przyciski widoczne dla admina i instruktora --}}
 @if(auth()->check() && in_array(auth()->user()->role, ['admin', 'instructor']))
 
 <flux:navlist.item icon="users" :href="route('admin.members')" :current="request()->routeIs('admin.members')" wire:navigate>{{ __('Members') }}</flux:navlist.item>
+
+<flux:navlist.item icon="user-group" :href="route('admin.groups')" :current="request()->routeIs('admin.groups')" wire:navigate>{{ __('Groups') }}</flux:navlist.item>
 
 
 @endif

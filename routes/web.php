@@ -10,6 +10,7 @@ use Laravel\Fortify\Features;
 use App\Http\Middleware\AdminMiddleware;
 
 use App\Livewire\Admin\Members;
+use App\Livewire\Admin\Groups;
 
 app('router')->aliasMiddleware('admin', AdminMiddleware::class);
 
@@ -20,6 +21,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
     Route::get('/admin/members', Members::class)->name('admin.members');
+    Route::get('/admin/groups', Groups::class)->name('admin.groups');
 
 });
 
