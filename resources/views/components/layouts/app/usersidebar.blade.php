@@ -6,42 +6,31 @@
 <body class="min-h-screen bg-white dark:bg-[#000000] flex flex-col">
 
     <!-- Top Banner - Full Width -->
-    <header class="bg-gradient-to-r from-[#106c21] via-[#112b50] to-[#2f76aa] text-white py-8 shadow-2xl">
+    <header class="bg-gradient-to-r from-[#106c21] via-[#112b50] to-[#2f76aa] text-white py-4 shadow-2xl">
         <div class="container mx-auto px-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-5xl font-bold tracking-tight">{{ config('app.name', 'OPW z Dronem') }}</h1>
-                    <p class="mt-2 text-lg text-neutral-200">Zespół Szkół Technicznych w Pile</p>
+            <div class="flex items-center justify-between gap-4">
+                <!-- Left Logo -->
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-white rounded-lg shadow-xl overflow-hidden">
+                        <img src="{{ asset('img/powiat.png') }}" alt="Logo Left" class="w-full h-full object-cover" onerror="this.src='{{ asset('img/powiat.svg') }}'">
+                    </div>
                 </div>
 
-                @auth
-                <div class="hidden lg:flex items-center gap-4">
-                    <span class="text-sm">{{ auth()->user()->name }}</span>
-                    <flux:dropdown position="bottom" align="end">
-                        <flux:profile
-                            :initials="auth()->user()->initials()"
-                            icon-trailing="chevron-down"
-                        />
-                        <flux:menu class="w-[220px]">
-                            <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Ustawienia') }}</flux:menu.item>
-                            @if(in_array(auth()->user()->role, ['admin', 'instructor']))
-                            <flux:menu.item :href="route('admin.dashboard')" icon="shield-check" wire:navigate>{{ __('Panel Admin') }}</flux:menu.item>
-                            @endif
-                            <flux:menu.separator />
-                            <form method="POST" action="{{ route('logout') }}" class="w-full">
-                                @csrf
-                                <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                                    {{ __('Wyloguj') }}
-                                </flux:menu.item>
-                            </form>
-                        </flux:menu>
-                    </flux:dropdown>
+                <!-- Center Title -->
+                <div class="flex-1 text-center px-4">
+                    <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight">{{ config('app.name', 'OPW z Dronem') }}</h1>
+                    <p class="mt-1 text-sm md:text-base lg:text-lg text-neutral-200">Platforma edukacyjna operatorów dronów</p>
                 </div>
-                @else
-                <a href="{{ route('login') }}" class="hidden lg:block bg-white text-[#106c21] px-6 py-2 rounded-lg font-semibold hover:bg-neutral-100 transition shadow-lg">
-                    Zaloguj się
-                </a>
-                @endauth
+
+                <!-- Right Logos -->
+                <div class="flex-shrink-0 flex gap-2 md:gap-4">
+                    <div class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-white rounded-lg shadow-xl overflow-hidden">
+                        <img src="{{ asset('img/opw.png') }}" alt="Logo Right 1" class="w-full h-full object-cover" onerror="this.src='{{ asset('img/wcr.svg') }}'">
+                    </div>
+                    <div class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-white rounded-lg shadow-xl overflow-hidden">
+                        <img src="{{ asset('img/zst.png') }}" alt="Logo Right 2" class="w-full h-full object-cover" onerror="this.src='{{ asset('img/zst.svg') }}'">
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -49,8 +38,8 @@
     <!-- Main Content Area -->
     <div class="flex-1 flex">
         <!-- Left Sidebar -->
-        <aside class="hidden lg:block w-64 bg-[#112b50] text-white border-r border-[#2f76aa]">
-            <nav class="p-6 space-y-2">
+        <aside class="hidden lg:flex lg:flex-col w-64 bg-[#112b50] text-white border-r border-[#2f76aa]">
+            <nav class="flex-1 flex flex-col p-6 space-y-2 overflow-y-auto">
                 <a href="{{ route('home') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg {{ request()->routeIs('home') ? 'bg-[#2f76aa] text-white' : 'text-neutral-300 hover:bg-[#2f76aa]/50 hover:text-white' }} transition-all duration-200">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
@@ -87,6 +76,46 @@
                         </svg>
                         <span class="font-medium">Forum</span>
                     </a>
+                </div>
+
+                <!-- User Menu at Bottom -->
+                <div class="mt-auto pt-6 border-t border-[#2f76aa]">
+                    @auth
+                    <flux:dropdown position="top" align="start">
+                        <div class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#2f76aa]/30 hover:bg-[#2f76aa]/50 cursor-pointer transition-all">
+                            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#106c21] text-white font-semibold">
+                                {{ auth()->user()->initials() }}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
+                                <p class="text-xs text-neutral-300 truncate">{{ auth()->user()->email }}</p>
+                            </div>
+                            <svg class="w-4 h-4 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                        <flux:menu class="w-[220px]">
+                            <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Ustawienia') }}</flux:menu.item>
+                            @if(in_array(auth()->user()->role, ['admin', 'instructor']))
+                            <flux:menu.item :href="route('admin.dashboard')" icon="shield-check" wire:navigate>{{ __('Panel Admin') }}</flux:menu.item>
+                            @endif
+                            <flux:menu.separator />
+                            <form method="POST" action="{{ route('logout') }}" class="w-full">
+                                @csrf
+                                <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
+                                    {{ __('Wyloguj') }}
+                                </flux:menu.item>
+                            </form>
+                        </flux:menu>
+                    </flux:dropdown>
+                    @else
+                    <a href="{{ route('login') }}" class="block w-full bg-[#106c21] hover:bg-[#2f76aa] text-white text-center font-semibold px-4 py-3 rounded-lg transition shadow-lg">
+                        <svg class="w-5 h-5 inline-block mr-2 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                        </svg>
+                        Zaloguj się
+                    </a>
+                    @endauth
                 </div>
             </nav>
         </aside>
