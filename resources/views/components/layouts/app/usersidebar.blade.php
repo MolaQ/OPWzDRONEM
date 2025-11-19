@@ -11,7 +11,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-5xl font-bold tracking-tight">{{ config('app.name', 'OPW z Dronem') }}</h1>
-                    <p class="mt-2 text-lg text-neutral-200">Platforma edukacyjna operatorów dronów</p>
+                    <p class="mt-2 text-lg text-neutral-200">Zespół Szkół Technicznych w Pile</p>
                 </div>
 
                 @auth
