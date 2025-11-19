@@ -69,7 +69,7 @@ class Groups extends Component
             $msg = 'Dodano grupę!';
         }
 
-        session()->flash('message', $msg);
+        $this->dispatch('notify', type: 'success', message: $msg);
         $this->showModal = false;
         $this->editingGroup = [
             'id' => null,
@@ -96,12 +96,12 @@ class Groups extends Component
         $group = Group::findOrFail($id);
 
         if ($group->users()->count() > 0) {
-            session()->flash('error', 'Nie można usunąć grupy, która ma przypisanych użytkowników!');
+            $this->dispatch('notify', type: 'error', message: 'Nie można usunąć grupy, która ma przypisanych użytkowników!');
             return;
         }
 
         $group->delete();
-        session()->flash('message', 'Grupa została usunięta!');
+        $this->dispatch('notify', type: 'success', message: 'Grupa została usunięta!');
     }
 
     public function render()

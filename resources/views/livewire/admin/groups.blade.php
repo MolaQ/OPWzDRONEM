@@ -1,18 +1,6 @@
 
 <div class="flex-1 overflow-auto rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-6 shadow">
 
-    @if (session()->has('message'))
-        <div class="mb-4 p-3 bg-[#880000] text-white rounded font-semibold text-center">
-            {{ session('message') }}
-        </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="mb-4 p-3 bg-red-600 text-white rounded font-semibold text-center">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <div class="mb-6 flex flex-wrap items-center gap-4 justify-between">
         <input
             type="text"

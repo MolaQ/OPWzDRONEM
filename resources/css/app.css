@@ -64,3 +64,30 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* SweetAlert2 Custom Styles */
+.colored-toast.swal2-icon-success {
+    background-color: #10b981 !important;
+}
+
+.colored-toast.swal2-icon-error {
+    background-color: #ef4444 !important;
+}
+
+.colored-toast.swal2-icon-warning {
+    background-color: #f59e0b !important;
+}
+
+.colored-toast.swal2-icon-info {
+    background-color: #3b82f6 !important;
+}
+
+.swal2-toast .swal2-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.swal2-toast .swal2-html-container {
+    font-size: 0.875rem;
+}
+

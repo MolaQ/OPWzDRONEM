@@ -12,23 +12,30 @@
             </a>
 
             <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                <flux:navlist.group :heading="__('Dashboard')" class="grid">
+                    <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>{{ __('Overview') }}</flux:navlist.item>
+                </flux:navlist.group>
 
+                {{-- Sekcja Zarządzania dla admina i instruktora --}}
+                @if(auth()->check() && in_array(auth()->user()->role, ['admin', 'instructor']))
+                <flux:navlist.group :heading="__('Management')" class="grid">
+                    <flux:navlist.item icon="users" :href="route('admin.members')" :current="request()->routeIs('admin.members')" wire:navigate>{{ __('Members') }}</flux:navlist.item>
+                    <flux:navlist.item icon="user-group" :href="route('admin.groups')" :current="request()->routeIs('admin.groups')" wire:navigate>{{ __('Groups') }}</flux:navlist.item>
+                </flux:navlist.group>
+                @endif
 
-                {{-- Przyciski widoczne dla admina i instruktora --}}
-@if(auth()->check() && in_array(auth()->user()->role, ['admin', 'instructor']))
+                {{-- Sekcja Treści --}}
+                <flux:navlist.group :heading="__('Content')" class="grid">
+                    <flux:navlist.item icon="newspaper" href="#" wire:navigate>{{ __('Posts') }}</flux:navlist.item>
+                    <flux:navlist.item icon="academic-cap" href="#" wire:navigate>{{ __('Courses') }}</flux:navlist.item>
+                    <flux:navlist.item icon="document-text" href="#" wire:navigate>{{ __('Resources') }}</flux:navlist.item>
+                </flux:navlist.group>
 
-<flux:navlist.item icon="users" :href="route('admin.members')" :current="request()->routeIs('admin.members')" wire:navigate>{{ __('Members') }}</flux:navlist.item>
-
-<flux:navlist.item icon="user-group" :href="route('admin.groups')" :current="request()->routeIs('admin.groups')" wire:navigate>{{ __('Groups') }}</flux:navlist.item>
-
-
-@endif
-
-
-
-
+                {{-- Sekcja Interakcji --}}
+                <flux:navlist.group :heading="__('Engagement')" class="grid">
+                    <flux:navlist.item icon="chat-bubble-left-right" href="#" wire:navigate>{{ __('Comments') }}</flux:navlist.item>
+                    <flux:navlist.item icon="heart" href="#" wire:navigate>{{ __('Likes') }}</flux:navlist.item>
+                    <flux:navlist.item icon="chart-bar" href="#" wire:navigate>{{ __('Analytics') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 

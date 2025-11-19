@@ -77,12 +77,14 @@ class Members extends Component
             $user = User::find($this->editingUser['id']);
             $user->update($this->editingUser);
             $msg = 'Zaktualizowano dane użytkownika!';
+            $type = 'success';
         } else {
             User::create($this->editingUser);
             $msg = 'Dodano użytkownika!';
+            $type = 'success';
         }
 
-        session()->flash('message', $msg);
+        $this->dispatch('notify', type: $type, message: $msg);
         $this->showModal = false;
         $this->editingUser = [
             'id' => null,
@@ -111,7 +113,7 @@ class Members extends Component
     public function deleteUser($id)
     {
         User::findOrFail($id)->delete();
-        session()->flash('message', 'Użytkownik został usunięty!');
+        $this->dispatch('notify', type: 'success', message: 'Użytkownik został usunięty!');
     }
 
     public function render()
