@@ -15,7 +15,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Card 2 -->
                 <div class="relative aspect-video overflow-hidden rounded-xl border-2 border-[#2f76aa] bg-gradient-to-br from-[#106c21] to-[#112b50] shadow-2xl">
                     <div class="absolute inset-0 flex items-center justify-center">
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Card 3 -->
                 <div class="relative aspect-video overflow-hidden rounded-xl border-2 border-[#4d3809] bg-gradient-to-br from-[#2f76aa] to-[#106c21] shadow-2xl">
                     <div class="absolute inset-0 flex items-center justify-center">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Large Bottom Card -->
             <div class="relative h-full flex-1 min-h-[400px] overflow-hidden rounded-xl border-2 border-[#106c21] bg-gradient-to-br from-[#112b50] via-[#2f76aa] to-[#106c21] shadow-2xl">
                 <div class="absolute inset-0 flex items-center justify-center">
@@ -52,7 +52,7 @@
                         </svg>
                         <h2 class="text-white text-3xl font-bold mb-4">Witaj na platformie OPW z Dronem</h2>
                         <p class="text-neutral-200 text-lg max-w-2xl mx-auto">
-                            Doskonalenie umiejętności operatorów dronów poprzez interaktywne materiały, 
+                            Doskonalenie umiejętności operatorów dronów poprzez interaktywne materiały,
                             ćwiczenia praktyczne i najnowsze informacje ze świata bezzałogowych statków powietrznych.
                         </p>
                         @guest
