@@ -81,51 +81,136 @@
     <div class="mt-6">{{ $users->links() }}</div>
 
     @if ($showModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-            <div class="bg-neutral-900 border border-neutral-700 rounded-xl p-8 w-full max-w-md shadow-2xl">
-                <h3 class="text-2xl font-bold mb-6 text-white">
-                    {{ $editingUser['id'] ? 'Edytuj użytkownika' : 'Dodaj użytkownika' }}
-                </h3>
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
+            <div class="bg-neutral-900 border border-neutral-700 rounded-2xl p-8 w-full max-w-2xl shadow-2xl transform transition-all">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-white">
+                        {{ $editingUser['id'] ? 'Edytuj użytkownika' : 'Dodaj nowego użytkownika' }}
+                    </h3>
+                    <button wire:click="closeModal" class="text-neutral-400 hover:text-neutral-300 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
 
-                <form wire:submit.prevent="saveUser" class="space-y-5" autocomplete="off">
-                    <div>
-                        <label for="name" class="block mb-2 font-medium text-neutral-300">Imię i nazwisko</label>
-                        <input id="name" type="text" wire:model.defer="editingUser.name"
-                               class="w-full rounded bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100" />
-                        @error('editingUser.name')<p class="mt-1 text-sm text-[#880000]">{{ $message }}</p>@enderror
+                <form wire:submit.prevent="saveUser" class="space-y-6" autocomplete="off">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Imię i nazwisko -->
+                        <div class="md:col-span-2">
+                            <label for="name" class="block mb-2 text-sm font-semibold text-neutral-300">
+                                Imię i nazwisko <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                id="name" 
+                                type="text" 
+                                wire:model.defer="editingUser.name"
+                                placeholder="Jan Kowalski"
+                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition" 
+                            />
+                            @error('editingUser.name')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
+                        </div>
+
+                        <!-- Email -->
+                        <div class="md:col-span-2">
+                            <label for="email" class="block mb-2 text-sm font-semibold text-neutral-300">
+                                Adres email <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                id="email" 
+                                type="email" 
+                                wire:model.defer="editingUser.email"
+                                placeholder="jan.kowalski@example.com"
+                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition" 
+                            />
+                            @error('editingUser.email')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
+                        </div>
+
+                        <!-- Rola -->
+                        <div>
+                            <label for="role" class="block mb-2 text-sm font-semibold text-neutral-300">
+                                Rola <span class="text-red-500">*</span>
+                            </label>
+                            <select 
+                                id="role" 
+                                wire:model.defer="editingUser.role" 
+                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
+                            >
+                                <option value="user">👤 Użytkownik</option>
+                                <option value="admin">⚡ Administrator</option>
+                                <option value="instructor">🎓 Instruktor</option>
+                            </select>
+                            @error('editingUser.role')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
+                        </div>
+
+                        <!-- Grupa -->
+                        <div>
+                            <label for="group_id" class="block mb-2 text-sm font-semibold text-neutral-300">
+                                Grupa
+                            </label>
+                            <select 
+                                id="group_id" 
+                                wire:model.defer="editingUser.group_id" 
+                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
+                            >
+                                <option value="">Brak przypisania</option>
+                                @foreach($groups as $g)
+                                    <option value="{{ $g->id }}">{{ $g->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('editingUser.group_id')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
+                        </div>
+
+                        <!-- Status konta -->
+                        <div class="md:col-span-2">
+                            <label class="block mb-2 text-sm font-semibold text-neutral-300">
+                                Status konta <span class="text-red-500">*</span>
+                            </label>
+                            <div class="flex items-center gap-4 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
+                                <label class="flex items-center gap-3 cursor-pointer flex-1">
+                                    <input 
+                                        type="radio" 
+                                        wire:model.defer="editingUser.active" 
+                                        value="1"
+                                        class="w-4 h-4 text-green-600 focus:ring-green-500 focus:ring-2"
+                                    />
+                                    <span class="flex items-center gap-2 text-sm font-medium text-neutral-300">
+                                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                        Aktywne
+                                    </span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer flex-1">
+                                    <input 
+                                        type="radio" 
+                                        wire:model.defer="editingUser.active" 
+                                        value="0"
+                                        class="w-4 h-4 text-red-600 focus:ring-red-500 focus:ring-2"
+                                    />
+                                    <span class="flex items-center gap-2 text-sm font-medium text-neutral-300">
+                                        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                        Nieaktywne
+                                    </span>
+                                </label>
+                            </div>
+                            @error('editingUser.active')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
+                        </div>
                     </div>
 
-                    <div>
-                        <label for="email" class="block mb-2 font-medium text-neutral-300">Email</label>
-                        <input id="email" type="email" wire:model.defer="editingUser.email"
-                               class="w-full rounded bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100" />
-                        @error('editingUser.email')<p class="mt-1 text-sm text-[#880000]">{{ $message }}</p>@enderror
-                    </div>
-
-                    <div>
-                        <label for="role" class="block mb-2 font-medium text-neutral-300">Rola</label>
-                        <select id="role" wire:model.defer="editingUser.role" class="w-full rounded bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100">
-                            <option value="user">Użytkownik</option>
-                            <option value="admin">Administrator</option>
-                            <option value="instructor">Instruktor</option>
-                        </select>
-                        @error('editingUser.role')<p class="mt-1 text-sm text-[#880000]">{{ $message }}</p>@enderror
-                    </div>
-
-                    <div>
-                        <label for="group_id" class="block mb-2 font-medium text-neutral-300">Grupa</label>
-                        <select id="group_id" wire:model.defer="editingUser.group_id" class="w-full rounded bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100">
-                            <option value="">Brak przypisania</option>
-                            @foreach($groups as $g)
-                                <option value="{{ $g->id }}">{{ $g->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('editingUser.group_id')<p class="mt-1 text-sm text-[#880000]">{{ $message }}</p>@enderror
-                    </div>
-
-                    <div class="flex justify-end space-x-3 mt-4">
-                        <button type="submit" class="bg-[#880000] hover:bg-red-900 text-white font-semibold px-6 py-2 rounded-lg transition">Zapisz</button>
-                        <button type="button" wire:click="closeModal" class="px-6 py-2 rounded-lg border border-neutral-700 bg-neutral-800 text-neutral-200 hover:bg-neutral-700">Anuluj</button>
+                    <!-- Przyciski akcji -->
+                    <div class="flex justify-end gap-3 pt-4 border-t border-neutral-700">
+                        <button 
+                            type="button" 
+                            wire:click="closeModal" 
+                            class="px-6 py-2.5 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-300 font-medium hover:bg-neutral-700 transition"
+                        >
+                            Anuluj
+                        </button>
+                        <button 
+                            type="submit" 
+                            class="px-6 py-2.5 rounded-lg bg-[#880000] hover:bg-red-900 text-white font-semibold shadow-lg hover:shadow-xl transition transform hover:scale-105"
+                        >
+                            {{ $editingUser['id'] ? '💾 Zapisz zmiany' : '➕ Dodaj użytkownika' }}
+                        </button>
                     </div>
                 </form>
             </div>

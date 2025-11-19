@@ -22,6 +22,7 @@ class Members extends Component
         'email' => '',
         'role' => 'user',
         'group_id' => null,
+        'active' => true,
     ];
 
     protected $paginationTheme = 'bootstrap'; // możesz zmienić na 'tailwind' lub custom
@@ -43,6 +44,7 @@ class Members extends Component
             'email' => '',
             'role' => 'user',
             'group_id' => null,
+            'active' => true,
         ];
         $this->showModal = true;
     }
@@ -56,6 +58,7 @@ class Members extends Component
             'email' => $user->email,
             'role' => $user->role,
             'group_id' => $user->group_id,
+            'active' => $user->active,
         ];
         $this->showModal = true;
     }
@@ -67,6 +70,7 @@ class Members extends Component
             'editingUser.email' => 'required|email|unique:users,email,' . ($this->editingUser['id'] ?? 'NULL'),
             'editingUser.role' => 'required|string|in:user,admin,instructor',
             'editingUser.group_id' => 'nullable|exists:groups,id',
+            'editingUser.active' => 'required|boolean',
         ]);
 
         if ($this->editingUser['id']) {
@@ -86,6 +90,7 @@ class Members extends Component
             'email' => '',
             'role' => 'user',
             'group_id' => null,
+            'active' => true,
         ];
     }
 
@@ -98,6 +103,7 @@ class Members extends Component
             'email' => '',
             'role' => 'user',
             'group_id' => null,
+            'active' => true,
         ];
         $this->resetValidation();
     }
