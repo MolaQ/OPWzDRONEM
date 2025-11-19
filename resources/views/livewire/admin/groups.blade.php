@@ -95,12 +95,12 @@
                             <label for="name" class="block mb-2 text-sm font-semibold text-neutral-300">
                                 Nazwa grupy <span class="text-red-500">*</span>
                             </label>
-                            <input 
-                                id="name" 
-                                type="text" 
+                            <input
+                                id="name"
+                                type="text"
                                 wire:model.defer="editingGroup.name"
                                 placeholder="np. Klasa IVOPW 2025/2026"
-                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition" 
+                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                             />
                             @error('editingGroup.name')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>
@@ -110,8 +110,8 @@
                             <label for="description" class="block mb-2 text-sm font-semibold text-neutral-300">
                                 Opis grupy
                             </label>
-                            <textarea 
-                                id="description" 
+                            <textarea
+                                id="description"
                                 wire:model.defer="editingGroup.description"
                                 placeholder="Opcjonalny opis grupy..."
                                 rows="3"
@@ -127,9 +127,9 @@
                             </label>
                             <div class="flex items-center gap-4 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
                                 <label class="flex items-center gap-3 cursor-pointer flex-1">
-                                    <input 
-                                        type="radio" 
-                                        wire:model.defer="editingGroup.active" 
+                                    <input
+                                        type="radio"
+                                        wire:model.defer="editingGroup.active"
                                         value="1"
                                         class="w-4 h-4 text-green-600 focus:ring-green-500 focus:ring-2"
                                     />
@@ -139,9 +139,9 @@
                                     </span>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer flex-1">
-                                    <input 
-                                        type="radio" 
-                                        wire:model.defer="editingGroup.active" 
+                                    <input
+                                        type="radio"
+                                        wire:model.defer="editingGroup.active"
                                         value="0"
                                         class="w-4 h-4 text-red-600 focus:ring-red-500 focus:ring-2"
                                     />
@@ -157,15 +157,15 @@
 
                     <!-- Przyciski akcji -->
                     <div class="flex justify-end gap-3 pt-4 border-t border-neutral-700">
-                        <button 
-                            type="button" 
-                            wire:click="closeModal" 
+                        <button
+                            type="button"
+                            wire:click="closeModal"
                             class="px-6 py-2.5 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-300 font-medium hover:bg-neutral-700 transition"
                         >
                             Anuluj
                         </button>
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             class="px-6 py-2.5 rounded-lg bg-[#880000] hover:bg-red-900 text-white font-semibold shadow-lg hover:shadow-xl transition transform hover:scale-105"
                         >
                             {{ $editingGroup['id'] ? '💾 Zapisz zmiany' : '➕ Dodaj grupę' }}

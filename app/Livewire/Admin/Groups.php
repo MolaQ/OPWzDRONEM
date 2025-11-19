@@ -94,12 +94,12 @@ class Groups extends Component
     public function deleteGroup($id)
     {
         $group = Group::findOrFail($id);
-        
+
         if ($group->users()->count() > 0) {
             session()->flash('error', 'Nie można usunąć grupy, która ma przypisanych użytkowników!');
             return;
         }
-        
+
         $group->delete();
         session()->flash('message', 'Grupa została usunięta!');
     }
