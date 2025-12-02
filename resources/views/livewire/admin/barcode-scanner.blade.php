@@ -5,7 +5,7 @@
         <div class="p-6">
             <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">Skaner kodów kreskowych</h1>
             <p class="text-neutral-600 dark:text-neutral-400 mb-6">Zeskanuj kod ucznia (S) lub sprzętu (E)</p>
-            
+
             <div class="flex gap-3">
                 <div class="flex-1">
                     <label for="barcode" class="block mb-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">
