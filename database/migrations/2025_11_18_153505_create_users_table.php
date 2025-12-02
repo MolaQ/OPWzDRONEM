@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'instructor', 'user'])->default('user');
+            $table->enum('role', ['admin', 'instructor', 'student', 'guest', 'user'])->default('student');
             $table->string('pilot_license')->nullable();
             $table->string('operator_license')->nullable();
             $table->date('license_expiry_date')->nullable();

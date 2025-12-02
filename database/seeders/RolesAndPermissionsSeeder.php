@@ -21,27 +21,27 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit posts',
             'delete posts',
             'publish posts',
-            
+
             // Comment permissions
             'view comments',
             'create comments',
             'edit comments',
             'delete comments',
             'moderate comments',
-            
+
             // User management permissions
             'view users',
             'create users',
             'edit users',
             'delete users',
             'manage user roles',
-            
+
             // Group permissions
             'view groups',
             'create groups',
             'edit groups',
             'delete groups',
-            
+
             // Admin dashboard
             'access admin panel',
             'view dashboard stats',
@@ -52,7 +52,7 @@ class RolesAndPermissionsSeeder extends Seeder
         }
 
         // Create roles and assign permissions
-        
+
         // Admin - full access
         $admin = Role::create(['name' => 'admin']);
         $admin->givePermissionTo(Permission::all());

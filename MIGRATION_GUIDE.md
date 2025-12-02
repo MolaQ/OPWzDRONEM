@@ -45,6 +45,30 @@
 
 ## Instrukcja wdrożenia
 
+### Szybka instalacja (zalecana dla nowej bazy)
+
+**Uruchom skrypt seedowania:**
+
+PowerShell:
+```powershell
+.\seed_database.ps1
+```
+
+Lub CMD:
+```cmd
+seed_database.bat
+```
+
+Skrypt automatycznie:
+1. Zaseeduje role i uprawnienia
+2. Utworzy użytkowników, grupy, posty, reakcje i komentarze
+3. Zresetuje cache uprawnień
+4. Wyczyści cache aplikacji
+
+---
+
+### Ręczna instalacja (krok po kroku)
+
 ### Krok 1: Uruchom XAMPP
 Upewnij się, że Apache i MySQL są uruchomione.
 
@@ -59,7 +83,20 @@ To utworzy tabele: `roles`, `permissions`, `model_has_roles`, `model_has_permiss
 php artisan db:seed --class=RolesAndPermissionsSeeder
 ```
 
-### Krok 4: Migruj istniejących użytkowników (jeśli są)
+### Krok 4: Seeduj dane testowe
+```powershell
+php artisan db:seed --class=MembersSeeder
+```
+To utworzy:
+- **1 administratora**: admin@example.com / Haslo1234
+- **2 instruktorów**: jan.kowalski@example.com, anna.nowak@example.com / Haslo1234
+- **1 wychowawcę**: piotr.wisniewski@example.com / Haslo1234
+- **30 studentów** w grupie 4OPW (student1@example.com - student30@example.com / Haslo1234)
+- **20 postów** z losową treścią
+- **60 reakcji** (polubienia/niepolubienia) na posty
+- **50 komentarzy** pod postami
+
+### Krok 5: Migruj istniejących użytkowników (tylko jeśli masz starą bazę)
 ```powershell
 php artisan db:seed --class=MigrateUserRolesSeeder
 ```
@@ -68,12 +105,14 @@ Ten seeder przypisze role użytkownikom na podstawie ich obecnego pola 'role':
 - `instructor` → rola `instructor`
 - `user` → rola `student`
 
-### Krok 5: Zresetuj cache uprawnień
+**UWAGA:** Pomiń ten krok jeśli tworzysz nową bazę danych!
+
+### Krok 6: Zresetuj cache uprawnień
 ```powershell
 php artisan permission:cache-reset
 ```
 
-### Krok 6 (opcjonalnie): Przeładuj cache aplikacji
+### Krok 7 (opcjonalnie): Przeładuj cache aplikacji
 ```powershell
 php artisan config:clear
 php artisan cache:clear
@@ -146,6 +185,28 @@ public function down()
     });
 }
 ```
+
+## Dane testowe
+
+Po uruchomieniu seedera `MembersSeeder` system utworzy:
+
+### Użytkownicy:
+- **Administrator**: admin@example.com / Haslo1234 (grupa: Administracja)
+- **Instruktor 1**: jan.kowalski@example.com / Haslo1234 (grupa: Administracja)
+- **Instruktor 2**: anna.nowak@example.com / Haslo1234 (grupa: Administracja)
+- **Wychowawca**: piotr.wisniewski@example.com / Haslo1234 (grupa: 4OPW)
+- **30 Studentów**: student1@example.com - student30@example.com / Haslo1234 (grupa: 4OPW)
+
+### Grupy:
+- **Administracja** - grupa dla adminów i instruktorów
+- **4OPW** - klasa uczniów 2025/2026
+
+### Zawartość:
+- **20 postów** - losowo przypisane do autorów (admin, instruktorzy, wychowawca)
+- **60 reakcji** - losowe polubienia/niepolubienia postów przez użytkowników
+- **50 komentarzy** - losowe komentarze pod postami
+
+Wszystkie konta mają to samo hasło: **Haslo1234**
 
 ## Uwagi
 - Stare pole 'role' jest nadal w bazie danych dla bezpieczeństwa

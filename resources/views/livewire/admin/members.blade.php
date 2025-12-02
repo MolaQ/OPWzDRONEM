@@ -95,12 +95,12 @@
                             <label for="name" class="block mb-2 text-sm font-semibold text-neutral-300">
                                 Imię i nazwisko <span class="text-red-500">*</span>
                             </label>
-                            <input 
-                                id="name" 
-                                type="text" 
+                            <input
+                                id="name"
+                                type="text"
                                 wire:model.defer="editingUser.name"
                                 placeholder="Jan Kowalski"
-                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition" 
+                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                             />
                             @error('editingUser.name')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>
@@ -110,12 +110,12 @@
                             <label for="email" class="block mb-2 text-sm font-semibold text-neutral-300">
                                 Adres email <span class="text-red-500">*</span>
                             </label>
-                            <input 
-                                id="email" 
-                                type="email" 
+                            <input
+                                id="email"
+                                type="email"
                                 wire:model.defer="editingUser.email"
                                 placeholder="jan.kowalski@example.com"
-                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition" 
+                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                             />
                             @error('editingUser.email')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>
@@ -125,9 +125,9 @@
                             <label for="role" class="block mb-2 text-sm font-semibold text-neutral-300">
                                 Rola <span class="text-red-500">*</span>
                             </label>
-                            <select 
-                                id="role" 
-                                wire:model.defer="editingUser.role" 
+                            <select
+                                id="role"
+                                wire:model.defer="editingUser.role"
                                 class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                             >
                                 <option value="student">👤 Student</option>
@@ -143,9 +143,9 @@
                             <label for="group_id" class="block mb-2 text-sm font-semibold text-neutral-300">
                                 Grupa
                             </label>
-                            <select 
-                                id="group_id" 
-                                wire:model.defer="editingUser.group_id" 
+                            <select
+                                id="group_id"
+                                wire:model.defer="editingUser.group_id"
                                 class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                             >
                                 <option value="">Brak przypisania</option>
@@ -162,12 +162,12 @@
                                 Hasło @if(!$editingUser['id'])<span class="text-red-500">*</span>@endif
                                 @if($editingUser['id'])<span class="text-neutral-500 text-xs">(pozostaw puste, aby nie zmieniać)</span>@endif
                             </label>
-                            <input 
-                                id="password" 
-                                type="password" 
+                            <input
+                                id="password"
+                                type="password"
                                 wire:model.defer="editingUser.password"
                                 placeholder="{{ $editingUser['id'] ? 'Pozostaw puste, aby nie zmieniać hasła' : 'Minimum 8 znaków' }}"
-                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition" 
+                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                             />
                             @error('editingUser.password')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>
@@ -179,9 +179,9 @@
                             </label>
                             <div class="flex items-center gap-4 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
                                 <label class="flex items-center gap-3 cursor-pointer flex-1">
-                                    <input 
-                                        type="radio" 
-                                        wire:model.defer="editingUser.active" 
+                                    <input
+                                        type="radio"
+                                        wire:model.defer="editingUser.active"
                                         value="1"
                                         class="w-4 h-4 text-green-600 focus:ring-green-500 focus:ring-2"
                                     />
@@ -191,9 +191,9 @@
                                     </span>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer flex-1">
-                                    <input 
-                                        type="radio" 
-                                        wire:model.defer="editingUser.active" 
+                                    <input
+                                        type="radio"
+                                        wire:model.defer="editingUser.active"
                                         value="0"
                                         class="w-4 h-4 text-red-600 focus:ring-red-500 focus:ring-2"
                                     />
@@ -209,15 +209,15 @@
 
                     <!-- Przyciski akcji -->
                     <div class="flex justify-end gap-3 pt-4 border-t border-neutral-700">
-                        <button 
-                            type="button" 
-                            wire:click="closeModal" 
+                        <button
+                            type="button"
+                            wire:click="closeModal"
                             class="px-6 py-2.5 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-300 font-medium hover:bg-neutral-700 transition"
                         >
                             Anuluj
                         </button>
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             class="px-6 py-2.5 rounded-lg bg-[#880000] hover:bg-red-900 text-white font-semibold shadow-lg hover:shadow-xl transition transform hover:scale-105"
                         >
                             {{ $editingUser['id'] ? '💾 Zapisz zmiany' : '➕ Dodaj użytkownika' }}
