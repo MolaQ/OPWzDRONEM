@@ -14,6 +14,8 @@ class Profile extends Component
 
     public string $email = '';
 
+    public bool $canChangeName = false;
+
     /**
      * Mount the component.
      */
@@ -21,6 +23,7 @@ class Profile extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->canChangeName = in_array(Auth::user()->role, ['admin', 'instructor']);
     }
 
     /**
@@ -29,10 +32,9 @@ class Profile extends Component
     public function updateProfileInformation(): void
     {
         $user = Auth::user();
+        /** @var User $user */
 
-        $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-
+        $rules = [
             'email' => [
                 'required',
                 'string',
@@ -41,9 +43,20 @@ class Profile extends Component
                 'max:255',
                 Rule::unique(User::class)->ignore($user->id),
             ],
-        ]);
+        ];
 
-        $user->fill($validated);
+        if ($this->canChangeName) {
+            $rules['name'] = ['required', 'string', 'max:255'];
+        }
+
+        $validated = $this->validate($rules);
+
+        // Only update name if permitted
+        if ($this->canChangeName && array_key_exists('name', $validated)) {
+            $user->name = $validated['name'];
+        }
+
+        $user->email = $validated['email'];
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
@@ -60,6 +73,7 @@ class Profile extends Component
     public function resendVerificationNotification(): void
     {
         $user = Auth::user();
+        /** @var \Illuminate\Contracts\Auth\MustVerifyEmail|User $user */
 
         if ($user->hasVerifiedEmail()) {
             $this->redirectIntended(default: route('dashboard', absolute: false));
