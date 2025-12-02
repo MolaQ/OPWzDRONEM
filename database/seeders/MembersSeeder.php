@@ -27,7 +27,7 @@ class MembersSeeder extends Seeder
         ]);
 
         // Tworzymy administratora
-        User::create([
+        $admin = User::create([
             'name' => 'Admin Systemu',
             'email' => 'admin@example.com',
             'password' => Hash::make('Haslo1234'), // zmień na bezpieczne hasło
@@ -38,10 +38,28 @@ class MembersSeeder extends Seeder
             'active' => true,
             'group_id' => $groupAdmin->id,
         ]);
+        $admin->assignRole('admin');
 
-        // Tworzymy 50 losowych użytkowników
+        // Tworzymy instruktora
+        $instructor = User::create([
+            'name' => 'Jan Kowalski',
+            'email' => 'instructor@example.com',
+            'password' => Hash::make('Haslo1234'),
+            'role' => 'instructor',
+            'pilot_license' => 'PL-INST-001',
+            'operator_license' => 'OP-INST-001',
+            'license_expiry_date' => now()->addYear(),
+            'active' => true,
+            'group_id' => $groupAdmin->id,
+        ]);
+        $instructor->assignRole('instructor');
+
+        // Tworzymy 50 losowych użytkowników (studentów)
         User::factory()->count(50)->create([
             'group_id' => fake()->randomElement([$groupAdmin->id, $groupUsers->id, null]),
-        ]);
+            'role' => 'student',
+        ])->each(function ($user) {
+            $user->assignRole('student');
+        });
     }
 }

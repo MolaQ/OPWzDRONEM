@@ -19,13 +19,13 @@ class AdminMiddleware
             return Redirect::route('home')->with('error', 'Brak dostępu - konto nieaktywne');
         }
 
-        // Sprawdzenie czy rola użytkownika jest dozwolona
-        if (!in_array($user->role, ['admin', 'instructor'])) {
+        // Sprawdzenie czy użytkownik ma uprawnienia do panelu administracyjnego
+        if (!$user->can('access admin panel')) {
             return Redirect::route('home')->with('error', 'Brak autoryzacji');
         }
 
-        // Dla zwykłych użytkowników (role: user) sprawdzamy ważność licencji
-        if ($user->role === 'user') {
+        // Dla studentów sprawdzamy ważność licencji
+        if ($user->hasRole('student')) {
             if (!$user->license_expiry_date) {
                 return Redirect::route('home')->with('error', 'Brak dostępu - brak daty ważności licencji pilota');
             }

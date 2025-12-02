@@ -50,7 +50,7 @@
                 <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
                     <td class="py-2 px-3">{{ $user->name }}</td>
                     <td class="py-2 px-3">{{ $user->email }}</td>
-                    <td class="py-2 px-3 capitalize">{{ $user->role }}</td>
+                    <td class="py-2 px-3 capitalize">{{ $user->roles->pluck('name')->join(', ') ?: '—' }}</td>
                     <td class="py-2 px-3">{{ $user->group?->name ?? '—' }}</td>
                     <td class="py-2 px-3">
                         <span class="px-2 py-1 text-xs rounded-full {{ $user->active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' }}">
@@ -130,9 +130,10 @@
                                 wire:model.defer="editingUser.role" 
                                 class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                             >
-                                <option value="user">👤 Użytkownik</option>
+                                <option value="student">👤 Student</option>
                                 <option value="admin">⚡ Administrator</option>
                                 <option value="instructor">🎓 Instruktor</option>
+                                <option value="guest">👁️ Gość</option>
                             </select>
                             @error('editingUser.role')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>

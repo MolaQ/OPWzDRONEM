@@ -20,7 +20,7 @@ class Members extends Component
         'id' => null,
         'name' => '',
         'email' => '',
-        'role' => 'user',
+        'role' => 'student',
         'group_id' => null,
         'active' => true,
         'password' => '',
@@ -43,7 +43,7 @@ class Members extends Component
             'id' => null,
             'name' => '',
             'email' => '',
-            'role' => 'user',
+            'role' => 'student',
             'group_id' => null,
             'active' => true,
             'password' => '',
@@ -58,7 +58,7 @@ class Members extends Component
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'role' => $user->role,
+            'role' => $user->roles->first()?->name ?? 'student',
             'group_id' => $user->group_id,
             'active' => $user->active,
             'password' => '',
@@ -71,7 +71,7 @@ class Members extends Component
         $rules = [
             'editingUser.name' => 'required|string|max:255',
             'editingUser.email' => 'required|email|unique:users,email,' . ($this->editingUser['id'] ?? 'NULL'),
-            'editingUser.role' => 'required|string|in:user,admin,instructor',
+            'editingUser.role' => 'required|string|in:student,admin,instructor,guest',
             'editingUser.group_id' => 'nullable|exists:groups,id',
             'editingUser.active' => 'required|boolean',
         ];
@@ -89,6 +89,8 @@ class Members extends Component
         if ($this->editingUser['id']) {
             $user = User::find($this->editingUser['id']);
             $data = $this->editingUser;
+            $roleName = $data['role'];
+            unset($data['role']);
 
             // Jeśli hasło jest puste przy edycji, usuń je z danych
             if (empty($data['password'])) {
@@ -98,12 +100,16 @@ class Members extends Component
             }
 
             $user->update($data);
+            $user->syncRoles([$roleName]);
             $msg = 'Zaktualizowano dane użytkownika!';
             $type = 'success';
         } else {
             $data = $this->editingUser;
+            $roleName = $data['role'];
+            unset($data['role']);
             $data['password'] = bcrypt($data['password']);
-            User::create($data);
+            $user = User::create($data);
+            $user->assignRole($roleName);
             $msg = 'Dodano użytkownika!';
             $type = 'success';
         }
@@ -114,7 +120,7 @@ class Members extends Component
             'id' => null,
             'name' => '',
             'email' => '',
-            'role' => 'user',
+            'role' => 'student',
             'group_id' => null,
             'active' => true,
             'password' => '',
@@ -128,7 +134,7 @@ class Members extends Component
             'id' => null,
             'name' => '',
             'email' => '',
-            'role' => 'user',
+            'role' => 'student',
             'group_id' => null,
             'active' => true,
             'password' => '',
@@ -144,10 +150,10 @@ class Members extends Component
 
     public function render()
     {
-        $roles = User::select('role')->distinct()->orderBy('role')->pluck('role')->toArray();
+        $roles = \Spatie\Permission\Models\Role::orderBy('name')->pluck('name')->toArray();
         $groups = Group::select('id', 'name')->orderBy('name')->get();
 
-        $users = User::with('group')
+        $users = User::with(['group', 'roles'])
             ->when($this->search, function ($query) {
                 $query->where(function($q) {
                     $q->where('name', 'like', "%{$this->search}%")
@@ -157,7 +163,11 @@ class Members extends Component
                       });
                 });
             })
-            ->when($this->role, fn($q) => $q->where('role', $this->role))
+            ->when($this->role, function($q) {
+                $q->whereHas('roles', function($roleQuery) {
+                    $roleQuery->where('name', $this->role);
+                });
+            })
             ->when($this->group_id, fn($q) => $q->where('group_id', $this->group_id))
             ->when($this->active !== '', fn($q) => $q->where('active', $this->active))
             ->orderBy('name')

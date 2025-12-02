@@ -17,12 +17,12 @@
                 </flux:navlist.group>
 
                 {{-- Sekcja Zarządzania dla admina i instruktora --}}
-                @if(auth()->check() && in_array(auth()->user()->role, ['admin', 'instructor']))
+                @can('view users')
                 <flux:navlist.group :heading="__('Management')" class="grid">
                     <flux:navlist.item icon="users" :href="route('admin.members')" :current="request()->routeIs('admin.members')" wire:navigate>{{ __('Members') }}</flux:navlist.item>
                     <flux:navlist.item icon="user-group" :href="route('admin.groups')" :current="request()->routeIs('admin.groups')" wire:navigate>{{ __('Groups') }}</flux:navlist.item>
                 </flux:navlist.group>
-                @endif
+                @endcan
 
                 {{-- Sekcja Treści --}}
                 <flux:navlist.group :heading="__('Content')" class="grid">

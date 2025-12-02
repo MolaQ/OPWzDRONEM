@@ -23,7 +23,7 @@ class Profile extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
-        $this->canChangeName = in_array(Auth::user()->role, ['admin', 'instructor']);
+        $this->canChangeName = Auth::user()->hasRole(['admin', 'instructor']);
     }
 
     /**
