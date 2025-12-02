@@ -62,8 +62,27 @@
                     </button>
                 </div>
             @else
-                <div class="py-4 border-t border-neutral-600 text-neutral-400 text-sm">
-                    <a href="{{ route('login') }}" class="text-[#106c21] hover:underline">Zaloguj się</a>, aby polubić lub skomentować ten post.
+                <div class="flex items-center gap-4 py-4 border-t border-neutral-600">
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-700 text-neutral-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                        </svg>
+                        <span class="font-semibold">{{ $likesCount }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-700 text-neutral-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+                        </svg>
+                        <span class="font-semibold">{{ $dislikesCount }}</span>
+                    </div>
+                </div>
+                <div class="py-3 px-4 bg-blue-900/30 border border-blue-700/50 rounded-lg flex items-start gap-3">
+                    <svg class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p class="text-blue-200 text-sm">
+                        <a href="{{ route('login') }}" class="text-blue-300 hover:text-blue-100 underline font-medium">Zaloguj się</a>, aby polubić lub skomentować ten post.
+                    </p>
                 </div>
             @endauth
         </div>
@@ -86,9 +105,8 @@
                     Dodaj komentarz
                 </button>
             </form>
-        @endauth
 
-        <div class="space-y-4">
+            <div class="space-y-4">
             @forelse($post->comments as $comment)
                 <div class="bg-neutral-800/50 rounded-lg p-4 border border-neutral-700">
                     <div class="flex items-start justify-between mb-2">
@@ -130,7 +148,17 @@
             @empty
                 <p class="text-neutral-400 text-center py-8">Brak komentarzy. Bądź pierwszy!</p>
             @endforelse
-        </div>
+            </div>
+        @else
+            <div class="py-4 px-4 bg-blue-900/30 border border-blue-700/50 rounded-lg flex items-start gap-3">
+                <svg class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p class="text-blue-200 text-sm">
+                    <a href="{{ route('login') }}" class="text-blue-300 hover:text-blue-100 underline font-medium">Zaloguj się</a>, aby zobaczyć i dodać komentarze.
+                </p>
+            </div>
+        @endauth
     </div>
 
     <div class="mt-6 text-center">

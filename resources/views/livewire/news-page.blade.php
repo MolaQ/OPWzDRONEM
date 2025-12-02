@@ -1,15 +1,4 @@
 <div class="max-w-7xl mx-auto p-3">
-    <div class="mb-6">
-        <a href="{{ route('home') }}" class="inline-flex items-center text-[#106c21] hover:text-[#2f76aa] transition mb-4">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Powrót do strony głównej
-        </a>
-        <h1 class="text-4xl font-bold text-neutral-900 dark:text-white mb-2">⚡ Aktualności</h1>
-        <p class="text-neutral-600 dark:text-neutral-400">Najnowsze informacje i ogłoszenia</p>
-    </div>
-
     @if($posts->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
             @foreach($posts as $post)
