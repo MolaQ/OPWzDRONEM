@@ -6,8 +6,8 @@
             </svg>
             Powrót do strony głównej
         </a>
-        <h1 class="text-4xl font-bold text-white mb-2">⚡ Aktualności</h1>
-        <p class="text-neutral-400">Najnowsze informacje i ogłoszenia</p>
+        <h1 class="text-4xl font-bold text-neutral-900 dark:text-white mb-2">⚡ Aktualności</h1>
+        <p class="text-neutral-600 dark:text-neutral-400">Najnowsze informacje i ogłoszenia</p>
     </div>
 
     @if($posts->count() > 0)
