@@ -86,7 +86,7 @@ class BarcodeResolver
         $barcode = strtoupper(trim($barcode));
 
         // Check if starts with valid prefix and has numeric part
-        if (preg_match('/^[SE]\d{3,}$/', $barcode)) {
+        if (preg_match('/^[SE]\d{10}$/', $barcode)) {
             return true;
         }
 
@@ -101,7 +101,7 @@ class BarcodeResolver
      */
     public static function generateStudentBarcode(int $id): string
     {
-        return self::PREFIX_STUDENT . str_pad($id, 5, '0', STR_PAD_LEFT);
+        return self::PREFIX_STUDENT . str_pad((string) $id, 10, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -112,6 +112,6 @@ class BarcodeResolver
      */
     public static function generateEquipmentBarcode(int $id): string
     {
-        return self::PREFIX_EQUIPMENT . str_pad($id, 5, '0', STR_PAD_LEFT);
+        return self::PREFIX_EQUIPMENT . str_pad((string) $id, 10, '0', STR_PAD_LEFT);
     }
 }

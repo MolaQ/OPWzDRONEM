@@ -16,15 +16,34 @@
                         id="barcode"
                         wire:model.live.debounce.500ms="barcode"
                         autofocus
-                        placeholder="Zeskanuj lub wpisz kod (np. S00001, E00001)"
+                        placeholder="Zeskanuj lub wpisz kod (np. S0000000001, E0000000001)"
                         class="w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 px-4 py-3 text-lg font-mono text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                         x-data
                         x-init="setTimeout(()=>{$el.focus()},50)"
                         @scanned.window="setTimeout(() => $el.focus(), 100)"
                     />
                     <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
-                        Format: <span class="font-mono">S</span> (student) lub <span class="font-mono">E</span> (equipment) + 5 cyfr
+                        Format: <span class="font-mono">S</span> (student) lub <span class="font-mono">E</span> (equipment) + 10 cyfr
                     </p>
+
+                    @if($showSuggestions)
+                    <div class="mt-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 max-h-72 overflow-y-auto shadow">
+                        @foreach($suggestions as $i => $s)
+                            <button
+                                type="button"
+                                wire:click="selectSuggestion('{{ $s['barcode'] }}')"
+                                class="w-full text-left px-3 py-2 hover:bg-neutral-50 dark:hover:bg-neutral-800 flex items-center gap-3"
+                                wire:key="suggestion-{{ $s['type'] }}-{{ $s['id'] }}-{{ $i }}"
+                            >
+                                <span class="inline-flex items-center justify-center w-6 h-6 rounded {{ $s['type'] === 'student' ? 'bg-blue-500' : 'bg-purple-500' }} text-white text-xs font-bold">
+                                    {{ strtoupper(substr($s['type'],0,1)) }}
+                                </span>
+                                <span class="flex-1 truncate">{{ $s['name'] }}</span>
+                                <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400">{{ $s['barcode'] }}</span>
+                            </button>
+                        @endforeach
+                    </div>
+                    @endif
                 </div>
                 <div class="flex items-end">
                     <button
@@ -68,7 +87,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-blue-600 dark:text-blue-400">Kody uczniów</p>
-                    <p class="text-lg font-bold text-blue-900 dark:text-blue-100">Format: S#####</p>
+                    <p class="text-lg font-bold text-blue-900 dark:text-blue-100">Format: S##########</p>
                 </div>
             </div>
         </div>
@@ -82,7 +101,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-purple-600 dark:text-purple-400">Kody sprzętu</p>
-                    <p class="text-lg font-bold text-purple-900 dark:text-purple-100">Format: E#####</p>
+                    <p class="text-lg font-bold text-purple-900 dark:text-purple-100">Format: E##########</p>
                 </div>
             </div>
         </div>

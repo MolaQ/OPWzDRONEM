@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\PostReaction;
 use App\Models\Comment;
+use App\Models\Equipment;
 use App\Services\BarcodeResolver;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -171,5 +172,31 @@ class MembersSeeder extends Seeder
         $this->command->info('   - 20 postów');
         $this->command->info('   - 60 reakcji na posty');
         $this->command->info('   - 50 komentarzy');
+
+        // Dodajmy przykładowy sprzęt aby skaner miał co wyszukiwać
+        $this->seedEquipments();
+    }
+
+    protected function seedEquipments(): void
+    {
+        $equipments = [
+            ['name' => 'DJI Mavic 3', 'model' => 'M3-2025', 'category' => 'drone', 'status' => 'available', 'description' => 'Dron szkoleniowy klasy premium'],
+            ['name' => 'DJI Mini 4 Pro', 'model' => 'MN4P', 'category' => 'drone', 'status' => 'in_use', 'description' => 'Lekki dron do ćwiczeń'],
+            ['name' => 'Parrot Anafi', 'model' => 'ANA-1', 'category' => 'drone', 'status' => 'maintenance', 'description' => 'Konserwacja kamery'],
+            ['name' => 'Kontroler RC', 'model' => 'RC-STD', 'category' => 'controller', 'status' => 'available', 'description' => 'Kontroler uniwersalny'],
+            ['name' => 'Gogle FPV', 'model' => 'FPV-G1', 'category' => 'fpv', 'status' => 'available', 'description' => 'Gogle treningowe'],
+            ['name' => 'Akumulator LiPo', 'model' => 'LIPO-5200', 'category' => 'battery', 'status' => 'available', 'description' => 'Akumulator 5200mAh'],
+            ['name' => 'Ładowarka Smart', 'model' => 'CHG-S', 'category' => 'charger', 'status' => 'available', 'description' => 'Inteligentna ładowarka wielokanałowa'],
+            ['name' => 'Tor transportowy', 'model' => 'BAG-XL', 'category' => 'bag', 'status' => 'available', 'description' => 'Duży tor na sprzęt'],
+            ['name' => 'Kamera GoPro', 'model' => 'GP12', 'category' => 'camera', 'status' => 'in_use', 'description' => 'Kamera akcji do nagrań'],
+            ['name' => 'Śmigła zapasowe', 'model' => 'PROP-S', 'category' => 'parts', 'status' => 'available', 'description' => 'Zestaw śmigieł'],
+        ];
+
+        foreach ($equipments as $data) {
+            $eq = Equipment::create($data);
+            $eq->update(['barcode' => BarcodeResolver::generateEquipmentBarcode($eq->id)]);
+        }
+
+        $this->command->info('   - 10 sprzętów z kodami EXXXXXXXXXX');
     }
 }
