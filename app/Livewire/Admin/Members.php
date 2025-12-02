@@ -26,7 +26,7 @@ class Members extends Component
         'password' => '',
     ];
 
-    protected $paginationTheme = 'bootstrap'; // możesz zmienić na 'tailwind' lub custom
+    // Livewire 3 uses Tailwind pagination by default
 
     protected $updatesQueryString = [
         'search', 'role', 'group_id', 'active', 'page'
