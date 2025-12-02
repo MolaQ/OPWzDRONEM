@@ -26,7 +26,7 @@
 
                 {{-- Sekcja Treści --}}
                 <flux:navlist.group :heading="__('Content')" class="grid">
-                    <flux:navlist.item icon="newspaper" href="#" wire:navigate>{{ __('Posts') }}</flux:navlist.item>
+                    <flux:navlist.item icon="newspaper" :href="route('admin.posts')" :current="request()->routeIs('admin.posts')" wire:navigate>{{ __('Posts') }}</flux:navlist.item>
                     <flux:navlist.item icon="academic-cap" href="#" wire:navigate>{{ __('Courses') }}</flux:navlist.item>
                     <flux:navlist.item icon="document-text" href="#" wire:navigate>{{ __('Resources') }}</flux:navlist.item>
                 </flux:navlist.group>

@@ -19,7 +19,7 @@
                 <!-- Center Title -->
                 <div class="flex-1 text-center px-4">
                     <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight">{{ config('app.name', 'OPW z Dronem') }}</h1>
-                    <p class="mt-1 text-sm md:text-base lg:text-lg text-neutral-200">Platforma edukacyjna operatorów dronów</p>
+                    <p class="mt-1 text-sm md:text-base lg:text-lg text-neutral-200">Zespół Szkół Technicznych w Pile</p>
                 </div>
 
                 <!-- Right Logos -->
@@ -184,7 +184,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="text-center md:text-left">
                     <p class="font-semibold text-lg">{{ config('app.name', 'OPW z Dronem') }}</p>
-                    <p class="text-sm text-neutral-400 mt-1">Platforma edukacyjna operatorów dronów</p>
+                    <p class="text-sm text-neutral-400 mt-1">Zespół Szkół Technicznych w Pile</p>
                 </div>
                 <div class="flex gap-6 text-sm text-neutral-400">
                     <a href="#" class="hover:text-white transition">Regulamin</a>

@@ -3,8 +3,8 @@
         <div class="flex h-full w-full flex-1 flex-col gap-4">
             <!-- Three Column Grid -->
             <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <!-- Card 1 -->
-                <div class="relative aspect-video overflow-hidden rounded-xl border-2 border-[#106c21] bg-gradient-to-br from-[#112b50] to-[#2f76aa] shadow-2xl">
+                <!-- Card 1 - News -->
+                <div class="relative aspect-video overflow-hidden rounded-xl border-2 border-[#106c21] bg-gradient-to-br from-[#112b50] to-[#2f76aa] shadow-2xl hover:scale-105 transition-transform duration-300 cursor-pointer" onclick="document.getElementById('news-section').scrollIntoView({ behavior: 'smooth' })">
                     <div class="absolute inset-0 flex items-center justify-center">
                         <div class="text-center p-6">
                             <svg class="w-16 h-16 mx-auto mb-4 text-[#106c21]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,6 +65,12 @@
                     </div>
                 </div>
             </div>
+
+            <!-- News Section -->
+            <div id="news-section" class="mt-8">
+                <livewire:news />
+            </div>
         </div>
     </div>
 </x-layouts.user>
+
