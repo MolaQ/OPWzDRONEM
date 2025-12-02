@@ -304,7 +304,7 @@
                         setTimeout(renderBarcode, 100);
                     }
                 };
-                
+
                 // Try immediately and after delay
                 setTimeout(renderBarcode, 100);
                 setTimeout(renderBarcode, 300);

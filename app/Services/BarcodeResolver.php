@@ -16,14 +16,14 @@ class BarcodeResolver
 
     /**
      * Resolve barcode to entity
-     * 
+     *
      * @param string $barcode
      * @return array{type: string, entity: Model|null, found: bool}
      */
     public function resolve(string $barcode): array
     {
         $barcode = strtoupper(trim($barcode));
-        
+
         if (empty($barcode)) {
             return [
                 'type' => 'unknown',
@@ -44,7 +44,7 @@ class BarcodeResolver
 
     /**
      * Detect entity type from barcode prefix
-     * 
+     *
      * @param string $barcode
      * @return string
      */
@@ -61,7 +61,7 @@ class BarcodeResolver
 
     /**
      * Find entity by barcode and type
-     * 
+     *
      * @param string $barcode
      * @param string $type
      * @return Model|null
@@ -77,14 +77,14 @@ class BarcodeResolver
 
     /**
      * Check if barcode format is valid
-     * 
+     *
      * @param string $barcode
      * @return bool
      */
     public function isValidFormat(string $barcode): bool
     {
         $barcode = strtoupper(trim($barcode));
-        
+
         // Check if starts with valid prefix and has numeric part
         if (preg_match('/^[SE]\d{3,}$/', $barcode)) {
             return true;
@@ -95,7 +95,7 @@ class BarcodeResolver
 
     /**
      * Generate barcode for student
-     * 
+     *
      * @param int $id
      * @return string
      */
@@ -106,7 +106,7 @@ class BarcodeResolver
 
     /**
      * Generate barcode for equipment
-     * 
+     *
      * @param int $id
      * @return string
      */

@@ -57,10 +57,10 @@ class BarcodeScanner extends Component
         }
 
         $this->result = $resolved;
-        
+
         // Clear barcode for next scan
         $this->barcode = '';
-        
+
         // Dispatch event for focus
         $this->dispatch('scanned');
     }
