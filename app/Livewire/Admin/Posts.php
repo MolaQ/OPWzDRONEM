@@ -16,6 +16,8 @@ class Posts extends Component
 
     public $search = '';
     public $is_published = '';
+    public $reactionFilter = ''; // all, liked, disliked, no_reactions
+    public $commentFilter = ''; // all, commented, no_comments
     public $showModal = false;
     public $image;
     public $editingPost = [
@@ -27,14 +29,14 @@ class Posts extends Component
         'image' => null,
     ];
 
-    protected $paginationTheme = 'bootstrap';
-
     protected $updatesQueryString = [
-        'search', 'is_published', 'page'
+        'search', 'is_published', 'reactionFilter', 'commentFilter', 'page'
     ];
 
     public function updatingSearch() { $this->resetPage(); }
     public function updatingIsPublished() { $this->resetPage(); }
+    public function updatingReactionFilter() { $this->resetPage(); }
+    public function updatingCommentFilter() { $this->resetPage(); }
 
     public function showCreateModal()
     {
@@ -156,7 +158,7 @@ class Posts extends Component
 
     public function render()
     {
-        $posts = Post::with('author')
+        $posts = Post::with(['author', 'reactions'])
             ->when($this->search, function ($query) {
                 $query->where(function($q) {
                     $q->where('title', 'like', "%{$this->search}%")
@@ -167,6 +169,25 @@ class Posts extends Component
                 });
             })
             ->when($this->is_published !== '', fn($q) => $q->where('is_published', $this->is_published))
+            ->when($this->reactionFilter === 'liked', function($q) {
+                $q->whereHas('reactions', function($query) {
+                    $query->where('type', 'like');
+                });
+            })
+            ->when($this->reactionFilter === 'disliked', function($q) {
+                $q->whereHas('reactions', function($query) {
+                    $query->where('type', 'dislike');
+                });
+            })
+            ->when($this->reactionFilter === 'no_reactions', function($q) {
+                $q->whereDoesntHave('reactions');
+            })
+            ->when($this->commentFilter === 'commented', function($q) {
+                $q->whereHas('comments');
+            })
+            ->when($this->commentFilter === 'no_comments', function($q) {
+                $q->whereDoesntHave('comments');
+            })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
