@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name', 'email', 'password', 'role',
+        'name', 'email', 'barcode', 'password', 'role',
         'pilot_license', 'operator_license', 'license_expiry_date', 'group_id', 'active'
     ];
 
@@ -52,7 +52,16 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'license_expiry_date' => 'date',
         ];
+    }
+
+    /**
+     * Scope a query to search by barcode
+     */
+    public function scopeByBarcode($query, string $barcode)
+    {
+        return $query->where('barcode', $barcode);
     }
 
     /**

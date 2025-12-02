@@ -76,19 +76,52 @@
 
     @if ($showModal)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
-            <div class="bg-neutral-900 border border-neutral-700 rounded-2xl p-8 w-full max-w-2xl shadow-2xl transform transition-all">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-2xl font-bold text-white">
-                        {{ $editingUser['id'] ? 'Edytuj użytkownika' : 'Dodaj nowego użytkownika' }}
-                    </h3>
-                    <button wire:click="closeModal" class="text-neutral-400 hover:text-neutral-300 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+            <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all">
+                <!-- Modal Header with Barcode at the top -->
+                <div class="p-6 border-b border-neutral-800">
+                    <div class="flex items-center justify-between gap-6">
+                        <h3 class="text-2xl font-bold text-white flex-1">
+                            {{ $editingUser['id'] ? 'Edytuj użytkownika' : 'Dodaj nowego użytkownika' }}
+                        </h3>
+                        @if($editingUser['id'] && $editingUser['barcode'])
+                        <div
+                            class="inline-block bg-white dark:bg-neutral-100 rounded-lg px-4 py-3"
+                            x-data="{
+                                render() {
+                                    const el = document.getElementById('barcode-top-{{ $editingUser['id'] }}');
+                                    if (!el || typeof JsBarcode === 'undefined') { setTimeout(()=>this.render(), 100); return; }
+                                    try {
+                                        JsBarcode(el, '{{ $editingUser['barcode'] }}', {
+                                            format: 'CODE128',
+                                            width: 2,
+                                            height: 50,
+                                            displayValue: false,
+                                            margin: 6,
+                                            lineColor: '#000000',
+                                            background: 'transparent'
+                                        });
+                                    } catch(e) { console.error(e); }
+                                }
+                            }"
+                            x-init="$nextTick(()=>render())"
+                            @showModal.window="render()"
+                        >
+                            <div class="text-center" wire:ignore>
+                                <svg id="barcode-top-{{ $editingUser['id'] }}"></svg>
+                                <p class="mt-1 text-xs font-mono text-neutral-900">{{ $editingUser['barcode'] }}</p>
+                            </div>
+                        </div>
+                        @endif
+                        <button wire:click="closeModal" class="text-neutral-400 hover:text-neutral-300 transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
-                <form wire:submit.prevent="saveUser" class="space-y-6" autocomplete="off">
+                <!-- Modal Body (scrollable if needed) -->
+                <form wire:submit.prevent="saveUser" class="space-y-6 p-6 max-h-[70vh] overflow-y-auto" autocomplete="off">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Imię i nazwisko -->
                         <div class="md:col-span-2">
@@ -205,6 +238,22 @@
                             </div>
                             @error('editingUser.active')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>
+
+                        @if(!$editingUser['id'])
+                        <div class="md:col-span-2">
+                            <div class="p-4 bg-blue-900/20 rounded-lg border border-blue-800">
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                    </svg>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-blue-300">Automatyczne generowanie kodu</p>
+                                        <p class="text-xs text-blue-400 mt-1">Kod kreskowy typu Code-128 zostanie automatycznie wygenerowany po utworzeniu użytkownika w formacie S##### (Student).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
                     </div>
 
                     <!-- Przyciski akcji -->
@@ -226,6 +275,43 @@
                 </form>
             </div>
         </div>
+
+        <!-- JsBarcode Script -->
+        <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+        @if($editingUser['id'] && $editingUser['barcode'])
+        <script>
+            // Wait for modal and library to be fully loaded
+            (function() {
+                const renderBarcode = () => {
+                    const barcodeElement = document.getElementById('barcode-{{ $editingUser['id'] }}');
+                    if (barcodeElement && typeof JsBarcode !== 'undefined') {
+                        try {
+                            JsBarcode(barcodeElement, '{{ $editingUser['barcode'] }}', {
+                                format: 'CODE128',
+                                width: 2,
+                                height: 80,
+                                displayValue: false,
+                                margin: 10,
+                                lineColor: '#000000',
+                                background: 'transparent'
+                            });
+                            console.log('Barcode rendered successfully');
+                        } catch (e) {
+                            console.error('Barcode generation error:', e);
+                        }
+                    } else {
+                        console.log('Retrying barcode render...');
+                        setTimeout(renderBarcode, 100);
+                    }
+                };
+                
+                // Try immediately and after delay
+                setTimeout(renderBarcode, 100);
+                setTimeout(renderBarcode, 300);
+                setTimeout(renderBarcode, 500);
+            })();
+        </script>
+        @endif
     @endif
 
 </div>

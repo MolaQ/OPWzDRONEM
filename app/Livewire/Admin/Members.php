@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
 use App\Models\Group;
+use App\Services\BarcodeResolver;
 
 class Members extends Component
 {
@@ -24,6 +25,7 @@ class Members extends Component
         'group_id' => null,
         'active' => true,
         'password' => '',
+        'barcode' => '',
     ];
 
     // Livewire 3 uses Tailwind pagination by default
@@ -47,6 +49,7 @@ class Members extends Component
             'group_id' => null,
             'active' => true,
             'password' => '',
+            'barcode' => '',
         ];
         $this->showModal = true;
     }
@@ -62,6 +65,7 @@ class Members extends Component
             'group_id' => $user->group_id,
             'active' => $user->active,
             'password' => '',
+            'barcode' => $user->barcode ?? '',
         ];
         $this->showModal = true;
     }
@@ -107,9 +111,12 @@ class Members extends Component
             $data = $this->editingUser;
             $roleName = $data['role'];
             unset($data['role']);
+            unset($data['barcode']); // Barcode will be generated after user creation
             $data['password'] = bcrypt($data['password']);
             $user = User::create($data);
             $user->assignRole($roleName);
+            // Generate barcode after user is created and has an ID
+            $user->update(['barcode' => BarcodeResolver::generateStudentBarcode($user->id)]);
             $msg = 'Dodano użytkownika!';
             $type = 'success';
         }
@@ -138,6 +145,7 @@ class Members extends Component
             'group_id' => null,
             'active' => true,
             'password' => '',
+            'barcode' => '',
         ];
         $this->resetValidation();
     }

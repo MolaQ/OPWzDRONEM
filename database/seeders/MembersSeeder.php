@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\PostReaction;
 use App\Models\Comment;
+use App\Services\BarcodeResolver;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -34,7 +35,7 @@ class MembersSeeder extends Seeder
         // 1 Administrator
         $admin = User::create([
             'name' => 'Administrator Systemu',
-            'email' => 'admin@exaple.com',
+            'email' => 'admin@example.com',
             'password' => Hash::make('Haslo1234'),
             'role' => 'admin',
             'pilot_license' => 'PL-ADMIN-001',
@@ -44,6 +45,7 @@ class MembersSeeder extends Seeder
             'group_id' => $groupAdmin->id,
         ]);
         $admin->assignRole('admin');
+        $admin->update(['barcode' => BarcodeResolver::generateStudentBarcode($admin->id)]);
 
         // 2 Instruktorzy
         $instructor1 = User::create([
@@ -58,6 +60,7 @@ class MembersSeeder extends Seeder
             'group_id' => $groupAdmin->id,
         ]);
         $instructor1->assignRole('instructor');
+        $instructor1->update(['barcode' => BarcodeResolver::generateStudentBarcode($instructor1->id)]);
 
         $instructor2 = User::create([
             'name' => 'Anna Nowak',
@@ -71,6 +74,7 @@ class MembersSeeder extends Seeder
             'group_id' => $groupAdmin->id,
         ]);
         $instructor2->assignRole('instructor');
+        $instructor2->update(['barcode' => BarcodeResolver::generateStudentBarcode($instructor2->id)]);
 
         // 1 Wychowawca
         $wychowawca = User::create([
@@ -85,6 +89,7 @@ class MembersSeeder extends Seeder
             'group_id' => $group4OPW->id,
         ]);
         $wychowawca->assignRole('instructor');
+        $wychowawca->update(['barcode' => BarcodeResolver::generateStudentBarcode($wychowawca->id)]);
 
         // 30 użytkowników (studentów) w grupie 4OPW
         $students = [];
@@ -101,6 +106,7 @@ class MembersSeeder extends Seeder
                 'group_id' => $group4OPW->id,
             ]);
             $student->assignRole('student');
+            $student->update(['barcode' => BarcodeResolver::generateStudentBarcode($student->id)]);
             $students[] = $student;
         }
 

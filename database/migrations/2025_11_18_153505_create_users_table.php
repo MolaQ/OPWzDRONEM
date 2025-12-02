@@ -12,8 +12,12 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('barcode')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->text('two_factor_secret')->nullable();
+            $table->text('two_factor_recovery_codes')->nullable();
+            $table->timestamp('two_factor_confirmed_at')->nullable();
             $table->enum('role', ['admin', 'instructor', 'student', 'guest', 'user'])->default('student');
             $table->string('pilot_license')->nullable();
             $table->string('operator_license')->nullable();

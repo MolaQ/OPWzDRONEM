@@ -27,6 +27,7 @@
                 <flux:navlist.group heading="Zarządzanie" class="grid">
                     <flux:navlist.item icon="users" :href="route('admin.members')" :current="request()->routeIs('admin.members')" wire:navigate>Użytkownicy</flux:navlist.item>
                     <flux:navlist.item icon="user-group" :href="route('admin.groups')" :current="request()->routeIs('admin.groups')" wire:navigate>Grupy</flux:navlist.item>
+                    <flux:navlist.item icon="qr-code" :href="route('admin.scanner')" :current="request()->routeIs('admin.scanner')" wire:navigate>Skaner kodów</flux:navlist.item>
                 </flux:navlist.group>
                 @endcan
             </flux:navlist>
@@ -131,6 +132,8 @@
 
         {{ $slot }}
 
+        <!-- Global JsBarcode library -->
+        <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
         @fluxScripts
     </body>
 </html>
