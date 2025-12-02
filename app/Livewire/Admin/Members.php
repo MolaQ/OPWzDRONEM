@@ -89,14 +89,14 @@ class Members extends Component
         if ($this->editingUser['id']) {
             $user = User::find($this->editingUser['id']);
             $data = $this->editingUser;
-            
+
             // Jeśli hasło jest puste przy edycji, usuń je z danych
             if (empty($data['password'])) {
                 unset($data['password']);
             } else {
                 $data['password'] = bcrypt($data['password']);
             }
-            
+
             $user->update($data);
             $msg = 'Zaktualizowano dane użytkownika!';
             $type = 'success';
