@@ -43,4 +43,36 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'author_id');
     }
+
+    /**
+     * Get all comments for the post
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get all reactions for the post
+     */
+    public function reactions()
+    {
+        return $this->hasMany(PostReaction::class);
+    }
+
+    /**
+     * Get likes count
+     */
+    public function likes()
+    {
+        return $this->reactions()->where('type', 'like');
+    }
+
+    /**
+     * Get dislikes count
+     */
+    public function dislikes()
+    {
+        return $this->reactions()->where('type', 'dislike');
+    }
 }
