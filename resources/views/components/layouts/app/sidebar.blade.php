@@ -12,51 +12,26 @@
             </a>
 
             <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Dashboard')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>{{ __('Overview') }}</flux:navlist.item>
+                <flux:navlist.group heading="Panel główny" class="grid">
+                    <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>Pulpit</flux:navlist.item>
+                </flux:navlist.group>
+
+                {{-- Sekcja Treści --}}
+                <flux:navlist.group heading="Treści" class="grid">
+                    <flux:navlist.item icon="newspaper" :href="route('admin.posts')" :current="request()->routeIs('admin.posts')" wire:navigate>Posty</flux:navlist.item>
+                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('admin.comments')" :current="request()->routeIs('admin.comments')" wire:navigate>Komentarze</flux:navlist.item>
                 </flux:navlist.group>
 
                 {{-- Sekcja Zarządzania dla admina i instruktora --}}
                 @can('view users')
-                <flux:navlist.group :heading="__('Management')" class="grid">
-                    <flux:navlist.item icon="users" :href="route('admin.members')" :current="request()->routeIs('admin.members')" wire:navigate>{{ __('Members') }}</flux:navlist.item>
-                    <flux:navlist.item icon="user-group" :href="route('admin.groups')" :current="request()->routeIs('admin.groups')" wire:navigate>{{ __('Groups') }}</flux:navlist.item>
+                <flux:navlist.group heading="Zarządzanie" class="grid">
+                    <flux:navlist.item icon="users" :href="route('admin.members')" :current="request()->routeIs('admin.members')" wire:navigate>Użytkownicy</flux:navlist.item>
+                    <flux:navlist.item icon="user-group" :href="route('admin.groups')" :current="request()->routeIs('admin.groups')" wire:navigate>Grupy</flux:navlist.item>
                 </flux:navlist.group>
                 @endcan
-
-                {{-- Sekcja Treści --}}
-                <flux:navlist.group :heading="__('Content')" class="grid">
-                    <flux:navlist.item icon="newspaper" :href="route('admin.posts')" :current="request()->routeIs('admin.posts')" wire:navigate>{{ __('Posts') }}</flux:navlist.item>
-                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('admin.comments')" :current="request()->routeIs('admin.comments')" wire:navigate>{{ __('Comments') }}</flux:navlist.item>
-                    <flux:navlist.item icon="academic-cap" href="#" wire:navigate>{{ __('Courses') }}</flux:navlist.item>
-                    <flux:navlist.item icon="document-text" href="#" wire:navigate>{{ __('Resources') }}</flux:navlist.item>
-                </flux:navlist.group>
-
-                {{-- Sekcja Interakcji --}}
-                <flux:navlist.group :heading="__('Engagement')" class="grid">
-                    <flux:navlist.item icon="heart" href="#" wire:navigate>{{ __('Likes') }}</flux:navlist.item>
-                    <flux:navlist.item icon="chart-bar" href="#" wire:navigate>{{ __('Analytics') }}</flux:navlist.item>
-                </flux:navlist.group>
             </flux:navlist>
-
-
-
 
             <flux:spacer />
-
-
-
-
-
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                {{ __('Documentation') }}
-                </flux:navlist.item>
-            </flux:navlist>
 
             <!-- Desktop User Menu -->
             <flux:dropdown class="hidden lg:block" position="bottom" align="start">
@@ -89,7 +64,7 @@
                     <flux:menu.separator />
 
                     <flux:menu.radio.group>
-                        <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                        <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>Ustawienia</flux:menu.item>
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
@@ -97,7 +72,7 @@
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
                         <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                            {{ __('Log Out') }}
+                            Wyloguj
                         </flux:menu.item>
                     </form>
                 </flux:menu>
@@ -139,7 +114,7 @@
                     <flux:menu.separator />
 
                     <flux:menu.radio.group>
-                        <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                        <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>Ustawienia</flux:menu.item>
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
@@ -147,7 +122,7 @@
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
                         <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                            {{ __('Log Out') }}
+                            Wyloguj
                         </flux:menu.item>
                     </form>
                 </flux:menu>

@@ -367,7 +367,7 @@
                         }
                     });
                 }
-                
+
                 // Wykryj usunięcie modala
                 if (mutation.removedNodes.length) {
                     mutation.removedNodes.forEach((node) => {
