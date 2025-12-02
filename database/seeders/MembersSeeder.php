@@ -110,11 +110,11 @@ class MembersSeeder extends Seeder
         // 20 postów
         $posts = [];
         $authors = collect([$admin, $instructor1, $instructor2, $wychowawca]);
-        
+
         for ($i = 1; $i <= 20; $i++) {
             $author = $authors->random();
             $isPublished = fake()->boolean(90); // 90% będzie opublikowanych
-            
+
             $post = Post::create([
                 'title' => fake()->sentence(rand(3, 8)),
                 'content' => fake()->paragraphs(rand(2, 5), true),
@@ -130,12 +130,12 @@ class MembersSeeder extends Seeder
         for ($i = 1; $i <= 60; $i++) {
             $post = fake()->randomElement($posts);
             $user = $allUsers->random();
-            
+
             // Sprawdź czy użytkownik już zareagował na ten post
             $exists = PostReaction::where('post_id', $post->id)
                 ->where('user_id', $user->id)
                 ->exists();
-            
+
             if (!$exists) {
                 PostReaction::create([
                     'post_id' => $post->id,
@@ -149,7 +149,7 @@ class MembersSeeder extends Seeder
         for ($i = 1; $i <= 50; $i++) {
             $post = fake()->randomElement($posts);
             $user = $allUsers->random();
-            
+
             Comment::create([
                 'post_id' => $post->id,
                 'user_id' => $user->id,
