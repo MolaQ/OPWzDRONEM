@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     @include('partials.head')
 </head>
@@ -36,15 +36,15 @@
     </header>
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex">
+    <div class="flex-1 flex max-w-[100vw]">
         <!-- Left Sidebar -->
         <aside class="hidden lg:flex lg:flex-col w-64 bg-[#112b50] text-white border-r border-[#2f76aa]">
             <nav class="flex-1 flex flex-col p-6 space-y-2 overflow-y-auto">
-                <a href="{{ route('home') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg {{ request()->routeIs('home') ? 'bg-[#2f76aa] text-white' : 'text-neutral-300 hover:bg-[#2f76aa]/50 hover:text-white' }} transition-all duration-200">
+                <a href="{{ route('news') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg {{ request()->routeIs('news') ? 'bg-[#2f76aa] text-white' : 'text-neutral-300 hover:bg-[#2f76aa]/50 hover:text-white' }} transition-all duration-200">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                     </svg>
-                    <span class="font-semibold">News</span>
+                    <span class="font-semibold">Aktualności</span>
                 </a>
 
                 <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-300 hover:bg-[#2f76aa]/50 hover:text-white transition-all duration-200">
@@ -81,7 +81,26 @@
                 <!-- User Menu at Bottom -->
                 <div class="mt-auto pt-6 border-t border-[#2f76aa]">
                     @auth
-                    <flux:dropdown position="top" align="start">
+                    <div class="space-y-2 mb-3">
+                        @if(in_array(auth()->user()->role, ['admin','instructor']))
+                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-[#106c21]/60 hover:bg-[#106c21] transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13h2l2 7h11l2-7h2M5 13l4-8h6l4 8M10 9h4" /></svg>
+                                <span>{{ __('Panel Admin') }}</span>
+                            </a>
+                        @endif
+                        <a href="{{ route('settings.all') }}" class="flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-[#2f76aa]/60 hover:bg-[#2f76aa] transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1z" /></svg>
+                            <span>{{ __('Ustawienia') }}</span>
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-red-600/70 hover:bg-red-600 text-white transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                                <span>{{ __('Wyloguj') }}</span>
+                            </button>
+                        </form>
+                    </div>
+                    <flux:dropdown position="bottom" align="start">
                         <div class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#2f76aa]/30 hover:bg-[#2f76aa]/50 cursor-pointer transition-all">
                             <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#106c21] text-white font-semibold">
                                 {{ auth()->user()->initials() }}
@@ -94,11 +113,17 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </div>
-                        <flux:menu class="w-[220px]">
-                            <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>{{ __('Ustawienia') }}</flux:menu.item>
+                        <flux:menu class="w-[240px]">
+                            <flux:menu.item :href="route('settings.all')" icon="cog" wire:navigate>{{ __('Ustawienia') }}</flux:menu.item>tem>
+
                             @if(in_array(auth()->user()->role, ['admin', 'instructor']))
-                            <flux:menu.item :href="route('admin.dashboard')" icon="shield-check" wire:navigate>{{ __('Panel Admin') }}</flux:menu.item>
+                                <flux:menu.separator />
+                                <flux:menu.item :href="route('admin.dashboard')" icon="shield-check" wire:navigate>{{ __('Panel Admin') }}</flux:menu.item>
+                                <flux:menu.item :href="route('admin.posts')" icon="newspaper" wire:navigate>{{ __('Posty') }}</flux:menu.item>
+                                <flux:menu.item :href="route('admin.members')" icon="users" wire:navigate>{{ __('Użytkownicy') }}</flux:menu.item>
+                                <flux:menu.item :href="route('admin.groups')" icon="user-group" wire:navigate>{{ __('Grupy') }}</flux:menu.item>
                             @endif
+
                             <flux:menu.separator />
                             <form method="POST" action="{{ route('logout') }}" class="w-full">
                                 @csrf
@@ -147,8 +172,8 @@
                 </button>
             </div>
             <nav class="space-y-2">
-                <a href="{{ route('home') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#2f76aa] text-white">
-                    <span class="font-semibold">News</span>
+                <a href="{{ route('news') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg {{ request()->routeIs('news') ? 'bg-[#2f76aa] text-white' : 'text-neutral-300 hover:bg-[#2f76aa]/50' }}">
+                    <span class="font-semibold">Aktualności</span>
                 </a>
                 <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-300 hover:bg-[#2f76aa]/50">
                     <span class="font-semibold">Education</span>
@@ -158,14 +183,32 @@
                 </a>
 
                 @auth
-                <div class="pt-6 mt-6 border-t border-[#2f76aa]">
-                    <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 text-neutral-300">
-                        Ustawienia
+                <div class="pt-6 mt-6 border-t border-[#2f76aa] space-y-1">
+                    <p class="px-4 text-xs uppercase text-neutral-400 font-semibold mb-2">{{ __('Konto') }}</p>
+                    <a href="{{ route('settings.all') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-300 hover:bg-[#2f76aa]/50">
+                        {{ __('Ustawienia') }}
                     </a>
-                    <form method="POST" action="{{ route('logout') }}">
+
+                    @if(in_array(auth()->user()->role, ['admin', 'instructor']))
+                        <p class="px-4 pt-4 text-xs uppercase text-neutral-400 font-semibold">{{ __('Administracja') }}</p>
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-300 hover:bg-[#2f76aa]/50">
+                            {{ __('Panel Admin') }}
+                        </a>
+                        <a href="{{ route('admin.posts') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-300 hover:bg-[#2f76aa]/50">
+                            {{ __('Posty') }}
+                        </a>
+                        <a href="{{ route('admin.members') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-300 hover:bg-[#2f76aa]/50">
+                            {{ __('Użytkownicy') }}
+                        </a>
+                        <a href="{{ route('admin.groups') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-300 hover:bg-[#2f76aa]/50">
+                            {{ __('Grupy') }}
+                        </a>
+                    @endif
+
+                    <form method="POST" action="{{ route('logout') }}" class="pt-2">
                         @csrf
-                        <button type="submit" class="w-full text-left flex items-center gap-3 px-4 py-3 text-neutral-300">
-                            Wyloguj
+                        <button type="submit" class="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg text-white bg-[#106c21] hover:bg-[#2f76aa] transition">
+                            {{ __('Wyloguj') }}
                         </button>
                     </form>
                 </div>

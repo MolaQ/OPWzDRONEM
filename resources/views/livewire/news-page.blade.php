@@ -1,6 +1,12 @@
-<div class="p-3">
+<div class="max-w-7xl mx-auto p-3">
     <div class="mb-6">
-        <h2 class="text-3xl font-bold text-white mb-2">⚡ Aktualności</h2>
+        <a href="{{ route('home') }}" class="inline-flex items-center text-[#106c21] hover:text-[#2f76aa] transition mb-4">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Powrót do strony głównej
+        </a>
+        <h1 class="text-4xl font-bold text-white mb-2">⚡ Aktualności</h1>
         <p class="text-neutral-400">Najnowsze informacje i ogłoszenia</p>
     </div>
 
@@ -59,4 +65,3 @@
         </div>
     @endif
 </div>
-

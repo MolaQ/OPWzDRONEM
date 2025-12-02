@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
@@ -27,13 +27,13 @@
                 {{-- Sekcja Treści --}}
                 <flux:navlist.group :heading="__('Content')" class="grid">
                     <flux:navlist.item icon="newspaper" :href="route('admin.posts')" :current="request()->routeIs('admin.posts')" wire:navigate>{{ __('Posts') }}</flux:navlist.item>
+                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('admin.comments')" :current="request()->routeIs('admin.comments')" wire:navigate>{{ __('Comments') }}</flux:navlist.item>
                     <flux:navlist.item icon="academic-cap" href="#" wire:navigate>{{ __('Courses') }}</flux:navlist.item>
                     <flux:navlist.item icon="document-text" href="#" wire:navigate>{{ __('Resources') }}</flux:navlist.item>
                 </flux:navlist.group>
 
                 {{-- Sekcja Interakcji --}}
                 <flux:navlist.group :heading="__('Engagement')" class="grid">
-                    <flux:navlist.item icon="chat-bubble-left-right" href="#" wire:navigate>{{ __('Comments') }}</flux:navlist.item>
                     <flux:navlist.item icon="heart" href="#" wire:navigate>{{ __('Likes') }}</flux:navlist.item>
                     <flux:navlist.item icon="chart-bar" href="#" wire:navigate>{{ __('Analytics') }}</flux:navlist.item>
                 </flux:navlist.group>
