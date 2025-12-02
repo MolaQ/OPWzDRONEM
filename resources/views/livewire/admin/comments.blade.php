@@ -22,7 +22,7 @@
                     <div>
                         <p class="font-semibold text-neutral-900 dark:text-neutral-100">{{ $comment->user->name }}</p>
                         <p class="text-xs text-neutral-500 dark:text-neutral-400">
-                            {{ $comment->created_at->format('d.m.Y H:i') }} · 
+                            {{ $comment->created_at->format('d.m.Y H:i') }} ·
                             Post: <a href="{{ route('post.view', $comment->post->id) }}" target="_blank" class="text-[#106c21] hover:underline">{{ Str::limit($comment->post->title, 40) }}</a>
                         </p>
                     </div>
