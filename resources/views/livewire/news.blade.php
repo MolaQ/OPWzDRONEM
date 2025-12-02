@@ -19,14 +19,14 @@
                             </svg>
                         </div>
                     @endif
-                    
+
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-white mb-3 line-clamp-2">{{ $post->title }}</h3>
-                        
+
                         <div class="text-neutral-300 text-sm mb-4 line-clamp-3">
                             {!! Str::limit(strip_tags($post->content), 120) !!}
                         </div>
-                        
+
                         <div class="flex items-center justify-between text-xs text-neutral-400">
                             <div class="flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

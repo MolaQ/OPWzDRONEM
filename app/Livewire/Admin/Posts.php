@@ -78,7 +78,7 @@ class Posts extends Component
         $this->validate($rules);
 
         $data = $this->editingPost;
-        
+
         // Handle image upload
         if ($this->image) {
             // Delete old image if exists
@@ -88,7 +88,7 @@ class Posts extends Component
                     Storage::disk('public')->delete($oldPost->image);
                 }
             }
-            
+
             $data['image'] = $this->image->store('posts', 'public');
         }
 
@@ -129,12 +129,12 @@ class Posts extends Component
     public function deletePost($id)
     {
         $post = Post::findOrFail($id);
-        
+
         // Delete image if exists
         if ($post->image) {
             Storage::disk('public')->delete($post->image);
         }
-        
+
         $post->delete();
         $this->dispatch('notify', type: 'success', message: 'Post został usunięty!');
     }
@@ -143,13 +143,13 @@ class Posts extends Component
     {
         $post = Post::findOrFail($id);
         $post->is_published = !$post->is_published;
-        
+
         if ($post->is_published && !$post->published_at) {
             $post->published_at = now();
         }
-        
+
         $post->save();
-        
+
         $status = $post->is_published ? 'opublikowany' : 'ukryty';
         $this->dispatch('notify', type: 'success', message: "Post został {$status}!");
     }

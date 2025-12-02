@@ -17,7 +17,7 @@
 
         <div class="p-8">
             <h1 class="text-4xl font-bold text-white mb-4">{{ $post->title }}</h1>
-            
+
             <div class="flex items-center gap-4 text-sm text-neutral-300 mb-8 pb-6 border-b border-neutral-600">
                 <div class="flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

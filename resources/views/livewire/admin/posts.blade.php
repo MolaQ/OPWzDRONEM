@@ -28,7 +28,7 @@
                             <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="w-32 h-32 object-cover rounded-lg">
                         </div>
                     @endif
-                    
+
                     <div class="flex-1 min-w-0">
                         <div class="flex items-start justify-between gap-4">
                             <div class="flex-1 min-w-0">
@@ -59,14 +59,14 @@
                                     @endif
                                 </div>
                             </div>
-                            
+
                             <div class="flex-shrink-0">
                                 <span class="px-3 py-1 text-xs rounded-full {{ $post->is_published ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' }}">
                                     {{ $post->is_published ? '✓ Opublikowany' : '○ Nieopublikowany' }}
                                 </span>
                             </div>
                         </div>
-                        
+
                         <div class="flex gap-2 mt-4">
                             <button wire:click="editPost({{ $post->id }})" class="text-blue-600 hover:underline text-sm font-medium">Edytuj</button>
                             <button wire:click="togglePublish({{ $post->id }})" class="text-green-600 hover:underline text-sm font-medium">
@@ -112,12 +112,12 @@
                         <label for="title" class="block mb-2 text-sm font-semibold text-neutral-300">
                             Tytuł <span class="text-red-500">*</span>
                         </label>
-                        <input 
-                            id="title" 
-                            type="text" 
+                        <input
+                            id="title"
+                            type="text"
                             wire:model.defer="editingPost.title"
                             placeholder="Wprowadź tytuł postu..."
-                            class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition" 
+                            class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                         />
                         @error('editingPost.title')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                     </div>
@@ -127,8 +127,8 @@
                         <label for="content" class="block mb-2 text-sm font-semibold text-neutral-300">
                             Treść <span class="text-red-500">*</span>
                         </label>
-                        <textarea 
-                            id="content" 
+                        <textarea
+                            id="content"
                             wire:model.defer="editingPost.content"
                             class="tinymce-editor"
                         ></textarea>
@@ -140,7 +140,7 @@
                         <label for="image" class="block mb-2 text-sm font-semibold text-neutral-300">
                             Obrazek
                         </label>
-                        
+
                         @if($editingPost['image'] && !$image)
                             <div class="mb-3">
                                 <img src="{{ asset('storage/' . $editingPost['image']) }}" alt="Current" class="w-48 h-48 object-cover rounded-lg border border-neutral-700">
@@ -155,12 +155,12 @@
                             </div>
                         @endif
 
-                        <input 
-                            id="image" 
-                            type="file" 
+                        <input
+                            id="image"
+                            type="file"
                             wire:model="image"
                             accept="image/*"
-                            class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#880000] file:text-white file:cursor-pointer hover:file:bg-red-900 transition" 
+                            class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#880000] file:text-white file:cursor-pointer hover:file:bg-red-900 transition"
                         />
                         <p class="text-xs text-neutral-400 mt-2">Maksymalny rozmiar: 2MB</p>
                         @error('image')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
@@ -174,9 +174,9 @@
                             </label>
                             <div class="flex items-center gap-4 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
                                 <label class="flex items-center gap-3 cursor-pointer flex-1">
-                                    <input 
-                                        type="radio" 
-                                        wire:model.defer="editingPost.is_published" 
+                                    <input
+                                        type="radio"
+                                        wire:model.defer="editingPost.is_published"
                                         value="1"
                                         class="w-4 h-4 text-green-600 focus:ring-green-500 focus:ring-2"
                                     />
@@ -186,9 +186,9 @@
                                     </span>
                                 </label>
                                 <label class="flex items-center gap-3 cursor-pointer flex-1">
-                                    <input 
-                                        type="radio" 
-                                        wire:model.defer="editingPost.is_published" 
+                                    <input
+                                        type="radio"
+                                        wire:model.defer="editingPost.is_published"
                                         value="0"
                                         class="w-4 h-4 text-yellow-600 focus:ring-yellow-500 focus:ring-2"
                                     />
@@ -206,11 +206,11 @@
                             <label for="published_at" class="block mb-2 text-sm font-semibold text-neutral-300">
                                 Data publikacji
                             </label>
-                            <input 
-                                id="published_at" 
-                                type="datetime-local" 
+                            <input
+                                id="published_at"
+                                type="datetime-local"
                                 wire:model.defer="editingPost.published_at"
-                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition" 
+                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                             />
                             <p class="text-xs text-neutral-400 mt-2">Pozostaw puste dla automatycznej daty</p>
                             @error('editingPost.published_at')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
@@ -219,15 +219,15 @@
 
                     <!-- Przyciski akcji -->
                     <div class="flex justify-end gap-3 pt-4 border-t border-neutral-700">
-                        <button 
-                            type="button" 
-                            wire:click="closeModal" 
+                        <button
+                            type="button"
+                            wire:click="closeModal"
                             class="px-6 py-2.5 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-300 font-medium hover:bg-neutral-700 transition"
                         >
                             Anuluj
                         </button>
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             class="px-6 py-2.5 rounded-lg bg-[#880000] hover:bg-red-900 text-white font-semibold shadow-lg hover:shadow-xl transition transform hover:scale-105"
                         >
                             {{ $editingPost['id'] ? '💾 Zapisz zmiany' : '➕ Dodaj post' }}
@@ -287,7 +287,7 @@
         const checkTinyMCE = setInterval(() => {
             if (typeof tinymce !== 'undefined') {
                 clearInterval(checkTinyMCE);
-                
+
                 setTimeout(() => {
                     tinymce.init({
                         selector: '.tinymce-editor',
@@ -313,7 +313,7 @@
                                 const content = editor.getContent();
                                 @this.set('editingPost.content', content);
                             });
-                            
+
                             editor.on('init', function() {
                                 // Ustaw wartość początkową
                                 const content = @this.get('editingPost.content');
