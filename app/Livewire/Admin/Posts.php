@@ -126,6 +126,7 @@ class Posts extends Component
             'image' => null,
         ];
         $this->resetValidation();
+        $this->dispatch('modalClosed');
     }
 
     public function deletePost($id)
