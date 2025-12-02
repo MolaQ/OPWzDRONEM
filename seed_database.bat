@@ -36,7 +36,7 @@ echo   Seedowanie zakonczone!
 echo ====================================
 echo.
 echo Dane logowania:
-echo   Admin: admin@example.com / Haslo1234
+echo   Admin: admin@exaple.com / Haslo1234
 echo   Instruktor 1: jan.kowalski@example.com / Haslo1234
 echo   Instruktor 2: anna.nowak@example.com / Haslo1234
 echo   Wychowawca: piotr.wisniewski@example.com / Haslo1234

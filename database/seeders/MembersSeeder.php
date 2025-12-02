@@ -34,7 +34,7 @@ class MembersSeeder extends Seeder
         // 1 Administrator
         $admin = User::create([
             'name' => 'Administrator Systemu',
-            'email' => 'admin@example.com',
+            'email' => 'admin@exaple.com',
             'password' => Hash::make('Haslo1234'),
             'role' => 'admin',
             'pilot_license' => 'PL-ADMIN-001',

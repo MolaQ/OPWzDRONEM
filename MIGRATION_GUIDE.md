@@ -41,7 +41,7 @@
 #### Seeders:
 - `RolesAndPermissionsSeeder.php` - tworzy role i przypisuje uprawnienia
 - `MembersSeeder.php` - przypisuje role nowym użytkownikom
-- `MigrateUserRolesSeeder.php` - migruje istniejących użytkowników
+<!-- `MigrateUserRolesSeeder.php` (usunięty) był używany do migracji istniejących użytkowników -->
 
 ## Instrukcja wdrożenia
 
@@ -88,7 +88,7 @@ php artisan db:seed --class=RolesAndPermissionsSeeder
 php artisan db:seed --class=MembersSeeder
 ```
 To utworzy:
-- **1 administratora**: admin@example.com / Haslo1234
+- **1 administratora**: admin@exaple.com / Haslo1234
 - **2 instruktorów**: jan.kowalski@example.com, anna.nowak@example.com / Haslo1234
 - **1 wychowawcę**: piotr.wisniewski@example.com / Haslo1234
 - **30 studentów** w grupie 4OPW (student1@example.com - student30@example.com / Haslo1234)
@@ -96,23 +96,12 @@ To utworzy:
 - **60 reakcji** (polubienia/niepolubienia) na posty
 - **50 komentarzy** pod postami
 
-### Krok 5: Migruj istniejących użytkowników (tylko jeśli masz starą bazę)
-```powershell
-php artisan db:seed --class=MigrateUserRolesSeeder
-```
-Ten seeder przypisze role użytkownikom na podstawie ich obecnego pola 'role':
-- `admin` → rola `admin`
-- `instructor` → rola `instructor`
-- `user` → rola `student`
-
-**UWAGA:** Pomiń ten krok jeśli tworzysz nową bazę danych!
-
-### Krok 6: Zresetuj cache uprawnień
+### Krok 5: Zresetuj cache uprawnień
 ```powershell
 php artisan permission:cache-reset
 ```
 
-### Krok 7 (opcjonalnie): Przeładuj cache aplikacji
+### Krok 6 (opcjonalnie): Przeładuj cache aplikacji
 ```powershell
 php artisan config:clear
 php artisan cache:clear
@@ -192,6 +181,8 @@ Po uruchomieniu seedera `MembersSeeder` system utworzy:
 
 ### Użytkownicy:
 - **Administrator**: admin@example.com / Haslo1234 (grupa: Administracja)
+// poprawiono powyżej; zachowujemy spójność danych
+- **Administrator**: admin@exaple.com / Haslo1234 (grupa: Administracja)
 - **Instruktor 1**: jan.kowalski@example.com / Haslo1234 (grupa: Administracja)
 - **Instruktor 2**: anna.nowak@example.com / Haslo1234 (grupa: Administracja)
 - **Wychowawca**: piotr.wisniewski@example.com / Haslo1234 (grupa: 4OPW)
