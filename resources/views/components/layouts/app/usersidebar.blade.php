@@ -81,40 +81,23 @@
                 <!-- User Menu at Bottom -->
                 <div class="mt-auto pt-6 border-t border-[#2f76aa]">
                     @auth
-                    <div class="space-y-2 mb-3">
-                        @if(in_array(auth()->user()->role, ['admin','instructor']))
-                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-[#106c21]/60 hover:bg-[#106c21] transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13h2l2 7h11l2-7h2M5 13l4-8h6l4 8M10 9h4" /></svg>
-                                <span>{{ __('Panel Admin') }}</span>
-                            </a>
-                        @endif
-                        <a href="{{ route('settings.all') }}" class="flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-[#2f76aa]/60 hover:bg-[#2f76aa] transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1z" /></svg>
-                            <span>{{ __('Ustawienia') }}</span>
-                        </a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-red-600/70 hover:bg-red-600 text-white transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                                <span>{{ __('Wyloguj') }}</span>
-                            </button>
-                        </form>
-                    </div>
                     <flux:dropdown position="bottom" align="start">
-                        <div class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#2f76aa]/30 hover:bg-[#2f76aa]/50 cursor-pointer transition-all">
-                            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#106c21] text-white font-semibold">
-                                {{ auth()->user()->initials() }}
+                        <flux:button variant="ghost" class="w-full justify-start">
+                            <div class="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#2f76aa]/30 hover:bg-[#2f76aa]/50 cursor-pointer transition-all w-full">
+                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#106c21] text-white font-semibold">
+                                    {{ auth()->user()->initials() }}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
+                                    <p class="text-xs text-neutral-300 truncate">{{ auth()->user()->email }}</p>
+                                </div>
+                                <svg class="w-4 h-4 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
                             </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
-                                <p class="text-xs text-neutral-300 truncate">{{ auth()->user()->email }}</p>
-                            </div>
-                            <svg class="w-4 h-4 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
+                        </flux:button>
                         <flux:menu class="w-[240px]">
-                            <flux:menu.item :href="route('settings.all')" icon="cog" wire:navigate>{{ __('Ustawienia') }}</flux:menu.item>tem>
+                            <flux:menu.item :href="route('settings.all')" icon="cog" wire:navigate>{{ __('Ustawienia') }}</flux:menu.item>
 
                             @if(in_array(auth()->user()->role, ['admin', 'instructor']))
                                 <flux:menu.separator />
