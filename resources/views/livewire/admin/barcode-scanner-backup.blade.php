@@ -1,13 +1,13 @@
 <flux:main>
-    <div class="flex w-full flex-col gap-4">
+    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
         <!-- Scanner Input -->
         <div class="relative overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
         <div class="p-6">
             <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-1">Skaner kodów kreskowych</h1>
-            <p class="text-neutral-600 dark:text-neutral-400 mb-6">Zeskanuj kod ucznia (S) lub sprzętu (E)</p>
+            <p class="text-neutral-600 dark:text-neutral-400 mb-6">Zeskanuj kod ucznia (S), sprzętu (E) lub zestawu (Z)</p>
 
             <div class="flex gap-3">
-                <div class="flex-1">
+                    <div class="flex-1">
                     <label for="barcode" class="block mb-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">
                         Kod kreskowy
                     </label>
@@ -16,14 +16,14 @@
                         id="barcode"
                         wire:model.live.debounce.500ms="barcode"
                         autofocus
-                        placeholder="Zeskanuj lub wpisz kod (np. S0000000001, E0000000001)"
+                        placeholder="Zeskanuj lub wpisz kod (np. S0000000001, E0000000001, Z0000000001)"
                         class="w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 px-4 py-3 text-lg font-mono text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                         x-data
                         x-init="setTimeout(()=>{$el.focus()},50)"
                         @scanned.window="setTimeout(() => $el.focus(), 100)"
                     />
                     <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
-                        Format: <span class="font-mono">S</span> (student) lub <span class="font-mono">E</span> (equipment) + 10 cyfr
+                        Format: <span class="font-mono">S</span> (student), <span class="font-mono">E</span> (equipment), <span class="font-mono">Z</span> (zestaw) + 10 cyfr
                     </p>
 
                     @if($showSuggestions)
@@ -35,7 +35,7 @@
                                 class="w-full text-left px-3 py-2 hover:bg-neutral-50 dark:hover:bg-neutral-800 flex items-center gap-3"
                                 wire:key="suggestion-{{ $s['type'] }}-{{ $s['id'] }}-{{ $i }}"
                             >
-                                <span class="inline-flex items-center justify-center w-6 h-6 rounded {{ $s['type'] === 'student' ? 'bg-blue-500' : 'bg-purple-500' }} text-white text-xs font-bold">
+                                <span class="inline-flex items-center justify-center w-6 h-6 rounded {{ $s['type'] === 'student' ? 'bg-blue-500' : ($s['type'] === 'set' ? 'bg-orange-500' : 'bg-purple-500') }} text-white text-xs font-bold">
                                     {{ strtoupper(substr($s['type'],0,1)) }}
                                 </span>
                                 <span class="flex-1 truncate">{{ $s['name'] }}</span>
@@ -44,11 +44,11 @@
                         @endforeach
                     </div>
                     @endif
-                </div>
-                <div class="flex items-end">
-                    <button
-                        wire:click="scan"
-                        class="px-6 py-3 rounded-lg bg-[#880000] text-white font-semibold hover:bg-red-900 transition flex items-center gap-2"
+                    </div>
+                    <div class="flex items-end">
+                        <button
+                            wire:click="scan"
+                            class="px-6 py-3 rounded-lg bg-[#880000] text-white font-semibold hover:bg-red-900 transition flex items-center gap-2"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -73,11 +73,11 @@
                     </button>
                 </div>
             @endif
+            </div>
         </div>
-    </div>
 
-    <!-- Quick Stats Grid -->
-    <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+        <!-- Quick Stats Grid -->
+        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
         <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800 p-4">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center">
@@ -110,12 +110,12 @@
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-lg bg-green-500 flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
                 </div>
                 <div>
-                    <p class="text-sm text-green-600 dark:text-green-400">Szybkie skanowanie</p>
-                    <p class="text-lg font-bold text-green-900 dark:text-green-100">Debounce 500ms</p>
+                    <p class="text-sm text-green-600 dark:text-green-400">Kody zestawów</p>
+                    <p class="text-lg font-bold text-green-900 dark:text-green-100">Format: Z##########</p>
                 </div>
             </div>
         </div>
@@ -132,7 +132,7 @@
                 <div>
                     <h2 class="text-xl font-bold text-white">Znaleziono!</h2>
                     <p class="text-green-100 text-sm">
-                        Typ: {{ $result['type'] === 'student' ? 'Uczeń' : 'Sprzęt' }}
+                        Typ: {{ $result['type'] === 'student' ? 'Uczeń' : ($result['type'] === 'set' ? 'Zestaw' : 'Sprzęt') }}
                     </p>
                 </div>
             </div>
@@ -187,6 +187,52 @@
                                 </p>
                             </div>
                             @endif
+                        </div>
+                    </div>
+                @elseif($result['type'] === 'set')
+                    <!-- Equipment Set Details -->
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white flex-shrink-0">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+                                    {{ $result['entity']->name }}
+                                </h3>
+                                <p class="text-neutral-600 dark:text-neutral-400 font-mono">{{ $result['entity']->barcode }}</p>
+                            </div>
+                            <span class="px-3 py-1 text-xs rounded-full {{ $result['entity']->isAvailable() ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' }}">
+                                {{ $result['entity']->isAvailable() ? 'Dostępny' : 'Niekompletny' }}
+                            </span>
+                        </div>
+
+                        @if($result['entity']->description)
+                        <div class="pt-2">
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400">Opis</p>
+                            <p class="font-medium text-neutral-900 dark:text-neutral-100">{{ $result['entity']->description }}</p>
+                        </div>
+                        @endif
+
+                        <div class="pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                            <p class="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-3">Skład zestawu ({{ $result['entity']->equipments->count() }} szt.):</p>
+                            <div class="space-y-2">
+                                @foreach($result['entity']->equipments as $eq)
+                                    <div class="flex items-center justify-between p-2 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+                                        <div class="flex items-center gap-2 flex-1">
+                                            <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">{{ $eq->name }}</span>
+                                            @if($eq->model)
+                                                <span class="text-xs text-neutral-500 dark:text-neutral-400">({{ $eq->model }})</span>
+                                            @endif
+                                        </div>
+                                        <span class="px-2 py-1 text-xs rounded-full bg-{{ $eq->status_color }}-100 text-{{ $eq->status_color }}-800 dark:bg-{{ $eq->status_color }}-900 dark:text-{{ $eq->status_color }}-200">
+                                            {{ $eq->status_label }}
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 @else

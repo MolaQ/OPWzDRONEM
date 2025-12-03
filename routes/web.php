@@ -14,7 +14,10 @@ use App\Livewire\Admin\Members;
 use App\Livewire\Admin\Groups;
 use App\Livewire\Admin\Posts;
 use App\Livewire\Admin\Comments;
-use App\Livewire\Admin\BarcodeScanner;
+use App\Livewire\Admin\GlobalSearch;
+use App\Livewire\Admin\Rentals;
+use App\Livewire\Admin\Returns;
+use App\Livewire\Admin\EquipmentSets;
 use App\Livewire\PostView;
 use App\Livewire\NewsPage;
 
@@ -33,7 +36,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/groups', Groups::class)->name('admin.groups');
     Route::get('/admin/posts', Posts::class)->name('admin.posts');
     Route::get('/admin/comments', Comments::class)->name('admin.comments');
-    Route::get('/admin/scanner', BarcodeScanner::class)->name('admin.scanner');
+    Route::get('/admin/search', GlobalSearch::class)->name('admin.search');
+    Route::get('/admin/rentals', Rentals::class)->name('admin.rentals');
+    Route::get('/admin/returns', Returns::class)->name('admin.returns');
+    Route::get('/admin/equipment-sets', EquipmentSets::class)->name('admin.equipment-sets');
 });
 
 Route::middleware(['auth'])->group(function () {

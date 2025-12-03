@@ -180,23 +180,86 @@ class MembersSeeder extends Seeder
     protected function seedEquipments(): void
     {
         $equipments = [
-            ['name' => 'DJI Mavic 3', 'model' => 'M3-2025', 'category' => 'drone', 'status' => 'available', 'description' => 'Dron szkoleniowy klasy premium'],
-            ['name' => 'DJI Mini 4 Pro', 'model' => 'MN4P', 'category' => 'drone', 'status' => 'in_use', 'description' => 'Lekki dron do ćwiczeń'],
-            ['name' => 'Parrot Anafi', 'model' => 'ANA-1', 'category' => 'drone', 'status' => 'maintenance', 'description' => 'Konserwacja kamery'],
-            ['name' => 'Kontroler RC', 'model' => 'RC-STD', 'category' => 'controller', 'status' => 'available', 'description' => 'Kontroler uniwersalny'],
-            ['name' => 'Gogle FPV', 'model' => 'FPV-G1', 'category' => 'fpv', 'status' => 'available', 'description' => 'Gogle treningowe'],
-            ['name' => 'Akumulator LiPo', 'model' => 'LIPO-5200', 'category' => 'battery', 'status' => 'available', 'description' => 'Akumulator 5200mAh'],
-            ['name' => 'Ładowarka Smart', 'model' => 'CHG-S', 'category' => 'charger', 'status' => 'available', 'description' => 'Inteligentna ładowarka wielokanałowa'],
-            ['name' => 'Tor transportowy', 'model' => 'BAG-XL', 'category' => 'bag', 'status' => 'available', 'description' => 'Duży tor na sprzęt'],
-            ['name' => 'Kamera GoPro', 'model' => 'GP12', 'category' => 'camera', 'status' => 'in_use', 'description' => 'Kamera akcji do nagrań'],
-            ['name' => 'Śmigła zapasowe', 'model' => 'PROP-S', 'category' => 'parts', 'status' => 'available', 'description' => 'Zestaw śmigieł'],
+            ['name' => 'DJI Mavic 3', 'model' => 'M3-2025', 'category' => 'drone', 'status' => 'dostepny', 'description' => 'Dron szkoleniowy klasy premium'],
+            ['name' => 'DJI Mini 4 Pro', 'model' => 'MN4P', 'category' => 'drone', 'status' => 'dostepny', 'description' => 'Lekki dron do ćwiczeń'],
+            ['name' => 'Parrot Anafi', 'model' => 'ANA-1', 'category' => 'drone', 'status' => 'konserwacja', 'description' => 'Konserwacja kamery'],
+            ['name' => 'Kontroler RC', 'model' => 'RC-STD', 'category' => 'controller', 'status' => 'dostepny', 'description' => 'Kontroler uniwersalny'],
+            ['name' => 'Gogle FPV', 'model' => 'FPV-G1', 'category' => 'fpv', 'status' => 'dostepny', 'description' => 'Gogle treningowe'],
+            ['name' => 'Akumulator LiPo', 'model' => 'LIPO-5200', 'category' => 'battery', 'status' => 'dostepny', 'description' => 'Akumulator 5200mAh'],
+            ['name' => 'Ładowarka Smart', 'model' => 'CHG-S', 'category' => 'charger', 'status' => 'dostepny', 'description' => 'Inteligentna ładowarka wielokanałowa'],
+            ['name' => 'Tor transportowy', 'model' => 'BAG-XL', 'category' => 'bag', 'status' => 'dostepny', 'description' => 'Duży tor na sprzęt'],
+            ['name' => 'Kamera GoPro', 'model' => 'GP12', 'category' => 'camera', 'status' => 'dostepny', 'description' => 'Kamera akcji do nagrań'],
+            ['name' => 'Śmigła zapasowe', 'model' => 'PROP-S', 'category' => 'parts', 'status' => 'dostepny', 'description' => 'Zestaw śmigieł'],
+            ['name' => 'Kontroler RC Pro', 'model' => 'RC-PRO', 'category' => 'controller', 'status' => 'dostepny', 'description' => 'Kontroler profesjonalny'],
+            ['name' => 'Akumulator LiPo 2', 'model' => 'LIPO-5200', 'category' => 'battery', 'status' => 'dostepny', 'description' => 'Akumulator 5200mAh #2'],
         ];
 
-        foreach ($equipments as $data) {
+        $createdEquipment = [];
+        foreach ($equipments as $index => $data) {
+            // Create with temporary barcode first
+            $data['barcode'] = 'E-TEMP-' . $index;
             $eq = Equipment::create($data);
+            // Then update with proper ID-based barcode
             $eq->update(['barcode' => BarcodeResolver::generateEquipmentBarcode($eq->id)]);
+            $createdEquipment[] = $eq;
         }
 
-        $this->command->info('   - 10 sprzętów z kodami EXXXXXXXXXX');
+        $this->command->info('   - ' . count($equipments) . ' sprzętów z kodami EXXXXXXXXXX');
+
+        // Create equipment sets
+        $this->seedEquipmentSets($createdEquipment);
+    }
+
+    protected function seedEquipmentSets(array $equipments): void
+    {
+        // Zestaw 1: DJI Mavic 3 Complete
+        $set1 = \App\Models\EquipmentSet::create([
+            'barcode' => 'Z-TEMP-1',
+            'name' => 'DJI Mavic 3 - Zestaw kompletny',
+            'description' => 'Kompletny zestaw do lotów - dron, kontroler, 2x akumulator, ładowarka, torba',
+            'active' => true,
+        ]);
+        $set1->update(['barcode' => BarcodeResolver::generateSetBarcode($set1->id)]);
+
+        // Attach: Mavic 3, Kontroler RC, 2x Akumulator, Ładowarka, Torba
+        $set1->equipments()->attach([
+            $equipments[0]->id, // DJI Mavic 3
+            $equipments[3]->id, // Kontroler RC
+            $equipments[5]->id, // Akumulator 1
+            $equipments[11]->id, // Akumulator 2
+            $equipments[6]->id, // Ładowarka
+            $equipments[7]->id, // Torba
+        ]);
+
+        // Zestaw 2: DJI Mini 4 Pro Basic
+        $set2 = \App\Models\EquipmentSet::create([
+            'barcode' => 'Z-TEMP-2',
+            'name' => 'DJI Mini 4 Pro - Zestaw podstawowy',
+            'description' => 'Zestaw podstawowy - dron, kontroler pro, kamera GoPro',
+            'active' => true,
+        ]);
+        $set2->update(['barcode' => BarcodeResolver::generateSetBarcode($set2->id)]);
+
+        $set2->equipments()->attach([
+            $equipments[1]->id, // DJI Mini 4 Pro
+            $equipments[10]->id, // Kontroler RC Pro
+            $equipments[8]->id, // Kamera GoPro
+        ]);
+
+        // Zestaw 3: FPV Training
+        $set3 = \App\Models\EquipmentSet::create([
+            'barcode' => 'Z-TEMP-3',
+            'name' => 'Zestaw szkoleniowy FPV',
+            'description' => 'Gogle FPV i akcesoria',
+            'active' => true,
+        ]);
+        $set3->update(['barcode' => BarcodeResolver::generateSetBarcode($set3->id)]);
+
+        $set3->equipments()->attach([
+            $equipments[4]->id, // Gogle FPV
+            $equipments[9]->id, // Śmigła zapasowe
+        ]);
+
+        $this->command->info('   - 3 zestawy z kodami ZXXXXXXXXXX');
     }
 }

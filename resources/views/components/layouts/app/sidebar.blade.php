@@ -27,7 +27,16 @@
                 <flux:navlist.group heading="Zarządzanie" class="grid">
                     <flux:navlist.item icon="users" :href="route('admin.members')" :current="request()->routeIs('admin.members')" wire:navigate>Użytkownicy</flux:navlist.item>
                     <flux:navlist.item icon="user-group" :href="route('admin.groups')" :current="request()->routeIs('admin.groups')" wire:navigate>Grupy</flux:navlist.item>
-                    <flux:navlist.item icon="qr-code" :href="route('admin.scanner')" :current="request()->routeIs('admin.scanner')" wire:navigate>Skaner kodów</flux:navlist.item>
+                </flux:navlist.group>
+                @endcan
+
+                {{-- Sekcja Wyposażenie Pracowni --}}
+                @can('view users')
+                <flux:navlist.group heading="Wyposażenie Pracowni" class="grid">
+                    <flux:navlist.item icon="magnifying-glass" :href="route('admin.search')" :current="request()->routeIs('admin.search')" wire:navigate>Wyszukiwarka</flux:navlist.item>
+                    <flux:navlist.item icon="shopping-cart" :href="route('admin.rentals')" :current="request()->routeIs('admin.rentals')" wire:navigate>Wypożyczenia</flux:navlist.item>
+                    <flux:navlist.item icon="arrow-uturn-left" :href="route('admin.returns')" :current="request()->routeIs('admin.returns')" wire:navigate>Zwroty</flux:navlist.item>
+                    <flux:navlist.item icon="cube" :href="route('admin.equipment-sets')" :current="request()->routeIs('admin.equipment-sets')" wire:navigate>Zestawy</flux:navlist.item>
                 </flux:navlist.group>
                 @endcan
             </flux:navlist>

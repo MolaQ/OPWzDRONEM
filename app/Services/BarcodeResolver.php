@@ -13,6 +13,7 @@ class BarcodeResolver
      */
     const PREFIX_STUDENT = 'S';
     const PREFIX_EQUIPMENT = 'E';
+    const PREFIX_SET = 'Z';
 
     /**
      * Resolve barcode to entity
@@ -33,11 +34,16 @@ class BarcodeResolver
         }
 
         $type = $this->detectType($barcode);
+        // Normalize type naming to match Livewire components expectations
+        if ($type === 'set') {
+            $type = 'equipment_set';
+        }
         $entity = $this->findEntity($barcode, $type);
 
         return [
             'type' => $type,
             'entity' => $entity,
+            'id' => $entity?->id,
             'found' => $entity !== null,
         ];
     }
@@ -55,6 +61,7 @@ class BarcodeResolver
         return match($prefix) {
             self::PREFIX_STUDENT => 'student',
             self::PREFIX_EQUIPMENT => 'equipment',
+            self::PREFIX_SET => 'set',
             default => 'unknown',
         };
     }
@@ -71,8 +78,88 @@ class BarcodeResolver
         return match($type) {
             'student' => User::where('barcode', $barcode)->first(),
             'equipment' => Equipment::where('barcode', $barcode)->first(),
+            'equipment_set' => \App\Models\EquipmentSet::where('barcode', $barcode)->first(),
             default => null,
         };
+    }
+
+    /**
+     * Get suggestions for a partial input across all types.
+     * Returns an array of up to 10 suggestions with barcode, type, id, name.
+     *
+     * @param string $input
+     * @param string $scope 'all'|'students'|'equipment'|'equipment_sets'
+     * @return array<int, array{barcode:string,type:string,id:int,name:string}>
+     */
+    public function getSuggestions(string $input, string $scope = 'all'): array
+    {
+        $term = trim($input);
+        if ($term === '') {
+            return [];
+        }
+
+        $suggestions = [];
+
+        $like = '%'.str_replace(['%', '_'], ['\%', '\_'], $term).'%';
+
+        if ($scope === 'all' || $scope === 'students') {
+            $users = User::query()
+                ->where(function($q) use ($like) {
+                    $q->where('name', 'like', $like)
+                      ->orWhere('email', 'like', $like)
+                      ->orWhere('barcode', 'like', $like);
+                })
+                ->limit(5)
+                ->get(['id','name','barcode']);
+            foreach ($users as $u) {
+                $suggestions[] = [
+                    'barcode' => $u->barcode,
+                    'type' => 'student',
+                    'id' => $u->id,
+                    'name' => $u->name,
+                ];
+            }
+        }
+
+        if ($scope === 'all' || $scope === 'equipment') {
+            $equip = Equipment::query()
+                ->where(function($q) use ($like) {
+                    $q->where('name', 'like', $like)
+                      ->orWhere('barcode', 'like', $like)
+                      ->orWhere('model', 'like', $like);
+                })
+                ->limit(5)
+                ->get(['id','name','barcode']);
+            foreach ($equip as $e) {
+                $suggestions[] = [
+                    'barcode' => $e->barcode,
+                    'type' => 'equipment',
+                    'id' => $e->id,
+                    'name' => $e->name,
+                ];
+            }
+        }
+
+        if ($scope === 'all' || $scope === 'equipment_sets') {
+            $sets = \App\Models\EquipmentSet::query()
+                ->where(function($q) use ($like) {
+                    $q->where('name', 'like', $like)
+                      ->orWhere('barcode', 'like', $like);
+                })
+                ->limit(5)
+                ->get(['id','name','barcode']);
+            foreach ($sets as $s) {
+                $suggestions[] = [
+                    'barcode' => $s->barcode,
+                    'type' => 'equipment_set',
+                    'id' => $s->id,
+                    'name' => $s->name,
+                ];
+            }
+        }
+
+        // Limit total suggestions
+        return array_slice($suggestions, 0, 10);
     }
 
     /**
@@ -86,7 +173,7 @@ class BarcodeResolver
         $barcode = strtoupper(trim($barcode));
 
         // Check if starts with valid prefix and has numeric part
-        if (preg_match('/^[SE]\d{10}$/', $barcode)) {
+        if (preg_match('/^[SEZ]\d{10}$/', $barcode)) {
             return true;
         }
 
@@ -113,5 +200,16 @@ class BarcodeResolver
     public static function generateEquipmentBarcode(int $id): string
     {
         return self::PREFIX_EQUIPMENT . str_pad((string) $id, 10, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Generate barcode for equipment set
+     *
+     * @param int $id
+     * @return string
+     */
+    public static function generateSetBarcode(int $id): string
+    {
+        return self::PREFIX_SET . str_pad((string) $id, 10, '0', STR_PAD_LEFT);
     }
 }

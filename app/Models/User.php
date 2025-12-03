@@ -31,6 +31,31 @@ class User extends Authenticatable
     }
 
     /**
+     * Rental groups this user is member of
+     */
+    public function rentalGroups()
+    {
+        return $this->belongsToMany(RentalGroup::class, 'rental_group_members')
+            ->withTimestamps();
+    }
+
+    /**
+     * All rentals this user is involved in (through rental groups)
+     */
+    public function rentals()
+    {
+        return Rental::whereIn('rental_group_id', $this->rentalGroups()->pluck('id'));
+    }
+
+    /**
+     * Active rentals (not returned yet)
+     */
+    public function activeRentals()
+    {
+        return $this->rentals()->whereNull('returned_at');
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
