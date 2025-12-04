@@ -20,7 +20,7 @@ class AdminMiddleware
         }
 
         // Sprawdzenie czy użytkownik ma uprawnienia do panelu administracyjnego
-        if (!$user->can('access admin panel')) {
+        if (!in_array($user->role, ['admin', 'instructor'])) {
             return Redirect::route('home')->with('error', 'Brak autoryzacji');
         }
 

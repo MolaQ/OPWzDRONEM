@@ -36,9 +36,10 @@ class Rentals extends Component
             return;
         }
 
+        $user = auth()->guard('web')->user();
         $rental->update([
             'returned_at' => now(),
-            'returned_by_user_id' => auth()->id(),
+            'returned_by_user_id' => $user?->id,
             'return_notes' => 'Zwrot wymuszony przez administratora'
         ]);
 
