@@ -35,7 +35,6 @@
                 {{-- Sekcja Wyposażenie Pracowni --}}
                 @can('view users')
                 <flux:navlist.group heading="Wyposażenie Pracowni" class="grid">
-                    <flux:navlist.item icon="magnifying-glass" :href="route('admin.search')" :current="request()->routeIs('admin.search')" wire:navigate>Wyszukiwarka</flux:navlist.item>
                     <flux:navlist.item icon="shopping-cart" :href="route('admin.rentals')" :current="request()->routeIs('admin.rentals')" wire:navigate>Wypożyczenia</flux:navlist.item>
                     <flux:navlist.item icon="arrow-uturn-left" :href="route('admin.returns')" :current="request()->routeIs('admin.returns')" wire:navigate>Zwroty</flux:navlist.item>
                     <flux:navlist.item icon="cube" :href="route('admin.equipment-sets')" :current="request()->routeIs('admin.equipment-sets')" wire:navigate>Zestawy</flux:navlist.item>
@@ -44,6 +43,13 @@
             </flux:navlist>
 
             <flux:spacer />
+
+            {{-- Wyszukiwarka przeniesiona na dół --}}
+            @can('view users')
+            <flux:navlist variant="outline">
+                <flux:navlist.item icon="magnifying-glass" :href="route('admin.search')" :current="request()->routeIs('admin.search')" wire:navigate>Wyszukiwarka</flux:navlist.item>
+            </flux:navlist>
+            @endcan
 
             <!-- Desktop User Menu -->
             <flux:dropdown class="hidden lg:block" position="bottom" align="start">
