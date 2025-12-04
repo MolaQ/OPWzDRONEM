@@ -11,8 +11,8 @@
             <div class="flex items-center justify-between gap-4">
                 <!-- Left Logo -->
                 <div class="flex-shrink-0">
-                    <div class="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-white rounded-lg shadow-xl overflow-hidden">
-                        <img src="{{ asset('img/powiat.png') }}" alt="Logo Left" class="w-full h-full object-cover" onerror="this.src='{{ asset('img/powiat.svg') }}'">
+                    <div class="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden flex items-center justify-center p-2">
+                        <img src="{{ asset('img/powiat.png') }}" alt="Logo Left" class="w-full h-full object-contain" onerror="this.src='{{ asset('img/powiat.svg') }}'">
                     </div>
                 </div>
 
@@ -24,11 +24,11 @@
 
                 <!-- Right Logos -->
                 <div class="flex-shrink-0 flex gap-2 md:gap-4">
-                    <div class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-white rounded-lg shadow-xl overflow-hidden">
-                        <img src="{{ asset('img/opw.png') }}" alt="Logo Right 1" class="w-full h-full object-cover" onerror="this.src='{{ asset('img/wcr.svg') }}'">
+                    <div class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-lg overflow-hidden flex items-center justify-center p-2">
+                        <img src="{{ asset('img/opw.png') }}" alt="Logo Right 1" class="w-full h-full object-contain" onerror="this.src='{{ asset('img/wcr.svg') }}'">
                     </div>
-                    <div class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-white rounded-lg shadow-xl overflow-hidden">
-                        <img src="{{ asset('img/zst.png') }}" alt="Logo Right 2" class="w-full h-full object-cover" onerror="this.src='{{ asset('img/zst.svg') }}'">
+                    <div class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-lg overflow-hidden flex items-center justify-center p-2">
+                        <img src="{{ asset('img/zst.png') }}" alt="Logo Right 2" class="w-full h-full object-contain" onerror="this.src='{{ asset('img/zst.svg') }}'">
                     </div>
                 </div>
             </div>
