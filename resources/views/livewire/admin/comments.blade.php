@@ -1,21 +1,30 @@
-<div class="flex-1 overflow-auto rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-6 shadow">
+<flux:main>
+    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+        <!-- Filtry i wyszukiwanie -->
+        <div class="space-y-3 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <!-- Rząd 1: Wyszukiwanie -->
+            <div>
+                <input
+                    type="text"
+                    wire:model.live="search"
+                    placeholder="Szukaj po treści, autorze lub poście..."
+                    class="w-full px-4 py-2 rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 dark:text-neutral-100 focus:ring-2 focus:ring-[#880000]"
+                />
+            </div>
 
-    <div class="mb-6 flex flex-wrap items-center gap-4 justify-between">
-        <input
-            type="text"
-            wire:model.live="search"
-            placeholder="Szukaj po treści, autorze lub poście..."
-            class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 shadow-sm focus:ring-2 focus:ring-[#880000] dark:bg-neutral-900 dark:text-neutral-100"
-        />
+            <!-- Rząd 2: Filtry -->
+            <div class="flex flex-wrap items-center gap-4">
+                <select wire:model.live="sortBy" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
+                    <option value="recent">Najnowsze</option>
+                    <option value="popular">Najpopularniejsze (polubienia)</option>
+                    <option value="controversial">Kontrowersyjne (nielubienia)</option>
+                </select>
+            </div>
+        </div>
 
-        <select wire:model.live="sortBy" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-900 dark:text-neutral-100">
-            <option value="recent">Najnowsze</option>
-            <option value="popular">Najpopularniejsze (polubienia)</option>
-            <option value="controversial">Kontrowersyjne (nielubienia)</option>
-        </select>
-    </div>
-
-    <div class="grid grid-cols-1 gap-4 overflow-x-auto">
+        <!-- Lista komentarzy -->
+        <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden flex-1 overflow-y-auto">
+            <div class="space-y-0">
         @forelse($comments as $comment)
             <div class="border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors min-w-0">
                 <div class="flex items-start justify-between gap-4 mb-3">
@@ -71,7 +80,7 @@
                 </div>
             </div>
         @empty
-            <div class="py-12 text-center text-neutral-500">
+            <div class="py-12 text-center text-neutral-500 px-6">
                 <svg class="w-16 h-16 mx-auto mb-4 text-neutral-300 dark:text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                 </svg>
@@ -79,7 +88,10 @@
                 <p class="text-sm mt-1">Komentarze pojawią się tutaj, gdy użytkownicy zaczną komentować posty</p>
             </div>
         @endforelse
-    </div>
+            </div>
+        </div>
 
-    <div class="mt-6">{{ $comments->links() }}</div>
-</div>
+        <!-- Paginacja -->
+        <div class="mt-6">{{ $comments->links() }}</div>
+    </div>
+</flux:main>

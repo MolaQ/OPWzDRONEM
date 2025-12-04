@@ -1,133 +1,121 @@
-<div class="flex-1 overflow-auto rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-6 shadow">
+<flux:main>
+    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+        <!-- Filtry i wyszukiwanie -->
+        <div class="space-y-3 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <!-- Rząd 1: Wyszukiwanie -->
+            <div>
+                <input
+                    type="text"
+                    wire:model.live="search"
+                    placeholder="Szukaj po tytule, treści lub autorze..."
+                    class="w-full px-4 py-2 rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 dark:text-neutral-100 focus:ring-2 focus:ring-[#880000]"
+                />
+            </div>
 
-    <div class="mb-6 flex flex-wrap items-center gap-4 justify-between">
-        <input
-            type="text"
-            wire:model.live="search"
-            placeholder="Szukaj po tytule, treści lub autorze..."
-            class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 shadow-sm focus:ring-2 focus:ring-[#880000] dark:bg-neutral-900 dark:text-neutral-100"
-        />
+            <!-- Rząd 2: Filtry i przyciski -->
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-4">
+                    <select wire:model.live="is_published" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
+                        <option value="">— Wszystkie posty —</option>
+                        <option value="1">Opublikowane</option>
+                        <option value="0">Nieopublikowane</option>
+                    </select>
 
-        <select wire:model.live="is_published" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-900 dark:text-neutral-100">
-            <option value="">— Wszystkie posty —</option>
-            <option value="1">Opublikowane</option>
-            <option value="0">Nieopublikowane</option>
-        </select>
+                    <select wire:model.live="reactionFilter" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
+                        <option value="">— Wszystkie reakcje —</option>
+                        <option value="liked">Lubiane</option>
+                        <option value="disliked">Nielubiane</option>
+                        <option value="no_reactions">Bez reakcji</option>
+                    </select>
 
-        <select wire:model.live="reactionFilter" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-900 dark:text-neutral-100">
-            <option value="">— Wszystkie reakcje —</option>
-            <option value="liked">Lubiane</option>
-            <option value="disliked">Nielubiane</option>
-            <option value="no_reactions">Bez reakcji</option>
-        </select>
+                    <select wire:model.live="commentFilter" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
+                        <option value="">— Wszystkie komentarze —</option>
+                        <option value="commented">Komentowane</option>
+                        <option value="no_comments">Bez komentarzy</option>
+                    </select>
+                </div>
 
-        <select wire:model.live="commentFilter" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-900 dark:text-neutral-100">
-            <option value="">— Wszystkie komentarze —</option>
-            <option value="commented">Komentowane</option>
-            <option value="no_comments">Bez komentarzy</option>
-        </select>
+                <button wire:click="showCreateModal" class="inline-flex items-center gap-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-[#880000] text-xs font-bold rounded transition-colors">
+                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-[#880000] flex-shrink-0">
+                        <span class="text-sm">+</span>
+                    </span>
+                    DODAJ POST
+                </button>
+            </div>
+        </div>
 
-        <button wire:click="showCreateModal" class="rounded bg-[#880000] text-white px-4 py-2 font-semibold hover:bg-red-900 transition">
-            Dodaj post
-        </button>
-    </div>
-
-    <div class="grid grid-cols-1 gap-4 overflow-x-auto">
-        @forelse($posts as $post)
-            <div class="border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors min-w-0">
-                <div class="flex gap-3 min-w-0">
-                    @if($post->image)
-                        <div class="flex-shrink-0 w-20 h-20 overflow-hidden rounded-lg">
-                            <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<div class=\'w-20 h-20 bg-neutral-200 dark:bg-neutral-700 rounded-lg flex items-center justify-center\'><svg class=\'w-8 h-8 text-neutral-400\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\' /></svg></div>'">
+        <!-- Lista postów -->
+        <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden flex-1 overflow-y-auto">
+            @forelse($posts as $post)
+                <div class="overflow-hidden border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
+                    <div class="px-4 py-3 flex items-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors gap-3">
+                        <!-- Kolumna 1: Status publikacji -->
+                        <div class="w-5 flex justify-center flex-shrink-0">
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full {{ $post->is_published ? 'bg-green-600' : 'bg-orange-500' }} text-white text-xs font-bold" title="{{ $post->is_published ? 'Opublikowany' : 'Szkic' }}">
+                                {{ $post->is_published ? '✓' : '○' }}
+                            </span>
                         </div>
-                    @else
-                        <div class="flex-shrink-0 w-20 h-20 bg-neutral-200 dark:bg-neutral-700 rounded-lg flex items-center justify-center">
-                            <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                    @endif
 
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-start justify-between gap-4">
-                            <div class="flex-1 min-w-0">
-                                <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-2">{{ $post->title }}</h3>
-                                <div class="text-sm text-neutral-600 dark:text-neutral-400 mb-3 line-clamp-2">
-                                    {!! Str::limit(strip_tags($post->content), 150) !!}
-                                </div>
-                                <div class="flex flex-wrap items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
-                                    <span class="flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
-                                        {{ $post->author->name }}
-                                    </span>
-                                    <span class="flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        {{ $post->created_at->format('d.m.Y H:i') }}
-                                    </span>
-                                    @if($post->published_at)
-                                        <span class="flex items-center gap-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            Opublikowano: {{ $post->published_at->format('d.m.Y H:i') }}
-                                        </span>
-                                    @endif
-                                    <span class="flex items-center gap-1 text-green-600">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                                        </svg>
-                                        {{ $post->likes()->count() }}
-                                    </span>
-                                    <span class="flex items-center gap-1 text-red-600">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
-                                        </svg>
-                                        {{ $post->dislikes()->count() }}
-                                    </span>
-                                    <span class="flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                                        </svg>
-                                        {{ $post->comments()->count() }}
-                                    </span>
-                                </div>
+                        <!-- Kolumna 2: Informacje o poście -->
+                        <div class="ml-2 flex-1 min-w-0">
+                            <div class="font-semibold text-neutral-900 dark:text-white truncate uppercase">{{ $post->title }}</div>
+                            @if($post->content)
+                                <div class="text-xs text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-1">{{ strip_tags(Str::limit(strip_tags($post->content), 100)) }}</div>
+                            @endif
+                            <div class="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+                                {{ $post->author->name }} • {{ $post->created_at->format('d.m.Y H:i') }}
+                                @if($post->published_at)
+                                    • Opublikowano: {{ $post->published_at->format('d.m.Y H:i') }}
+                                @endif
                             </div>
-
-                            <div class="flex-shrink-0">
-                                <span class="px-3 py-1 text-xs rounded-full {{ $post->is_published ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' }}">
-                                    {{ $post->is_published ? '✓ Opublikowany' : '○ Nieopublikowany' }}
+                            <div class="flex flex-wrap items-center gap-3 mt-2 text-xs text-neutral-500 dark:text-neutral-400">
+                                <span class="flex items-center gap-1 text-green-600">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                                    </svg>
+                                    {{ $post->likes()->count() }}
+                                </span>
+                                <span class="flex items-center gap-1 text-red-600">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+                                    </svg>
+                                    {{ $post->dislikes()->count() }}
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                                    </svg>
+                                    {{ $post->comments()->count() }}
                                 </span>
                             </div>
                         </div>
 
-                        <div class="flex gap-2 mt-4">
-                            <button wire:click="editPost({{ $post->id }})" class="text-blue-600 hover:underline text-sm font-medium">Edytuj</button>
-                            <button wire:click="togglePublish({{ $post->id }})" class="text-green-600 hover:underline text-sm font-medium">
-                                {{ $post->is_published ? 'Ukryj' : 'Opublikuj' }}
+                        <!-- Kolumna 3: Akcje -->
+                        <div class="flex items-center gap-3 flex-shrink-0 px-3">
+                            <button wire:click.stop="editPost({{ $post->id }})" class="inline-flex items-center justify-center w-6 h-6 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors" title="Edytuj post">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             </button>
-                            <button
-                                onclick="if(confirm('Czy na pewno chcesz usunąć ten post?')) { @this.deletePost({{ $post->id }}) }"
-                                class="text-[#880000] hover:text-red-700 font-semibold text-sm">Usuń</button>
+                            <button wire:click.stop="deletePost({{ $post->id }})" wire:confirm="Czy na pewno usunąć ten post?" class="inline-flex items-center justify-center w-6 h-6 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors" title="Usuń post">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        @empty
-            <div class="py-12 text-center text-neutral-500">
-                <svg class="w-16 h-16 mx-auto mb-4 text-neutral-300 dark:text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <p class="text-lg font-medium">Brak postów</p>
-                <p class="text-sm mt-1">Dodaj pierwszy post klikając przycisk powyżej</p>
-            </div>
-        @endforelse
-    </div>
+            @empty
+                <div class="py-12 text-center text-neutral-500 px-6">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-neutral-300 dark:text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <p class="text-lg font-medium">Brak postów</p>
+                    <p class="text-sm mt-1">Dodaj pierwszy post klikając przycisk powyżej</p>
+                </div>
+            @endforelse
+        </div>
 
-    <div class="mt-6">{{ $posts->links() }}</div>
+        <!-- Paginacja -->
+        <div class="mt-6">{{ $posts->links() }}</div>
+    </div>
+</flux:main>
 
     @if ($showModal)
         <div class="fixed inset-0 z-50 overflow-y-auto bg-black/50 flex items-center justify-center p-4" wire:click="closeModal">

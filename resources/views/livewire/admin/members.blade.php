@@ -1,23 +1,29 @@
+<flux:main>
+    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+        <!-- Filtry i wyszukiwanie -->
+        <div class="space-y-3 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <!-- Rząd 1: Wyszukiwanie -->
+            <div>
+                <input
+                    type="text"
+                    wire:model.live="search"
+                    placeholder="Szukaj po nazwie, mailu lub grupie..."
+                    class="w-full px-4 py-2 rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 dark:text-neutral-100 focus:ring-2 focus:ring-[#880000]"
+                />
+            </div>
 
-<div class="flex-1 overflow-auto rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-6 shadow">
+            <!-- Rząd 2: Filtry i przyciski -->
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-4">
+                    <select wire:model.live="role" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
+                        <option value="">— Wszystkie role —</option>
+                        @foreach($roles as $r)
+                            <option value="{{ $r }}">{{ ucfirst($r) }}</option>
+                        @endforeach
+                    </select>
 
-    <div class="mb-6 flex flex-wrap items-center gap-4 justify-between">
-        <input
-            type="text"
-            wire:model.live="search"
-            placeholder="Szukaj po nazwie, mailu lub grupie..."
-            class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 shadow-sm focus:ring-2 focus:ring-[#880000] dark:bg-neutral-900 dark:text-neutral-100"
-        />
-
-        <select wire:model.live="role" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-900 dark:text-neutral-100">
-            <option value="">— Wszystkie role —</option>
-            @foreach($roles as $r)
-                <option value="{{ $r }}">{{ ucfirst($r) }}</option>
-            @endforeach
-        </select>
-
-        <select wire:model.live="group_id" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-900 dark:text-neutral-100">
-            <option value="">— Wszystkie grupy —</option>
+                    <select wire:model.live="group_id" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
+                        <option value="">— Wszystkie grupy —</option>
             @foreach($groups as $g)
                 <option value="{{ $g->id }}">{{ $g->name }}</option>
             @endforeach
@@ -27,14 +33,20 @@
             <option value="">— Wszystkie statusy —</option>
             <option value="1">Aktywny</option>
             <option value="0">Nieaktywny</option>
-        </select>
+                </div>
 
-        <button wire:click="showCreateModal" class="rounded bg-[#880000] text-white px-4 py-2 font-semibold hover:bg-red-900 transition">
-            Dodaj użytkownika
-        </button>
-    </div>
+                <button wire:click="showCreateModal" class="inline-flex items-center gap-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-[#880000] text-xs font-bold rounded transition-colors">
+                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-[#880000] flex-shrink-0">
+                        <span class="text-sm">+</span>
+                    </span>
+                    DODAJ UŻYTKOWNIKA
+                </button>
+            </div>
+        </div>
 
-    <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700 rounded-lg overflow-hidden">
+        <!-- Tabela użytkowników -->
+        <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden flex-1 overflow-y-auto">
+            <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
         <thead class="bg-neutral-100 dark:bg-neutral-800">
             <tr>
                 <th class="py-2 px-3">Imię i nazwisko</th>
@@ -70,9 +82,12 @@
                 </tr>
             @endforelse
         </tbody>
-    </table>
+        </table>
 
-    <div class="mt-6">{{ $users->links() }}</div>
+        <!-- Paginacja -->
+        <div class="mt-6">{{ $users->links() }}</div>
+    </div>
+</flux:main>
 
     @if ($showModal)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" wire:click="closeModal">
