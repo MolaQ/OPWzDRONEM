@@ -1,37 +1,45 @@
 <flux:main>
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-neutral-900 dark:text-white">Wypożyczenia</h1>
-            <div class="text-sm text-neutral-600 dark:text-neutral-400">
-                <span class="mr-3">Grupy: <strong>{{ $totalGroups }}</strong></span>
-                <span>Przedmioty: <strong>{{ $totalItems }}</strong></span>
+        <!-- Header -->
+        <div class="space-y-3 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-neutral-900 dark:text-white">Wypożyczenia</h1>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Zarządzaj aktywnymi i historycznymi wypożyczeniami</p>
+                </div>
+                <div class="text-sm text-neutral-600 dark:text-neutral-400 flex gap-4">
+                    <span>Grupy: <strong class="text-neutral-900 dark:text-white">{{ $totalGroups }}</strong></span>
+                    <span>Przedmioty: <strong class="text-neutral-900 dark:text-white">{{ $totalItems }}</strong></span>
+                </div>
             </div>
         </div>
 
         <!-- Filters and Search -->
-        <div class="flex gap-4 items-center">
-            <div class="flex gap-2">
-                <button
-                    wire:click="$set('filter', 'active')"
-                    class="px-4 py-2 rounded-lg font-medium transition {{ $filter === 'active' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700' }}"
-                >
-                    Aktywne
-                </button>
-                <button
-                    wire:click="$set('filter', 'all')"
-                    class="px-4 py-2 rounded-lg font-medium transition {{ $filter === 'all' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700' }}"
-                >
-                    Wszystkie
-                </button>
-            </div>
+        <div class="space-y-3 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <div class="flex flex-wrap items-center gap-4">
+                <div class="flex gap-2">
+                    <button
+                        wire:click="$set('filter', 'active')"
+                        class="px-4 py-2 rounded-lg font-medium transition text-sm {{ $filter === 'active' ? 'bg-[#880000] text-white' : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700' }}"
+                    >
+                        Aktywne
+                    </button>
+                    <button
+                        wire:click="$set('filter', 'all')"
+                        class="px-4 py-2 rounded-lg font-medium transition text-sm {{ $filter === 'all' ? 'bg-[#880000] text-white' : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700' }}"
+                    >
+                        Wszystkie
+                    </button>
+                </div>
 
-            <div class="flex-1">
-                <input
-                    type="text"
-                    wire:model.live.debounce.300ms="search"
-                    placeholder="Szukaj po uczniu, sprzęcie lub kodzie..."
-                    class="w-full px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                >
+                <div class="flex-1">
+                    <input
+                        type="text"
+                        wire:model.live.debounce.300ms="search"
+                        placeholder="Szukaj po uczniu, sprzęcie lub kodzie..."
+                        class="w-full px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-[#880000] focus:border-transparent"
+                    >
+                </div>
             </div>
         </div>
 

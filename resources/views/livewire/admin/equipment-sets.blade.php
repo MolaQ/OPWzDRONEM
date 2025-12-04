@@ -1,55 +1,59 @@
 <flux:main>
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
         <!-- Header -->
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">Zestawy sprzętu</h1>
-                <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">Zarządzaj zestawami sprzętu dostępnymi do wypożyczenia</p>
+        <div class="space-y-3 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-neutral-900 dark:text-white">Zestawy sprzętu</h1>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Zarządzaj zestawami sprzętu dostępnymi do wypożyczenia</p>
+                </div>
+                <button
+                    wire:click="create"
+                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-[#880000] text-xs font-bold rounded transition-colors"
+                >
+                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-[#880000] flex-shrink-0">
+                        <span class="text-sm">+</span>
+                    </span>
+                    DODAJ ZESTAW
+                </button>
             </div>
-            <button
-                wire:click="create"
-                class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition flex items-center gap-2"
-            >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Nowy zestaw
-            </button>
         </div>
 
     <!-- Flash Messages - Usuń bo używamy SweetAlert -->
     
     <!-- Search -->
-    <div class="relative">
-        <input
-            type="text"
-            wire:model.live.debounce.300ms="search"
-            placeholder="Szukaj zestawów po nazwie, kodzie lub opisie..."
-            class="w-full px-4 py-2 pl-10 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-        >
-        <svg class="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
+    <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
+        <div class="relative">
+            <input
+                type="text"
+                wire:model.live.debounce.300ms="search"
+                placeholder="Szukaj zestawów po nazwie, kodzie lub opisie..."
+                class="w-full px-4 py-2 pl-10 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-[#880000] focus:border-transparent"
+            >
+            <svg class="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
     </div>
     <!-- Sets Table -->
-    <div class="bg-white dark:bg-neutral-800 rounded-lg shadow overflow-hidden">
+    <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden flex-1 overflow-y-auto">
         <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
-                    <thead class="bg-neutral-50 dark:bg-neutral-900">
+                    <thead class="bg-neutral-100 dark:bg-neutral-800">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                                 Zestaw
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                                 Kod
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                                 Sprzęty
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                                 Status
                             </th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                            <th class="px-6 py-3 text-right text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                                 Akcje
                             </th>
                         </tr>

@@ -1,11 +1,15 @@
 <flux:main>
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-neutral-900 dark:text-white">Zwroty</h1>
+        <!-- Header -->
+        <div class="space-y-3 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <div>
+                <h1 class="text-3xl font-bold text-neutral-900 dark:text-white">Zwroty</h1>
+                <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Zeskanuj kod ucznia lub sprzętu aby dokonać zwrotu</p>
+            </div>
         </div>
 
         <!-- Barcode Input -->
-        <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+        <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
             <div class="relative">
                 <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
                     Zeskanuj kod ucznia lub sprzętu
@@ -16,7 +20,7 @@
                     wire:keydown.enter="scanForReturn"
                     placeholder="Wpisz lub zeskanuj kod..."
                     autofocus
-                    class="w-full px-4 py-3 rounded-lg border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white text-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    class="w-full px-4 py-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-[#880000] focus:border-transparent"
                 >
 
                 <!-- Suggestions Dropdown -->

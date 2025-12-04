@@ -1,53 +1,58 @@
 <flux:main>
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <div class="flex items-center justify-between">
+        <!-- Header -->
+        <div class="space-y-3 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
             <div>
-                <h1 class="text-2xl font-bold text-neutral-900 dark:text-white">Wyszukiwarka globalna</h1>
+                <h1 class="text-3xl font-bold text-neutral-900 dark:text-white">Wyszukiwarka globalna</h1>
                 <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Szukaj uczniów, sprzętu, zestawów, postów i komentarzy</p>
             </div>
         </div>
 
         <!-- Search Input -->
-        <div class="relative max-w-3xl">
-            <input
-                type="text"
-                wire:model.live.debounce.300ms="query"
-                placeholder="Wpisz nazwę, kod kreskowy, email..."
-                autofocus
-                class="w-full px-4 py-3 pl-12 pr-12 rounded-lg border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white text-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-            <svg class="w-6 h-6 text-neutral-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-
-            @if($query)
-                <button
-                    wire:click="clearSearch"
-                    class="absolute right-4 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+        <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
+            <div class="relative">
+                <input
+                    type="text"
+                    wire:model.live.debounce.300ms="query"
+                    placeholder="Wpisz nazwę, kod kreskowy, email..."
+                    autofocus
+                    class="w-full px-4 py-3 pl-12 pr-12 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-[#880000] focus:border-transparent"
                 >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            @endif
+                <svg class="w-5 h-5 text-neutral-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+
+                @if($query)
+                    <button
+                        wire:click="clearSearch"
+                        class="absolute right-4 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                @endif
+            </div>
         </div>
 
         <!-- Results -->
         @if($query && strlen($query) >= 2)
-            <div class="space-y-6 max-w-5xl">
+            <div class="space-y-4">
                 <!-- Students -->
                 @if(!empty($results['students']))
-                    <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
-                        <h2 class="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                            Uczniowie ({{ count($results['students']) }})
-                        </h2>
+                    <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                        <div class="px-4 py-3 bg-neutral-100 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                            <h2 class="text-sm font-bold text-neutral-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                                <svg class="w-4 h-4 text-[#880000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                Uczniowie ({{ count($results['students']) }})
+                            </h2>
+                        </div>
 
-                        <div class="space-y-3">
+                        <div class="divide-y divide-neutral-200 dark:divide-neutral-700">
                             @foreach($results['students'] as $student)
-                                <div class="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
+                                <div class="p-4 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
                                     <div class="flex items-start justify-between gap-3">
                                         <button
                                             wire:click="showDetails('student', {{ $student['id'] }})"
