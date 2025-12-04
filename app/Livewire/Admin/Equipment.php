@@ -21,6 +21,7 @@ class Equipment extends Component
     public $status = 'available';
     public $description = '';
     public $search = '';
+    public $statusFilter = '';
 
     protected function rules()
     {
@@ -34,6 +35,11 @@ class Equipment extends Component
     }
 
     public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingStatusFilter()
     {
         $this->resetPage();
     }
@@ -143,6 +149,9 @@ class Equipment extends Component
                       ->orWhere('model', 'LIKE', "%{$this->search}%")
                       ->orWhere('category', 'LIKE', "%{$this->search}%");
                 });
+            })
+            ->when($this->statusFilter, function($query) {
+                $query->where('status', $this->statusFilter);
             })
             ->withCount('rentals')
             ->orderBy('name')

@@ -4,8 +4,8 @@
         <div class="space-y-3 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
             <div class="flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-bold text-neutral-900 dark:text-white">Sprzęt</h1>
-                    <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Zarządzaj pojedynczymi przedmiotami sprzętu</p>
+                    <h1 class="text-3xl font-bold text-neutral-900 dark:text-white">Wyposażenie</h1>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Zarządzaj pojedynczymi przedmiotami wyposażenia pracowni</p>
                 </div>
                 <button
                     wire:click="create"
@@ -14,23 +14,32 @@
                     <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-[#880000] flex-shrink-0">
                         <span class="text-sm">+</span>
                     </span>
-                    DODAJ SPRZĘT
+                    DODAJ WYPOSAŻENIE
                 </button>
             </div>
         </div>
 
-        <!-- Search -->
+        <!-- Filters -->
         <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
-            <div class="relative">
-                <input
-                    type="text"
-                    wire:model.live.debounce.300ms="search"
-                    placeholder="Szukaj sprzętu po nazwie, kodzie, modelu lub kategorii..."
-                    class="w-full px-4 py-2 pl-10 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-[#880000] focus:border-transparent"
-                >
-                <svg class="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="relative">
+                    <input
+                        type="text"
+                        wire:model.live.debounce.300ms="search"
+                        placeholder="Szukaj wyposażenia po nazwie, kodzie, modelu lub kategorii..."
+                        class="w-full px-4 py-2 pl-10 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-[#880000] focus:border-transparent"
+                    >
+                    <svg class="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <select wire:model.live="statusFilter" class="rounded-lg border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
+                    <option value="">— Wszystkie statusy —</option>
+                    <option value="available">Dostępny</option>
+                    <option value="rented">Wypożyczony</option>
+                    <option value="maintenance">W naprawie</option>
+                    <option value="retired">Wycofany</option>
+                </select>
             </div>
         </div>
 
@@ -41,7 +50,7 @@
                     <thead class="bg-neutral-100 dark:bg-neutral-800">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
-                                Sprzęt
+                                Wyposażenie
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                                 Kod
@@ -137,7 +146,7 @@
                                         <button
                                             type="button"
                                             wire:click="delete({{ $equipment->id }})"
-                                            wire:confirm="Czy na pewno chcesz usunąć ten sprzęt?"
+                                            wire:confirm="Czy na pewno chcesz usunąć to wyposażenie?"
                                             class="inline-flex items-center justify-center w-8 h-8 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors cursor-pointer"
                                             title="Usuń"
                                         >
@@ -154,8 +163,8 @@
                                     <svg class="w-12 h-12 mx-auto mb-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                     </svg>
-                                    <p class="text-lg font-medium">Brak sprzętu</p>
-                                    <p class="mt-1 text-sm">Dodaj pierwszy przedmiot, aby rozpocząć</p>
+                                    <p class="text-lg font-medium">Brak wyposażenia</p>
+                                    <p class="mt-1 text-sm">Dodaj pierwsze wyposażenie, aby rozpocząć</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -179,7 +188,7 @@
                     <!-- Header -->
                     <div class="bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-6 py-4 border-b border-neutral-700 flex items-center justify-between rounded-t-2xl">
                         <h3 class="text-xl font-bold text-white">
-                            {{ $editingEquipmentId ? '✏️ Edytuj sprzęt' : '✨ Dodaj nowy sprzęt' }}
+                            {{ $editingEquipmentId ? '✏️ Edytuj wyposażenie' : '✨ Dodaj nowe wyposażenie' }}
                         </h3>
                         <button wire:click="closeModal" type="button" class="text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg p-2 transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -200,7 +209,7 @@
                                     id="name"
                                     type="text"
                                     wire:model="name"
-                                    placeholder="Wprowadź nazwę sprzętu..."
+                                    placeholder="Wprowadź nazwę wyposażenia..."
                                     class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                                 />
                                 @error('name')<p class="mt-1 text-xs text-red-400">{{ $message }}</p>@enderror
@@ -322,7 +331,7 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                 </svg>
-                                Dodaj sprzęt
+                                Dodaj wyposażenie
                             @endif
                         </button>
                     </div>

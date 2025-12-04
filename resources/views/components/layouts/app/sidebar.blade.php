@@ -37,6 +37,7 @@
                 <flux:navlist.group heading="Wyposażenie Pracowni" class="grid">
                     <flux:navlist.item icon="shopping-cart" :href="route('admin.rentals')" :current="request()->routeIs('admin.rentals')" wire:navigate>Wypożyczenia</flux:navlist.item>
                     <flux:navlist.item icon="arrow-uturn-left" :href="route('admin.returns')" :current="request()->routeIs('admin.returns')" wire:navigate>Zwroty</flux:navlist.item>
+                    <flux:navlist.item icon="cube" :href="route('admin.equipment')" :current="request()->routeIs('admin.equipment')" wire:navigate>Wyposażenie</flux:navlist.item>
                     <flux:navlist.item icon="cube" :href="route('admin.equipment-sets')" :current="request()->routeIs('admin.equipment-sets')" wire:navigate>Zestawy</flux:navlist.item>
                 </flux:navlist.group>
                 @endcan
