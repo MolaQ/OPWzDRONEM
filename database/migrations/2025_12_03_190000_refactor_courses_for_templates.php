@@ -11,7 +11,7 @@ return new class extends Migration {
             // Kurs może być szablonem (template) lub instancją
             $table->boolean('is_template')->default(false)->after('active');
             $table->foreignId('template_id')->nullable()->after('is_template')->constrained('courses')->nullOnDelete();
-            
+
             // Przeliczone godziny z jednostek (zamiast ręcznego ustawiania)
             $table->unsignedInteger('calculated_theory_minutes')->default(0)->after('require_lab');
             $table->unsignedInteger('calculated_practice_flight_minutes')->default(0)->after('calculated_theory_minutes');

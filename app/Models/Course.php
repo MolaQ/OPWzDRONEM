@@ -52,7 +52,7 @@ class Course extends Model
     public function calculateHours(): void
     {
         $units = $this->units()->whereNull('parent_id')->with('children')->get();
-        
+
         $minutes = [
             'theory' => 0,
             'practice_flight' => 0,
@@ -83,7 +83,7 @@ class Course extends Model
     public function copyUnitsFromTemplate(Course $template): void
     {
         $blocks = $template->units()->whereNull('parent_id')->orderBy('position')->get();
-        
+
         foreach ($blocks as $templateBlock) {
             $newBlock = $this->units()->create([
                 'type' => $templateBlock->type,

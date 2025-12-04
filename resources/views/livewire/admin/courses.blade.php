@@ -23,10 +23,10 @@
                                     <span class="px-2 py-0.5 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded">SZABLON</span>
                                 </div>
                                 <div class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-                                    Jednostek: {{ $template->units_count }} • 
-                                    Teoria: {{ number_format($template->calculated_theory_minutes / 60, 1) }}h • 
-                                    Praktyka: {{ number_format($template->calculated_practice_flight_minutes / 60, 1) }}h • 
-                                    Lab: {{ number_format($template->calculated_practice_lab_minutes / 60, 1) }}h • 
+                                    Jednostek: {{ $template->units_count }} •
+                                    Teoria: {{ number_format($template->calculated_theory_minutes / 60, 1) }}h •
+                                    Praktyka: {{ number_format($template->calculated_practice_flight_minutes / 60, 1) }}h •
+                                    Lab: {{ number_format($template->calculated_practice_lab_minutes / 60, 1) }}h •
                                     Symulator: {{ number_format($template->calculated_simulator_minutes / 60, 1) }}h
                                 </div>
                                 @if($template->description)
@@ -61,7 +61,7 @@
                                     <div class="text-xs text-neutral-500">Oparte na: {{ $instance->template->name }}</div>
                                 @endif
                                 <div class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-                                    Jednostek: {{ $instance->units_count }} • 
+                                    Jednostek: {{ $instance->units_count }} •
                                     Uczniów: {{ $instance->studentCourses()->count() }}
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
         <!-- Struktura jednostek szablonu -->
         <div class="mt-4">
             <h2 class="text-xl font-semibold text-neutral-900 dark:text-white mb-2">Edycja struktury (pierwszy szablon)</h2>
-            
+
             <!-- Filtry jednostek -->
             <div class="flex flex-wrap items-center gap-3 mb-3">
                 <div class="flex-1 min-w-[200px]">
@@ -122,7 +122,7 @@
                                 </div>
                             </div>
                             @php($topics = $block->children)
-        
+
             <!-- Modal edycji jednostki (blok/zagadnienie) -->
             @if($editingUnitId !== null || $editingParentId !== null || $unitTitle)
                 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" wire:click="resetUnitEditor">
