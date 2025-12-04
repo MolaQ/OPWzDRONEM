@@ -50,6 +50,7 @@ class Posts extends Component
         ];
         $this->image = null;
         $this->showModal = true;
+        $this->dispatch('open-modal');
     }
 
     public function editPost($id)
@@ -65,6 +66,7 @@ class Posts extends Component
         ];
         $this->image = null;
         $this->showModal = true;
+        $this->dispatch('open-modal');
     }
 
     public function savePost()

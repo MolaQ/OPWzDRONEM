@@ -326,6 +326,22 @@
         Livewire.on('modalClosed', () => {
             cleanupEditor();
         });
+
+        // Nasłuchuj na otwarcie modala
+        Livewire.on('open-modal', () => {
+            console.log('Modal opening event received');
+            // Poczekaj na renderowanie modala
+            setTimeout(() => {
+                const editor = document.querySelector('.tinymce-editor');
+                if (editor && !editorInitialized) {
+                    console.log('Initializing TinyMCE after modal open');
+                    cleanupEditor();
+                    setTimeout(() => {
+                        initTinyMCE();
+                    }, 150);
+                }
+            }, 100);
+        });
     });
 
     function cleanupEditor() {
