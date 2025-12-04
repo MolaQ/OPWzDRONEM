@@ -19,6 +19,7 @@ use App\Livewire\Admin\Rentals;
 use App\Livewire\Admin\Returns;
 use App\Livewire\Admin\EquipmentSets;
 use App\Livewire\Admin\Courses;
+use App\Livewire\Admin\CourseMaterials;
 use App\Livewire\PostView;
 use App\Livewire\NewsPage;
 
@@ -42,6 +43,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/returns', Returns::class)->name('admin.returns');
     Route::get('/admin/equipment-sets', EquipmentSets::class)->name('admin.equipment-sets');
     Route::get('/admin/courses', Courses::class)->name('admin.courses');
+    Route::get('/admin/course-materials', CourseMaterials::class)->name('admin.course-materials');
 });
 
 Route::middleware(['auth'])->group(function () {

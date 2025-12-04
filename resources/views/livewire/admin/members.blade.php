@@ -75,8 +75,8 @@
     <div class="mt-6">{{ $users->links() }}</div>
 
     @if ($showModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm">
-            <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all">
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" wire:click="closeModal">
+            <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all" wire:click.stop>
                 <!-- Modal Header with Barcode at the top -->
                 <div class="p-6 border-b border-neutral-800">
                     <div class="flex items-center justify-between gap-6">

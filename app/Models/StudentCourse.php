@@ -10,29 +10,22 @@ class StudentCourse extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'course_id', 'group_id', 'start_date', 'end_date',
+        'user_id', 'course_id',
         'flight_hours_required', 'sim_hours_required', 'require_lab', 'status'
     ];
 
     protected $casts = [
         'require_lab' => 'boolean',
-        'start_date' => 'date',
-        'end_date' => 'date',
     ];
-
-    public function course()
-    {
-        return $this->belongsTo(Course::class);
-    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function group()
+    public function course()
     {
-        return $this->belongsTo(Group::class);
+        return $this->belongsTo(Course::class);
     }
 
     public function unitProgress()

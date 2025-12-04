@@ -18,7 +18,8 @@
 
                 {{-- Sekcja Treści --}}
                 <flux:navlist.group heading="Treści" class="grid">
-                    <flux:navlist.item icon="academic-cap" :href="route('admin.courses')" :current="request()->routeIs('admin.courses')" wire:navigate>Kursy</flux:navlist.item>
+                    <flux:navlist.item icon="academic-cap" :href="route('admin.courses')" :current="request()->routeIs('admin.courses')" wire:navigate>Program kursu</flux:navlist.item>
+                    <flux:navlist.item icon="document-text" :href="route('admin.course-materials')" :current="request()->routeIs('admin.course-materials')" wire:navigate>Materiały do zajęć</flux:navlist.item>
                     <flux:navlist.item icon="newspaper" :href="route('admin.posts')" :current="request()->routeIs('admin.posts')" wire:navigate>Posty</flux:navlist.item>
                     <flux:navlist.item icon="chat-bubble-left-right" :href="route('admin.comments')" :current="request()->routeIs('admin.comments')" wire:navigate>Komentarze</flux:navlist.item>
                 </flux:navlist.group>

@@ -4,37 +4,26 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\WithFileUploads;
 use App\Models\Course;
 use App\Models\CourseUnit;
-use App\Models\Group;
-use App\Models\User;
+use App\Models\CourseMaterial;
+use Illuminate\Support\Facades\Storage;
 
 #[Layout('components.layouts.app.sidebar')]
 class Courses extends Component
 {
-    public string $name = '';
-    public string $description = '';
-    public int $default_flight_hours_required = 4;
-    public int $default_sim_hours_required = 6;
-    public bool $require_lab = true;
-    public bool $is_template = false;
+    use WithFileUploads;
 
-    public ?int $editingCourseId = null;
-
-    // New instance creation
-    public bool $showInstanceCreator = false;
-    public ?int $selectedTemplateId = null;
-    public ?int $selectedGroupId = null;
-    public $manualStudentIds = [];
-
-    // Filters
-    public string $search = '';
-    public ?string $filterCategory = null; // theory, practice_flight, practice_lab, simulator
+    // Filters - regular properties for wire:model.live
+    public ?string $search = null;
     public bool $filterRequiredOnly = false;
+    public bool $filterHasMaterials = false;
+    public bool $filterWithoutMaterials = false;
 
     // Block/Topic editor state
     public ?int $editingUnitId = null;
-    public ?int $editingParentId = null; // null for blocks, unit id for topics
+    public ?int $editingParentId = null;
     public string $unitTitle = '';
     public string $unitDescription = '';
     public string $unitType = 'theory';
@@ -42,124 +31,161 @@ class Courses extends Component
     public ?int $unitDurationMinutes = null;
     public int $unitPosition = 0;
 
-    public function saveCourse()
-    {
-        $data = $this->validate([
-            'name' => 'required|string|min:3',
-            'description' => 'nullable|string',
-            'default_flight_hours_required' => 'required|integer|min:0',
-            'default_sim_hours_required' => 'required|integer|min:0',
-            'require_lab' => 'boolean',
-            'is_template' => 'boolean',
-        ]);
+    // Course editor state
+    public bool $showCourseEditor = false;
+    public string $courseTitle = '';
+    public ?int $courseId = null;
 
-        if ($this->editingCourseId) {
-            $course = Course::findOrFail($this->editingCourseId);
-            $course->update(array_merge($data, ['active' => true]));
-            session()->flash('success', 'Kurs zaktualizowany.');
-        } else {
-            $course = Course::create(array_merge($data, ['active' => true]));
-            session()->flash('success', 'Szablon kursu utworzony.');
+    // Materials state
+    public ?int $materialEditingUnitId = null;
+    public string $materialTitle = '';
+    public string $materialType = 'pdf'; // pdf, video_link, external_link
+    public $materialFile = null;
+    public string $materialUrl = '';
+    public array $unitMaterials = [];
+
+    public function mount()
+    {
+        // Default course ID for 'OPW z Dronem' (ID: 1 from seeder)
+        if (!$this->courseId) {
+            $this->courseId = 1;
         }
-
-        $this->resetForm();
-    }
-
-    public function editCourse(int $courseId)
-    {
-        $course = Course::findOrFail($courseId);
-        $this->editingCourseId = $course->id;
-        $this->name = $course->name;
-        $this->description = (string)($course->description ?? '');
-        $this->default_flight_hours_required = (int)$course->default_flight_hours_required;
-        $this->default_sim_hours_required = (int)$course->default_sim_hours_required;
-        $this->require_lab = (bool)$course->require_lab;
-        $this->is_template = (bool)$course->is_template;
-    }
-
-    public function resetForm()
-    {
-        $this->reset(['editingCourseId','name','description','default_flight_hours_required','default_sim_hours_required','require_lab','is_template']);
-        $this->default_flight_hours_required = 4;
-        $this->default_sim_hours_required = 6;
-        $this->require_lab = true;
-        $this->is_template = false;
-    }
-
-    public function deleteCourse(int $courseId)
-    {
-        $course = Course::findOrFail($courseId);
-        $course->delete();
-        session()->flash('success', 'Kurs usunięty.');
-        $this->resetForm();
+        
+        // Load course title
+        $course = Course::find($this->courseId);
+        if ($course) {
+            $this->courseTitle = $course->name;
+        }
     }
 
     public function render()
     {
-        $templates = Course::where('is_template', true)->withCount('units')->orderBy('name')->get();
-        $instances = Course::where('is_template', false)->with('template')->withCount('units')->orderBy('created_at','desc')->get();
-
-        // Load blocks and topics for the first template for structure editing
-        $selectedCourse = $templates->first();
+        $course = $this->courseId ? Course::find($this->courseId) : null;
         $blocks = collect();
-        if ($selectedCourse) {
+
+        if ($course) {
+            // Zaawansowana logika wyszukiwania
+            $searchTerm = trim($this->search);
+            
+            // Jeśli są filtry dla materiałów, najpierw znajdujemy zagadnienia z materiałami
+            $unitIdsWithMaterials = null;
+            if ($this->filterHasMaterials || $this->filterWithoutMaterials) {
+                $unitsWithMaterials = CourseUnit::whereHas('approvedMaterials')
+                    ->pluck('id')
+                    ->toArray();
+                
+                if ($this->filterHasMaterials && !$this->filterWithoutMaterials) {
+                    $unitIdsWithMaterials = $unitsWithMaterials;
+                } elseif ($this->filterWithoutMaterials && !$this->filterHasMaterials) {
+                    // Wszystkie zagadnienia kursu oprócz tych z materiałami
+                    $allUnitIds = CourseUnit::where('course_id', $course->id)->pluck('id')->toArray();
+                    $unitIdsWithMaterials = array_diff($allUnitIds, $unitsWithMaterials);
+                }
+                // Jeśli są oba zaznaczone - nie filtrujemy (pokazujemy wszystkie)
+            }
+
             $query = CourseUnit::query()
-                ->where('course_id', $selectedCourse->id)
+                ->where('course_id', $course->id)
                 ->whereNull('parent_id');
 
-            if ($this->filterCategory) {
-                $query->where('type', $this->filterCategory);
-            }
+            // Filtry wymagalności
             if ($this->filterRequiredOnly) {
                 $query->where('is_required', true);
             }
-            if (trim($this->search) !== '') {
-                $query->where(function($q){
-                    $q->where('title','like','%'.trim($this->search).'%')
-                      ->orWhere('description','like','%'.trim($this->search).'%');
+
+            // Zaawansowane wyszukiwanie po tekście
+            if ($searchTerm !== '') {
+                $query->where(function($q) use ($searchTerm) {
+                    $q->where('title', 'like', '%' . $searchTerm . '%')
+                      ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                      // Wyszukaj również w dzieciach (zagadnieniach)
+                      ->orWhereHas('children', function($childQ) use ($searchTerm) {
+                          $childQ->where('title', 'like', '%' . $searchTerm . '%')
+                                 ->orWhere('description', 'like', '%' . $searchTerm . '%');
+                      })
+                      // Wyszukaj w materiałach
+                      ->orWhereHas('children.approvedMaterials', function($matQ) use ($searchTerm) {
+                          $matQ->where('title', 'like', '%' . $searchTerm . '%')
+                               ->orWhere('type', 'like', '%' . $searchTerm . '%');
+                      });
                 });
             }
 
             $blocks = $query->orderBy('position')->orderBy('id')->get();
 
-            // Eager load children topics with filters applied per parent
-            $blocks->load(['children' => function($childQ) {
-                if ($this->filterCategory) {
-                    $childQ->where('type', $this->filterCategory);
-                }
+            // Załaduj dzieci z filtrami
+            $blocks->load(['children' => function($childQ) use ($searchTerm, $unitIdsWithMaterials) {
+                // NIE filtrujemy dzieci po kategorii - dziedziczą kategorię od bloku!
+                
                 if ($this->filterRequiredOnly) {
                     $childQ->where('is_required', true);
                 }
-                if (trim($this->search) !== '') {
-                    $search = trim($this->search);
-                    $childQ->where(function($q) use ($search){
-                        $q->where('title','like','%'.$search.'%')
-                          ->orWhere('description','like','%'.$search.'%');
+                
+                // Filtr dla materiałów
+                if ($unitIdsWithMaterials !== null) {
+                    $childQ->whereIn('id', $unitIdsWithMaterials);
+                }
+
+                // Zaawansowane wyszukiwanie w zagadnieniach
+                if ($searchTerm !== '') {
+                    $childQ->where(function($q) use ($searchTerm) {
+                        $q->where('title', 'like', '%' . $searchTerm . '%')
+                          ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                          // Wyszukaj w materiałach zagadnienia
+                          ->orWhereHas('approvedMaterials', function($matQ) use ($searchTerm) {
+                              $matQ->where('title', 'like', '%' . $searchTerm . '%')
+                                   ->orWhere('type', 'like', '%' . $searchTerm . '%');
+                          });
                     });
                 }
+
                 $childQ->orderBy('position')->orderBy('id');
             }]);
         }
 
-        $groups = Group::where('active', true)
-            ->withCount(['users' => function($q) {
-                $q->where('active', true);
-            }])
-            ->orderBy('name')
-            ->get();
-
         return view('livewire.admin.courses', [
-            'templates' => $templates,
-            'instances' => $instances,
-            'selectedCourse' => $selectedCourse,
+            'course' => $course,
             'blocks' => $blocks,
-            'groups' => $groups,
         ]);
+    }
+    
+    public function editCourse()
+    {
+        if ($this->courseId) {
+            $course = Course::find($this->courseId);
+            if ($course) {
+                $this->courseTitle = $course->name;
+                $this->showCourseEditor = true;
+            }
+        }
+    }
+
+    public function saveCourse()
+    {
+        $this->validate([
+            'courseTitle' => 'required|string|min:3|max:255',
+        ]);
+
+        if ($this->courseId) {
+            $course = Course::find($this->courseId);
+            if ($course) {
+                $course->update(['name' => $this->courseTitle]);
+                // Ensure the property is synced
+                $this->courseTitle = $course->name;
+                $this->dispatch('notify', type: 'success', message: 'Kurs zaktualizowany.');
+                $this->showCourseEditor = false;
+            }
+        }
+    }
+
+    public function closeCourseEditor()
+    {
+        $this->showCourseEditor = false;
     }
 
     public function startCreateBlock()
     {
-        $this->editingUnitId = null;
+        $this->editingUnitId = -1; // Znacznik dla nowego bloku (ujemne ID)
         $this->editingParentId = null;
         $this->unitTitle = '';
         $this->unitDescription = '';
@@ -175,8 +201,7 @@ class Courses extends Component
         $this->editingParentId = $parentId;
         $this->unitTitle = '';
         $this->unitDescription = '';
-        $parent = CourseUnit::findOrFail($parentId);
-        $this->unitType = $parent->type; // topic inherits block type
+        $this->unitType = 'theory'; // Zawsze teoria
         $this->unitIsRequired = true;
         $this->unitDurationMinutes = null;
         $this->unitPosition = 0;
@@ -193,6 +218,7 @@ class Courses extends Component
         $this->unitIsRequired = (bool)$unit->is_required;
         $this->unitDurationMinutes = $unit->duration_minutes ? (int)$unit->duration_minutes : null;
         $this->unitPosition = (int)($unit->position ?? 0);
+        $this->loadMaterialsForUnit($unitId);
     }
 
     public function saveUnit()
@@ -207,6 +233,26 @@ class Courses extends Component
         ]);
 
         $course = Course::orderBy('id')->firstOrFail();
+        
+        // Jeśli tworzymy nową jednostkę i pozycja nie jest ustawiona, oblicz ją
+        $position = $data['unitPosition'];
+        $isNewUnit = $this->editingUnitId === null || $this->editingUnitId <= 0;
+        if ($isNewUnit) {
+            if ($this->editingParentId) {
+                // Dla nowego zagadnienia - maksymalna pozycja wśród dzieci
+                $maxPosition = CourseUnit::where('course_id', $course->id)
+                    ->where('parent_id', $this->editingParentId)
+                    ->max('position') ?? -1;
+                $position = $maxPosition + 1;
+            } else {
+                // Dla nowego bloku - maksymalna pozycja wśród bloków
+                $maxPosition = CourseUnit::where('course_id', $course->id)
+                    ->whereNull('parent_id')
+                    ->max('position') ?? -1;
+                $position = $maxPosition + 1;
+            }
+        }
+        
         $payload = [
             'course_id' => $course->id,
             'title' => $data['unitTitle'],
@@ -214,37 +260,88 @@ class Courses extends Component
             'type' => $data['unitType'],
             'is_required' => (bool)$data['unitIsRequired'],
             'duration_minutes' => $data['unitDurationMinutes'] ?? null,
-            'position' => $data['unitPosition'],
+            'position' => $position,
             'parent_id' => $this->editingParentId,
         ];
 
-        if ($this->editingUnitId) {
+        if ($this->editingUnitId && $this->editingUnitId > 0) {
             $unit = CourseUnit::findOrFail($this->editingUnitId);
             $unit->update($payload);
-            session()->flash('success', 'Jednostka zaktualizowana.');
+            $this->dispatch('notify', type: 'success', message: 'Jednostka zaktualizowana.');
         } else {
-            CourseUnit::create($payload);
-            session()->flash('success', 'Jednostka dodana.');
+            $newUnit = CourseUnit::create($payload);
+            $this->dispatch('notify', type: 'success', message: 'Jednostka dodana.');
+            
+            // Normalizuj pozycje wszystkich rodzeństwa po dodaniu
+            $this->normalizeSiblingPositions($newUnit);
         }
 
         $this->resetUnitEditor();
+    }
+    
+    private function normalizeSiblingPositions(CourseUnit $unit)
+    {
+        // Pobierz wszystkie rodzeństwo i nadaj im pozycje od 0
+        $siblings = CourseUnit::where('course_id', $unit->course_id)
+            ->where('parent_id', $unit->parent_id)
+            ->orderBy('position')
+            ->orderBy('id')
+            ->get();
+        
+        foreach ($siblings as $index => $sibling) {
+            if ($sibling->position !== $index) {
+                $sibling->position = $index;
+                $sibling->save();
+            }
+        }
     }
 
     public function deleteUnit(int $unitId)
     {
         $unit = CourseUnit::findOrFail($unitId);
         $unit->delete();
-        session()->flash('success', 'Jednostka usunięta.');
+        $this->dispatch('notify', type: 'success', message: 'Jednostka usunięta.');
         $this->resetUnitEditor();
     }
 
     public function moveUnit(int $unitId, string $direction)
     {
         $unit = CourseUnit::findOrFail($unitId);
-        $delta = $direction === 'up' ? -1 : 1;
-        $unit->position = max(0, (int)($unit->position ?? 0) + $delta);
+        
+        // Pobierz rodzeństwo (elementy na tym samym poziomie)
+        $siblings = CourseUnit::where('course_id', $unit->course_id)
+            ->where('parent_id', $unit->parent_id)
+            ->orderBy('position')
+            ->orderBy('id')
+            ->get();
+        
+        // Znajdź indeks aktualnego elementu
+        $currentIndex = $siblings->search(fn($item) => $item->id === $unit->id);
+        
+        if ($currentIndex === false) {
+            $this->dispatch('notify', type: 'error', message: 'Element nie znaleziony.');
+            return;
+        }
+        
+        // Określ nowy indeks
+        $newIndex = $direction === 'up' ? $currentIndex - 1 : $currentIndex + 1;
+        
+        // Sprawdź czy nowy indeks jest prawidłowy
+        if ($newIndex < 0 || $newIndex >= $siblings->count()) {
+            $this->dispatch('notify', type: 'info', message: 'Element jest już na końcu listy.');
+            return;
+        }
+        
+        // Zamień pozycje
+        $targetUnit = $siblings[$newIndex];
+        $tempPosition = $unit->position;
+        $unit->position = $targetUnit->position;
+        $targetUnit->position = $tempPosition;
+        
         $unit->save();
-        session()->flash('success', 'Zmieniono pozycję.');
+        $targetUnit->save();
+        
+        $this->dispatch('notify', type: 'success', message: 'Zmieniono pozycję.');
     }
 
     public function resetUnitEditor()
@@ -254,80 +351,112 @@ class Courses extends Component
         $this->unitIsRequired = true;
         $this->unitDurationMinutes = null;
         $this->unitPosition = 0;
+        $this->resetMaterialEditor();
     }
 
-    public function startInstanceCreator()
+    // =============== MATERIALS METHODS ===============
+
+    public function loadMaterialsForUnit(int $unitId)
     {
-        $this->showInstanceCreator = true;
-        $this->selectedTemplateId = null;
-        $this->selectedGroupId = null;
-        $this->manualStudentIds = [];
+        $materials = CourseMaterial::where('course_unit_id', $unitId)->orderBy('created_at', 'desc')->get();
+        $this->unitMaterials = $materials->map(fn($m) => [
+            'id' => $m->id,
+            'title' => $m->title,
+            'description' => $m->description,
+            'type' => $m->type,
+            'url' => $m->url_or_file_path,
+            'uploaded_by' => $m->uploadedBy->name ?? 'System',
+            'is_approved' => $m->is_approved,
+        ])->toArray();
     }
 
-    public function createCourseInstance()
+    public function startAddMaterial(int $unitId)
     {
-        $this->validate([
-            'selectedTemplateId' => 'required|exists:courses,id',
-            'selectedGroupId' => 'nullable|exists:groups,id',
-        ]);
+        // Clear form fields but keep unit ID
+        $this->reset(['materialTitle', 'materialType', 'materialFile', 'materialUrl']);
+        $this->materialType = 'pdf';
+        $this->materialEditingUnitId = $unitId;
+        $this->loadMaterialsForUnit($unitId);
+    }
 
-        $template = Course::where('is_template', true)->findOrFail($this->selectedTemplateId);
+    public function saveMaterial()
+    {
+        $rules = [
+            'materialTitle' => 'required|string|min:3',
+            'materialType' => 'required|in:pdf,video_link,external_link',
+        ];
 
-        // Utwórz nową instancję kursu
-        $instance = Course::create([
-            'name' => $template->name . ' - ' . now()->format('Y-m-d'),
-            'description' => $template->description,
-            'active' => true,
-            'is_template' => false,
-            'template_id' => $template->id,
-            'default_flight_hours_required' => $template->default_flight_hours_required,
-            'default_sim_hours_required' => $template->default_sim_hours_required,
-            'require_lab' => $template->require_lab,
-        ]);
-
-        // Skopiuj strukturę jednostek
-        $instance->copyUnitsFromTemplate($template);
-
-        // Przypisz uczniów z wybranej grupy
-        if ($this->selectedGroupId) {
-            $group = Group::findOrFail($this->selectedGroupId);
-            $students = User::where('role', 'student')
-                ->where('group_id', $group->id)
-                ->where('active', true)
-                ->get();
-
-            foreach ($students as $student) {
-                $instance->studentCourses()->create([
-                    'user_id' => $student->id,
-                    'group_id' => $group->id,
-                    'flight_hours_required' => $instance->default_flight_hours_required,
-                    'sim_hours_required' => $instance->default_sim_hours_required,
-                    'require_lab' => $instance->require_lab,
-                    'status' => 'active',
-                    'start_date' => now(),
-                ]);
-            }
+        if ($this->materialType === 'pdf') {
+            $rules['materialFile'] = 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:51200'; // 50MB
+        } else {
+            $rules['materialUrl'] = 'required|url';
         }
 
-        // Przypisz ręcznie dodanych uczniów (jeśli będzie implementacja)
-        // TODO: implement manual student selection
+        $data = $this->validate($rules);
 
-        session()->flash('success', 'Utworzono instancję kursu i przypisano ' . $instance->studentCourses()->count() . ' uczniów.');
-        $this->showInstanceCreator = false;
+        $material = new CourseMaterial();
+        $material->course_unit_id = $this->materialEditingUnitId;
+        $material->title = $data['materialTitle'];
+        $material->type = $data['materialType'];
+        
+        $user = auth()->guard('web')->user();
+        $material->uploaded_by_id = $user?->id;
+        $material->is_approved = in_array($user?->role, ['admin', 'instructor']);
+
+        if ($this->materialType === 'pdf' && $this->materialFile) {
+            $path = $this->materialFile->store('course_materials', 'public');
+            $material->url_or_file_path = $path;
+        } else {
+            $material->url_or_file_path = $data['materialUrl'];
+        }
+
+        $material->save();
+
+        $unitId = $this->materialEditingUnitId; // Save before reset
+        
+        $this->dispatch('notify', type: 'success', message: 'Materiał został ' . ($material->is_approved ? 'zatwierdzony' : 'wysłany do zatwierdzenia') . '.');
+        $this->resetMaterialEditor();
+        $this->loadMaterialsForUnit($unitId); // Use saved ID
     }
 
-    public function cancelInstanceCreator()
+    public function deleteMaterial(int $materialId)
     {
-        $this->showInstanceCreator = false;
-        $this->selectedTemplateId = null;
-        $this->selectedGroupId = null;
-        $this->manualStudentIds = [];
+        $material = CourseMaterial::findOrFail($materialId);
+        $unitId = $material->course_unit_id;
+
+        if ($material->type === 'pdf') {
+            Storage::disk('public')->delete($material->url_or_file_path);
+        }
+
+        $material->delete();
+        $this->dispatch('notify', type: 'success', message: 'Materiał usunięty.');
+        $this->loadMaterialsForUnit($unitId);
     }
 
-    public function recalculateHours(int $courseId)
+    public function approveMaterial(int $materialId)
     {
-        $course = Course::findOrFail($courseId);
-        $course->calculateHours();
-        session()->flash('success', 'Przeliczono godziny kursu.');
+        $material = CourseMaterial::findOrFail($materialId);
+        $material->is_approved = true;
+        $material->rejection_reason = null;
+        $material->save();
+        $this->dispatch('notify', type: 'success', message: 'Materiał zatwierdzony.');
+        $this->loadMaterialsForUnit($material->course_unit_id);
+    }
+
+    public function rejectMaterial(int $materialId, string $reason = '')
+    {
+        $material = CourseMaterial::findOrFail($materialId);
+        $material->is_approved = false;
+        $material->rejection_reason = $reason ?: 'Odrzucone przez admina';
+        $material->save();
+        $this->dispatch('notify', type: 'success', message: 'Materiał odrzucony.');
+        $this->loadMaterialsForUnit($material->course_unit_id);
+    }
+
+    public function resetMaterialEditor()
+    {
+        $this->reset(['materialEditingUnitId', 'materialTitle', 'materialType', 'materialFile', 'materialUrl']);
+        $this->materialType = 'pdf';
     }
 }
+

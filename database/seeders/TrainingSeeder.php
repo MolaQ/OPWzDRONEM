@@ -5,88 +5,201 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Course;
 use App\Models\CourseUnit;
-use App\Models\User;
-use App\Models\PilotLicense;
-use App\Services\CourseService;
 
 class TrainingSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
+        // Create main course
         $course = Course::create([
-            'name' => 'Kurs operatora drona (OPW)',
-            'description' => 'Program kursu obejmujący teorię, praktykę, laboratorium i symulator.',
+            'name' => 'OPW z Dronem',
+            'description' => 'Program szkoleniowy pilotów bezzałogowych statków latających (BPSL) - Operacyjna Procedura Warsztatowa z Dronem',
             'active' => true,
-            'is_template' => true, // To jest szablon
-            'default_flight_hours_required' => 4,
-            'default_sim_hours_required' => 6,
-            'require_lab' => true,
         ]);
 
-        // Create high-level blocks (parentless units)
-        $blocks = [
-            ['type' => 'theory', 'title' => 'Teoria — podstawy', 'description' => null, 'is_required' => true, 'position' => 1],
-            ['type' => 'practice_lab', 'title' => 'Laboratorium — budowa', 'description' => null, 'is_required' => true, 'position' => 2],
-            ['type' => 'simulator', 'title' => 'Symulator — trening', 'description' => null, 'is_required' => true, 'position' => 3],
-            ['type' => 'practice_flight', 'title' => 'Praktyka — loty', 'description' => null, 'is_required' => true, 'position' => 4],
-        ];
+        // BLOCK 1: TEORIA - Propozycja kursów A1/A3
+        $teoriaBlock = CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => null,
+            'title' => 'Teoria — Propozycja A1/A3',
+            'description' => 'Część teoretyczna przygotowująca do egzaminu EASA - kategorii A1 i A3',
+            'type' => 'theory',
+            'is_required' => true,
+            'position' => 0,
+        ]);
 
-        $createdBlocks = [];
-        foreach ($blocks as $b) {
-            $createdBlocks[$b['type']] = CourseUnit::create(array_merge($b, ['course_id' => $course->id]));
-        }
+        // Add theory topics (examples)
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $teoriaBlock->id,
+            'title' => 'Prawo lotnicze i regulacje EASA',
+            'description' => 'Zapoznanie z przepisami lotniczymi i wymogami operacyjnymi',
+            'type' => 'theory',
+            'is_required' => true,
+            'duration_minutes' => 180,
+            'position' => 0,
+        ]);
 
-        // Topics under blocks
-        $topicsByBlock = [
-            'theory' => [
-                ['title' => 'Przepisy lotnicze', 'description' => 'Podstawy prawa lotniczego.', 'is_required' => true, 'position' => 1],
-                ['title' => 'Bezpieczeństwo operacji', 'description' => 'Zasady bezpiecznego latania.', 'is_required' => true, 'position' => 2],
-            ],
-            'practice_lab' => [
-                ['title' => 'Składanie drona', 'description' => 'Montaż ramy i podzespołów.', 'is_required' => true, 'position' => 1],
-                ['title' => 'Lutowanie podzespołów', 'description' => 'Lutowanie ESC, FC, silników.', 'is_required' => true, 'position' => 2],
-                ['title' => 'Konfiguracja oprogramowania', 'description' => 'Konfiguracja Betaflight/INAV.', 'is_required' => true, 'position' => 3],
-            ],
-            'simulator' => [
-                ['title' => 'Ćwiczenia na symulatorze', 'description' => 'Loty treningowe.', 'is_required' => true, 'position' => 1, 'duration_minutes' => 120],
-            ],
-            'practice_flight' => [
-                ['title' => 'Loty podstawowe', 'description' => 'Start, zawis, lądowanie.', 'is_required' => true, 'position' => 1, 'duration_minutes' => 60],
-            ],
-        ];
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $teoriaBlock->id,
+            'title' => 'Bezpieczeństwo operacji',
+            'description' => 'Zasady bezpiecznego prowadzenia operacji dronem',
+            'type' => 'theory',
+            'is_required' => true,
+            'duration_minutes' => 120,
+            'position' => 1,
+        ]);
 
-        $createdUnits = [];
-        foreach ($topicsByBlock as $type => $topics) {
-            $block = $createdBlocks[$type];
-            foreach ($topics as $t) {
-                $createdUnits[] = CourseUnit::create(array_merge(
-                    ['course_id' => $course->id, 'type' => $type, 'parent_id' => $block->id],
-                    $t
-                ));
-            }
-        }
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $teoriaBlock->id,
+            'title' => 'Meteorologia i warunki atmosferyczne',
+            'description' => 'Wpływ warunków pogodowych na operacje dronem',
+            'type' => 'theory',
+            'is_required' => false,
+            'duration_minutes' => 90,
+            'position' => 2,
+        ]);
 
-        $service = new CourseService();
-        $students = User::where('role', 'student')->limit(10)->get();
-        foreach ($students as $student) {
-            // Enroll student with course defaults
-            $studentCourse = $service->enrollStudent($student, $course);
-            // Assign required theory units
-            foreach ($createdUnits as $unit) {
-                if ($unit->is_required) {
-                    // Assign only theory and lab initially; flight/simulator later
-                    if (in_array($unit->type, ['theory','practice_lab'])) {
-                        $service->assignUnit($studentCourse, $unit, assignedByUserId: $student->id);
-                    }
-                }
-            }
-        }
+        // BLOCK 2: LABORATORIA - Budowa i nawiązanie
+        $labBlock = CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => null,
+            'title' => 'Laboratoria — Budowa i nawiązanie',
+            'description' => 'Części praktyczne w laboratoriach - montaż, kalibracja, diagnostyka',
+            'type' => 'practice_lab',
+            'is_required' => true,
+            'position' => 1,
+        ]);
 
-        // Przelicz godziny z jednostek
-        $course->calculateHours();
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $labBlock->id,
+            'title' => 'Budowa drona i komponenty',
+            'description' => 'Poznanie struktury drona, silniki, ESC, kontrolery lotu',
+            'type' => 'practice_lab',
+            'is_required' => true,
+            'duration_minutes' => 120,
+            'position' => 0,
+        ]);
 
-        $this->command->info('   - Utworzono kurs, bloki i zagadnienia szkoleniowe');
-        $this->command->info('   - Zapisano 10 studentów i przypisano zagadnienia teoretyczne/laboratoryjne');
-        $this->command->info('   - Przeliczono godziny z jednostek kursu');
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $labBlock->id,
+            'title' => 'Kalibracja i przygotowanie sprzętu',
+            'description' => 'Procedury kalibracji żyroskopu, akcelerometru i kompasu',
+            'type' => 'practice_lab',
+            'is_required' => true,
+            'duration_minutes' => 90,
+            'position' => 1,
+        ]);
+
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $labBlock->id,
+            'title' => 'Diagnostyka i troubleshooting',
+            'description' => 'Rozwiązywanie problemów z dronami i sprzętem',
+            'type' => 'practice_lab',
+            'is_required' => false,
+            'duration_minutes' => 60,
+            'position' => 2,
+        ]);
+
+        // BLOCK 3: PRAKTYKA - Bezpieczeństwo Operacji (BSP)
+        $praktykaBlock = CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => null,
+            'title' => 'Praktyka — BSP (Bezpieczeństwo Operacji)',
+            'description' => 'Praktyczne szkolenie lotów w terenie z uwzględnieniem bezpieczeństwa',
+            'type' => 'practice_flight',
+            'is_required' => true,
+            'position' => 2,
+        ]);
+
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $praktykaBlock->id,
+            'title' => 'Pierwszy lot kontrolowany',
+            'description' => 'Pierwszy kontrolowany lot w bezpiecznym środowisku',
+            'type' => 'practice_flight',
+            'is_required' => true,
+            'duration_minutes' => 90,
+            'position' => 0,
+        ]);
+
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $praktykaBlock->id,
+            'title' => 'Maneury podstawowe',
+            'description' => 'Nauka podstawowych manewrów lotniczych - wznoszenie, opadanie, skręty',
+            'type' => 'practice_flight',
+            'is_required' => true,
+            'duration_minutes' => 120,
+            'position' => 1,
+        ]);
+
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $praktykaBlock->id,
+            'title' => 'Lot w złych warunkach',
+            'description' => 'Szkolenie w trudnych warunkach atmosferycznych',
+            'type' => 'practice_flight',
+            'is_required' => false,
+            'duration_minutes' => 90,
+            'position' => 2,
+        ]);
+
+        // BLOCK 4: SYMULATOR - Trening
+        $symulatorBlock = CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => null,
+            'title' => 'Symulator — Trening',
+            'description' => 'Szkolenie na symulatorach - bezpieczne i kontrolowane środowisko',
+            'type' => 'simulator',
+            'is_required' => true,
+            'position' => 3,
+        ]);
+
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $symulatorBlock->id,
+            'title' => 'Obsługa symulatora',
+            'description' => 'Zapoznanie się z interfejsem i sterowaniem w symulatorze',
+            'type' => 'simulator',
+            'is_required' => true,
+            'duration_minutes' => 60,
+            'position' => 0,
+        ]);
+
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $symulatorBlock->id,
+            'title' => 'Ćwiczenia z awarią silnika',
+            'description' => 'Scenariusze awaryjne i reagowanie na usterki',
+            'type' => 'simulator',
+            'is_required' => true,
+            'duration_minutes' => 120,
+            'position' => 1,
+        ]);
+
+        CourseUnit::create([
+            'course_id' => $course->id,
+            'parent_id' => $symulatorBlock->id,
+            'title' => 'Zaawansowane manewry',
+            'description' => 'Zaawansowane techniki pilotażu na symulatorze',
+            'type' => 'simulator',
+            'is_required' => false,
+            'duration_minutes' => 90,
+            'position' => 2,
+        ]);
+
+        $this->command->info('   - Utworzono kurs "OPW z Dronem" ze strukturą 4 bloków');
+        $this->command->info('   - Teoria (A1/A3), Laboratoria, Praktyka (BSP), Symulator');
+        $this->command->info('   - Dodano przykładowe zagadnienia do każdego bloku');
     }
 }
+

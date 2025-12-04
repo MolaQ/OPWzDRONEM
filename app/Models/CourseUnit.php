@@ -37,6 +37,16 @@ class CourseUnit extends Model
         return $this->hasMany(CourseUnit::class, 'parent_id')->orderBy('position');
     }
 
+    public function materials(): HasMany
+    {
+        return $this->hasMany(CourseMaterial::class, 'course_unit_id');
+    }
+
+    public function approvedMaterials(): HasMany
+    {
+        return $this->hasMany(CourseMaterial::class, 'course_unit_id')->where('is_approved', true);
+    }
+
     public function scopeCategory($query, ?string $category)
     {
         if ($category) {

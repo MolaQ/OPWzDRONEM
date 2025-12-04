@@ -130,9 +130,8 @@
     <div class="mt-6">{{ $posts->links() }}</div>
 
     @if ($showModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-70 backdrop-blur-sm">
-            <div class="flex min-h-screen items-center justify-center p-4">
-                <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl max-h-[70vh] shadow-2xl transform transition-all my-8 overflow-hidden flex flex-col">
+        <div class="fixed inset-0 z-50 overflow-y-auto bg-black/50 flex items-center justify-center p-4" wire:click="closeModal">
+                <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl max-h-[70vh] shadow-2xl transform transition-all my-8 overflow-hidden flex flex-col" wire:click.stop>
                     <!-- Header - Sticky -->
                     <div class="sticky top-0 bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-6 py-4 border-b border-neutral-700 flex items-center justify-between">
                         <h3 class="text-xl font-bold text-white">
