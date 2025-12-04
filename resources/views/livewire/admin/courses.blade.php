@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Tytuł kursu z edycją -->
                 <div class="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
                     <h2 class="text-xl font-semibold text-neutral-900 dark:text-white">{{ $course ? $course->name : '' }}</h2>
@@ -69,7 +69,7 @@
                                         </span>
                                     @endif
                                 </div>
-                                
+
                                 <!-- Kolumna 2: Nazwa bloku + opis + czas -->
                                 <div class="ml-3 flex-1 min-w-0">
                                     <div class="font-semibold text-neutral-900 dark:text-white truncate uppercase">{{ $block->title }}</div>
@@ -91,7 +91,7 @@
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                     </button>
                                 </div>
-                                
+
                                 <!-- Kolumna 4: Strzałki (odsunięte od krawędzi) -->
                                 <div class="flex flex-col gap-0.5 w-5 flex justify-center pr-4">
                                     @php($isFirstBlock = $loop->first)
@@ -124,7 +124,7 @@
                                         <div class="py-2.5 flex items-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors border-b border-neutral-200 dark:border-neutral-700 last:border-b-0 px-4">
                                             <!-- Kolumna 1: Wcięcie przed ikoną -->
                                             <div class="w-12"></div>
-                                            
+
                                             <!-- Kolumna 2: Ikona wymagalności -->
                                             <div class="w-5 flex justify-center flex-shrink-0">
                                                 @if($topic->is_required)
@@ -158,7 +158,7 @@
                                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                                 </button>
                                             </div>
-                                            
+
                                             <!-- Kolumna 5: Strzałki (odsunięte od krawędzi) -->
                                             <div class="flex flex-col gap-0.5 w-5 flex justify-center pr-4">
                                                 @php($isFirstTopic = $loop->first)
@@ -232,7 +232,7 @@
                             <label class="text-sm font-medium text-neutral-100">Opis</label>
                             <textarea wire:model.live="unitDescription" rows="3" class="w-full px-4 py-2 rounded border border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-2 focus:ring-[#880000]"></textarea>
                         </div>
-                        
+
                         @if($editingParentId === null)
                             <!-- Info o łącznym czasie bloku -->
                             @if($editingUnitId)
@@ -245,7 +245,7 @@
                                 @endif
                             @endif
                         @endif
-                        
+
                         <div class="grid grid-cols-2 gap-4">
                             <label class="inline-flex items-center gap-2 text-sm cursor-pointer">
                                 <input type="checkbox" wire:model.live="unitIsRequired" class="rounded text-[#880000] focus:ring-[#880000]" />
@@ -264,7 +264,7 @@
                         @if($editingUnitId && $editingUnitId > 0)
                             <div class="border-t border-neutral-800 pt-4 mt-4">
                                 <h3 class="text-sm font-semibold text-neutral-100 mb-3">Materiały do {{ $editingParentId ? 'zagadnienia' : 'bloku' }}</h3>
-                                
+
                                 <!-- Lista materiałów (tylko wyświetlanie) -->
                                 @if(count($unitMaterials) > 0)
                                     <div class="space-y-2 mb-4 max-h-48 overflow-y-auto bg-neutral-800/50 rounded p-3 border border-neutral-700">

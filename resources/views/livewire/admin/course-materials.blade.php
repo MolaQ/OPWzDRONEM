@@ -73,7 +73,7 @@
                                             <div class="text-xs text-neutral-600 dark:text-neutral-300 mt-1">{{ $material->description }}</div>
                                         @endif
                                         <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                                            {{ ucfirst(str_replace('_', ' ', $material->type)) }} • 
+                                            {{ ucfirst(str_replace('_', ' ', $material->type)) }} •
                                             {{ $material->uploadedBy->name ?? 'Nieznany' }}
                                             @if(!$material->is_approved)
                                                 <span class="text-yellow-500">• Czeka na zatwierdzenie</span>
@@ -100,7 +100,7 @@
                             @foreach($topics as $topic)
                                 <div class="mb-3 pl-8">
                                     <div class="text-sm font-medium text-neutral-900 dark:text-white mb-1">{{ $topic->title }}</div>
-                                    
+
                                     <!-- Topic materials -->
                                     @if($topic->materials->count() > 0)
                                         @foreach($topic->materials as $material)
@@ -111,7 +111,7 @@
                                                         <div class="text-xs text-neutral-600 dark:text-neutral-300 mt-1">{{ $material->description }}</div>
                                                     @endif
                                                     <div class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                                                        {{ ucfirst(str_replace('_', ' ', $material->type)) }} • 
+                                                        {{ ucfirst(str_replace('_', ' ', $material->type)) }} •
                                                         {{ $material->uploadedBy->name ?? 'Nieznany' }}
                                                         @if(!$material->is_approved)
                                                             <span class="text-yellow-500">• Czeka na zatwierdzenie</span>

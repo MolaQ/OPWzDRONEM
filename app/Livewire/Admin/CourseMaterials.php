@@ -19,7 +19,7 @@ class CourseMaterials extends Component
     public string $search = '';
     public string $filterType = '';
     public string $filterUnit = '';
-    
+
     // Material editor
     public bool $showMaterialEditor = false;
     public ?int $editingMaterialId = null;
@@ -42,16 +42,16 @@ class CourseMaterials extends Component
     public function render()
     {
         $course = Course::find($this->courseId);
-        
+
         $units = $course ? CourseUnit::where('course_id', $course->id)
             ->with(['materials' => function($query) {
                 $query->with('uploadedBy');
-                
+
                 // Apply search filter
                 if ($this->search) {
                     $query->where('title', 'like', '%' . $this->search . '%');
                 }
-                
+
                 // Apply type filter
                 if ($this->filterType) {
                     $query->where('type', $this->filterType);
@@ -64,14 +64,14 @@ class CourseMaterials extends Component
         // Apply unit filter
         if ($this->filterUnit) {
             $units = $units->filter(function($unit) {
-                return $unit->id == $this->filterUnit || 
+                return $unit->id == $this->filterUnit ||
                        $unit->parent_id == $this->filterUnit ||
                        $unit->materials->isNotEmpty();
             });
         }
 
         $blocks = $units->whereNull('parent_id');
-        
+
         return view('livewire.admin.course-materials', [
             'course' => $course,
             'blocks' => $blocks,
@@ -83,7 +83,7 @@ class CourseMaterials extends Component
     {
         $this->resetMaterialForm();
         $this->selectedUnitId = $unitId;
-        
+
         if ($materialId) {
             $material = CourseMaterial::findOrFail($materialId);
             $this->editingMaterialId = $material->id;
@@ -93,7 +93,7 @@ class CourseMaterials extends Component
             $this->materialType = $material->type;
             $this->materialUrl = $material->url_or_file_path;
         }
-        
+
         $this->showMaterialEditor = true;
     }
 
@@ -121,7 +121,7 @@ class CourseMaterials extends Component
             $material->description = $this->materialDescription;
             $material->type = $data['materialType'];
             $material->course_unit_id = $data['selectedUnitId'];
-            
+
             if ($this->materialType !== 'pdf' && $this->materialUrl) {
                 $material->url_or_file_path = $this->materialUrl;
             }
@@ -131,7 +131,7 @@ class CourseMaterials extends Component
             $material->title = $data['materialTitle'];
             $material->description = $this->materialDescription;
             $material->type = $data['materialType'];
-            
+
             $user = auth()->guard('web')->user();
             $material->uploaded_by_id = $user?->id;
             $material->is_approved = in_array($user?->role, ['admin', 'instructor']);

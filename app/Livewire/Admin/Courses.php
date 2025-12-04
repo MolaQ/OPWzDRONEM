@@ -50,7 +50,7 @@ class Courses extends Component
         if (!$this->courseId) {
             $this->courseId = 1;
         }
-        
+
         // Load course title
         $course = Course::find($this->courseId);
         if ($course) {
@@ -66,14 +66,14 @@ class Courses extends Component
         if ($course) {
             // Zaawansowana logika wyszukiwania
             $searchTerm = trim($this->search);
-            
+
             // Jeśli są filtry dla materiałów, najpierw znajdujemy zagadnienia z materiałami
             $unitIdsWithMaterials = null;
             if ($this->filterHasMaterials || $this->filterWithoutMaterials) {
                 $unitsWithMaterials = CourseUnit::whereHas('approvedMaterials')
                     ->pluck('id')
                     ->toArray();
-                
+
                 if ($this->filterHasMaterials && !$this->filterWithoutMaterials) {
                     $unitIdsWithMaterials = $unitsWithMaterials;
                 } elseif ($this->filterWithoutMaterials && !$this->filterHasMaterials) {
@@ -116,11 +116,11 @@ class Courses extends Component
             // Załaduj dzieci z filtrami
             $blocks->load(['children' => function($childQ) use ($searchTerm, $unitIdsWithMaterials) {
                 // NIE filtrujemy dzieci po kategorii - dziedziczą kategorię od bloku!
-                
+
                 if ($this->filterRequiredOnly) {
                     $childQ->where('is_required', true);
                 }
-                
+
                 // Filtr dla materiałów
                 if ($unitIdsWithMaterials !== null) {
                     $childQ->whereIn('id', $unitIdsWithMaterials);
@@ -148,7 +148,7 @@ class Courses extends Component
             'blocks' => $blocks,
         ]);
     }
-    
+
     public function editCourse()
     {
         if ($this->courseId) {
@@ -233,7 +233,7 @@ class Courses extends Component
         ]);
 
         $course = Course::orderBy('id')->firstOrFail();
-        
+
         // Jeśli tworzymy nową jednostkę i pozycja nie jest ustawiona, oblicz ją
         $position = $data['unitPosition'];
         $isNewUnit = $this->editingUnitId === null || $this->editingUnitId <= 0;
@@ -252,7 +252,7 @@ class Courses extends Component
                 $position = $maxPosition + 1;
             }
         }
-        
+
         $payload = [
             'course_id' => $course->id,
             'title' => $data['unitTitle'],
@@ -271,14 +271,14 @@ class Courses extends Component
         } else {
             $newUnit = CourseUnit::create($payload);
             $this->dispatch('notify', type: 'success', message: 'Jednostka dodana.');
-            
+
             // Normalizuj pozycje wszystkich rodzeństwa po dodaniu
             $this->normalizeSiblingPositions($newUnit);
         }
 
         $this->resetUnitEditor();
     }
-    
+
     private function normalizeSiblingPositions(CourseUnit $unit)
     {
         // Pobierz wszystkie rodzeństwo i nadaj im pozycje od 0
@@ -287,7 +287,7 @@ class Courses extends Component
             ->orderBy('position')
             ->orderBy('id')
             ->get();
-        
+
         foreach ($siblings as $index => $sibling) {
             if ($sibling->position !== $index) {
                 $sibling->position = $index;
@@ -307,40 +307,40 @@ class Courses extends Component
     public function moveUnit(int $unitId, string $direction)
     {
         $unit = CourseUnit::findOrFail($unitId);
-        
+
         // Pobierz rodzeństwo (elementy na tym samym poziomie)
         $siblings = CourseUnit::where('course_id', $unit->course_id)
             ->where('parent_id', $unit->parent_id)
             ->orderBy('position')
             ->orderBy('id')
             ->get();
-        
+
         // Znajdź indeks aktualnego elementu
         $currentIndex = $siblings->search(fn($item) => $item->id === $unit->id);
-        
+
         if ($currentIndex === false) {
             $this->dispatch('notify', type: 'error', message: 'Element nie znaleziony.');
             return;
         }
-        
+
         // Określ nowy indeks
         $newIndex = $direction === 'up' ? $currentIndex - 1 : $currentIndex + 1;
-        
+
         // Sprawdź czy nowy indeks jest prawidłowy
         if ($newIndex < 0 || $newIndex >= $siblings->count()) {
             $this->dispatch('notify', type: 'info', message: 'Element jest już na końcu listy.');
             return;
         }
-        
+
         // Zamień pozycje
         $targetUnit = $siblings[$newIndex];
         $tempPosition = $unit->position;
         $unit->position = $targetUnit->position;
         $targetUnit->position = $tempPosition;
-        
+
         $unit->save();
         $targetUnit->save();
-        
+
         $this->dispatch('notify', type: 'success', message: 'Zmieniono pozycję.');
     }
 
@@ -398,7 +398,7 @@ class Courses extends Component
         $material->course_unit_id = $this->materialEditingUnitId;
         $material->title = $data['materialTitle'];
         $material->type = $data['materialType'];
-        
+
         $user = auth()->guard('web')->user();
         $material->uploaded_by_id = $user?->id;
         $material->is_approved = in_array($user?->role, ['admin', 'instructor']);
@@ -413,7 +413,7 @@ class Courses extends Component
         $material->save();
 
         $unitId = $this->materialEditingUnitId; // Save before reset
-        
+
         $this->dispatch('notify', type: 'success', message: 'Materiał został ' . ($material->is_approved ? 'zatwierdzony' : 'wysłany do zatwierdzenia') . '.');
         $this->resetMaterialEditor();
         $this->loadMaterialsForUnit($unitId); // Use saved ID
