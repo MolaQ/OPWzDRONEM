@@ -3,8 +3,9 @@
 namespace App\Livewire\Admin;
 
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 
-
+#[Layout('components.layouts.app.sidebar')]
 class Dashboard extends Component
 {
     public function render()
