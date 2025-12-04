@@ -47,7 +47,8 @@
         <!-- Lista postów -->
         <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden flex-1 overflow-y-auto">
             @forelse($posts as $post)
-                <div class="overflow-hidden border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
+            <div wire:key="post-{{ $post->id }}"
+            <div wire:key="post-{{ $post->id }}" class="overflow-hidden border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
                     <div class="px-4 py-3 flex items-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors gap-3">
                         <!-- Kolumna 1: Status publikacji -->
                         <div class="w-5 flex justify-center flex-shrink-0">
@@ -92,10 +93,10 @@
 
                         <!-- Kolumna 3: Akcje -->
                         <div class="flex items-center gap-3 flex-shrink-0 px-3">
-                            <button wire:click.stop="editPost({{ $post->id }})" class="inline-flex items-center justify-center w-6 h-6 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors" title="Edytuj post">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                            <button type="button" wire:click="editPost({{ $post->id }})" class="inline-flex items-center justify-center w-8 h-8 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors cursor-pointer" title="Edytuj post">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                             </button>
-                            <button wire:click.stop="deletePost({{ $post->id }})" wire:confirm="Czy na pewno usunąć ten post?" class="inline-flex items-center justify-center w-6 h-6 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors" title="Usuń post">
+                            <button type="button" wire:click="deletePost({{ $post->id }})" wire:confirm="Czy na pewno usunąć ten post?" class="inline-flex items-center justify-center w-8 h-8 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors cursor-pointer" title="Usuń post">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                             </button>
                         </div>
@@ -114,26 +115,26 @@
 
         <!-- Paginacja -->
         <div class="mt-6">{{ $posts->links() }}</div>
-    </div>
-</flux:main>
 
-    @if ($showModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto bg-black/50 flex items-center justify-center p-4" wire:click="closeModal">
-                <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl max-h-[70vh] shadow-2xl transform transition-all my-8 overflow-hidden flex flex-col" wire:click.stop>
-                    <!-- Header - Sticky -->
-                    <div class="sticky top-0 bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-6 py-4 border-b border-neutral-700 flex items-center justify-between">
-                        <h3 class="text-xl font-bold text-white">
-                            {{ $editingPost['id'] ? '✏️ Edytuj post' : '✨ Dodaj nowy post' }}
-                        </h3>
-                        <button wire:click="closeModal" type="button" class="text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg p-2 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
+        @if ($showModal)
+            <div class="fixed inset-0 z-50 overflow-y-auto bg-black/50 py-6" wire:click="closeModal">
+                <div class="flex items-start justify-center min-h-full px-4">
+                    <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all my-8" wire:click.stop>
+                    <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all my-8" wire:click.stop>
+                        <!-- Header -->
+                        <div class="bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-6 py-4 border-b border-neutral-700 flex items-center justify-between rounded-t-2xl">
+                            <h3 class="text-xl font-bold text-white">
+                                {{ $editingPost['id'] ? '✏️ Edytuj post' : '✨ Dodaj nowy post' }}
+                            </h3>
+                            <button wire:click="closeModal" type="button" class="text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg p-2 transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
 
-                    <!-- Content - Scrollable -->
-                    <div class="overflow-y-auto flex-1 px-6 py-5">
+                        <!-- Content -->
+                        <div class="px-6 py-5">
                         <form wire:submit.prevent="savePost" class="space-y-5" id="postForm">
                     <!-- Tytuł -->
                     <div>
@@ -143,7 +144,7 @@
                         <input
                             id="title"
                             type="text"
-                            wire:model.defer="editingPost.title"
+                            wire:model="editingPost.title"
                             placeholder="Wprowadź tytuł postu..."
                             class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                         />
@@ -157,7 +158,7 @@
                         </label>
                         <textarea
                             id="content"
-                            wire:model.defer="editingPost.content"
+                            wire:model="editingPost.content"
                             class="tinymce-editor"
                         ></textarea>
                         @error('editingPost.content')<p class="mt-1 text-xs text-red-400">{{ $message }}</p>@enderror
@@ -236,7 +237,7 @@
                                             <label class="flex items-center gap-2.5 p-3 bg-neutral-800 border-2 border-neutral-700 rounded-lg cursor-pointer transition hover:border-green-600 has-[:checked]:border-green-600 has-[:checked]:bg-green-950/30">
                                                 <input
                                                     type="radio"
-                                                    wire:model.defer="editingPost.is_published"
+                                                    wire:model="editingPost.is_published"
                                                     value="1"
                                                     class="w-4 h-4 text-green-600 focus:ring-green-500 focus:ring-2"
                                                 />
@@ -248,7 +249,7 @@
                                             <label class="flex items-center gap-2.5 p-3 bg-neutral-800 border-2 border-neutral-700 rounded-lg cursor-pointer transition hover:border-yellow-600 has-[:checked]:border-yellow-600 has-[:checked]:bg-yellow-950/30">
                                                 <input
                                                     type="radio"
-                                                    wire:model.defer="editingPost.is_published"
+                                                    wire:model="editingPost.is_published"
                                                     value="0"
                                                     class="w-4 h-4 text-yellow-600 focus:ring-yellow-500 focus:ring-2"
                                                 />
@@ -269,7 +270,7 @@
                                         <input
                                             id="published_at"
                                             type="datetime-local"
-                                            wire:model.defer="editingPost.published_at"
+                                            wire:model="editingPost.published_at"
                                             class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
                                         />
                                         <p class="text-xs text-neutral-500 mt-1.5">Zostaw puste dla automatycznej daty publikacji</p>
@@ -277,11 +278,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                            </form>
+                        </div>
 
-                    <!-- Footer - Sticky -->
-                    <div class="sticky bottom-0 bg-neutral-900 px-6 py-4 border-t border-neutral-700 flex justify-end gap-3">
+                        <!-- Footer -->
+                        <div class="bg-neutral-900 px-6 py-4 border-t border-neutral-700 flex justify-end gap-3 rounded-b-2xl">
                         <button
                             type="button"
                             wire:click="closeModal"
@@ -306,13 +307,13 @@
                                 Dodaj post
                             @endif
                         </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         @endif
-
-</div>
+    </div>
+</flux:main>
 
 <!-- TinyMCE Local -->
 <script src="{{ asset('tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
