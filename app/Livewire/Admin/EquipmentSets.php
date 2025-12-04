@@ -56,7 +56,7 @@ class EquipmentSets extends Component
 
         // Check if set is currently rented
         if ($set->rentals()->whereNull('returned_at')->exists()) {
-            session()->flash('error', 'Nie można edytować zestawu, który jest obecnie wypożyczony');
+            $this->dispatch('notify', type: 'error', message: 'Nie można edytować zestawu, który jest obecnie wypożyczony');
             return;
         }
 
@@ -103,7 +103,7 @@ class EquipmentSets extends Component
         $this->showModal = false;
         $this->reset(['editingSetId', 'name', 'description', 'selectedEquipment', 'active']);
 
-        session()->flash('message', $message);
+        $this->dispatch('notify', type: 'success', message: $message);
         $this->dispatch('set-saved');
     }
 
@@ -113,12 +113,12 @@ class EquipmentSets extends Component
 
         // Check if set has active rentals
         if ($set->rentals()->whereNull('returned_at')->exists()) {
-            session()->flash('error', 'Nie można usunąć zestawu, który jest obecnie wypożyczony');
+            $this->dispatch('notify', type: 'error', message: 'Nie można usunąć zestawu, który jest obecnie wypożyczony');
             return;
         }
 
         $set->delete();
-        session()->flash('message', 'Zestaw został usunięty');
+        $this->dispatch('notify', type: 'success', message: 'Zestaw został usunięty');
     }
 
     public function toggleActive($setId)
@@ -126,7 +126,7 @@ class EquipmentSets extends Component
         $set = EquipmentSet::findOrFail($setId);
         $set->update(['active' => !$set->active]);
 
-        session()->flash('message', $set->active ? 'Zestaw aktywowany' : 'Zestaw dezaktywowany');
+        $this->dispatch('notify', type: 'success', message: $set->active ? 'Zestaw aktywowany' : 'Zestaw dezaktywowany');
     }
 
     public function closeModal()
@@ -171,7 +171,7 @@ class EquipmentSets extends Component
         $equipment = Equipment::where('barcode', $barcode)->first();
 
         if (!$equipment) {
-            session()->flash('error', 'Nie znaleziono sprzętu o kodzie: ' . $barcode);
+            $this->dispatch('notify', type: 'error', message: 'Nie znaleziono sprzętu o kodzie: ' . $barcode);
             return;
         }
 

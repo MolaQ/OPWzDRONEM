@@ -24,15 +24,16 @@
 
                     <select wire:model.live="group_id" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
                         <option value="">— Wszystkie grupy —</option>
-            @foreach($groups as $g)
-                <option value="{{ $g->id }}">{{ $g->name }}</option>
-            @endforeach
-        </select>
+                        @foreach($groups as $g)
+                            <option value="{{ $g->id }}">{{ $g->name }}</option>
+                        @endforeach
+                    </select>
 
-        <select wire:model.live="active" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-900 dark:text-neutral-100">
-            <option value="">— Wszystkie statusy —</option>
-            <option value="1">Aktywny</option>
-            <option value="0">Nieaktywny</option>
+                    <select wire:model.live="active" class="rounded border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
+                        <option value="">— Wszystkie statusy —</option>
+                        <option value="1">Aktywny</option>
+                        <option value="0">Nieaktywny</option>
+                    </select>
                 </div>
 
                 <button wire:click="showCreateModal" class="inline-flex items-center gap-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-[#880000] text-xs font-bold rounded transition-colors">
@@ -47,42 +48,51 @@
         <!-- Tabela użytkowników -->
         <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden flex-1 overflow-y-auto">
             <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
-        <thead class="bg-neutral-100 dark:bg-neutral-800">
-            <tr>
-                <th class="py-2 px-3">Imię i nazwisko</th>
-                <th class="py-2 px-3">Email</th>
-                <th class="py-2 px-3">Rola</th>
-                <th class="py-2 px-3">Grupa</th>
-                <th class="py-2 px-3">Status</th>
-                <th class="py-2 px-3">Akcje</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-neutral-700">
-            @forelse($users as $user)
-                <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
-                    <td class="py-2 px-3">{{ $user->name }}</td>
-                    <td class="py-2 px-3">{{ $user->email }}</td>
-                    <td class="py-2 px-3 capitalize">{{ $user->roles->pluck('name')->join(', ') ?: '—' }}</td>
-                    <td class="py-2 px-3">{{ $user->group?->name ?? '—' }}</td>
-                    <td class="py-2 px-3">
-                        <span class="px-2 py-1 text-xs rounded-full {{ $user->active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' }}">
-                            {{ $user->active ? 'Aktywny' : 'Nieaktywny' }}
-                        </span>
-                    </td>
-                    <td class="py-2 px-3 flex gap-2">
-                        <button wire:click="editUser({{ $user->id }})" class="text-blue-600 hover:underline">Edytuj</button>
-                        <button
-                            onclick="if(confirm('Czy na pewno chcesz usunąć tego użytkownika?')) { @this.deleteUser({{ $user->id }}) }"
-                            class="text-[#880000] hover:text-red-700 font-semibold">Usuń</button>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="6" class="py-4 text-center text-neutral-500">Brak użytkowników.</td>
-                </tr>
-            @endforelse
-        </tbody>
-        </table>
+                <thead class="bg-neutral-100 dark:bg-neutral-800">
+                    <tr>
+                        <th class="py-2 px-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Imię i nazwisko</th>
+                        <th class="py-2 px-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Email</th>
+                        <th class="py-2 px-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Rola</th>
+                        <th class="py-2 px-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Grupa</th>
+                        <th class="py-2 px-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Status</th>
+                        <th class="py-2 px-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Akcje</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-neutral-700">
+                    @forelse($users as $user)
+                        <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
+                            <td class="py-2 px-3 text-neutral-900 dark:text-neutral-100">{{ $user->name }}</td>
+                            <td class="py-2 px-3 text-neutral-900 dark:text-neutral-100">{{ $user->email }}</td>
+                            <td class="py-2 px-3 text-neutral-900 dark:text-neutral-100 capitalize">{{ $user->roles->pluck('name')->join(', ') ?: '—' }}</td>
+                            <td class="py-2 px-3 text-neutral-900 dark:text-neutral-100">{{ $user->group?->name ?? '—' }}</td>
+                            <td class="py-2 px-3">
+                                <span class="px-2 py-1 text-xs rounded-full {{ $user->active ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' }}">
+                                    {{ $user->active ? 'Aktywny' : 'Nieaktywny' }}
+                                </span>
+                            </td>
+                            <td class="py-2 px-3 flex gap-3">
+                                <button type="button" wire:click="editUser({{ $user->id }})" class="inline-flex items-center justify-center w-8 h-8 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors cursor-pointer" title="Edytuj użytkownika">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                </button>
+                                <button type="button" wire:click="deleteUser({{ $user->id }})" wire:confirm="Czy na pewno usunąć tego użytkownika?" class="inline-flex items-center justify-center w-8 h-8 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors cursor-pointer" title="Usuń użytkownika">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="py-12 text-center text-neutral-500">
+                                <svg class="w-16 h-16 mx-auto mb-4 text-neutral-300 dark:text-neutral-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <p class="text-lg font-medium">Brak użytkowników</p>
+                                <p class="text-sm mt-1">Dodaj pierwszego użytkownika klikając przycisk powyżej</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
         <!-- Paginacja -->
         <div class="mt-6">{{ $users->links() }}</div>
