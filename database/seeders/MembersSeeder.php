@@ -180,18 +180,18 @@ class MembersSeeder extends Seeder
     protected function seedEquipments(): void
     {
         $equipments = [
-            ['name' => 'DJI Mavic 3', 'model' => 'M3-2025', 'category' => 'drone', 'status' => 'dostepny', 'description' => 'Dron szkoleniowy klasy premium'],
-            ['name' => 'DJI Mini 4 Pro', 'model' => 'MN4P', 'category' => 'drone', 'status' => 'dostepny', 'description' => 'Lekki dron do ćwiczeń'],
-            ['name' => 'Parrot Anafi', 'model' => 'ANA-1', 'category' => 'drone', 'status' => 'konserwacja', 'description' => 'Konserwacja kamery'],
-            ['name' => 'Kontroler RC', 'model' => 'RC-STD', 'category' => 'controller', 'status' => 'dostepny', 'description' => 'Kontroler uniwersalny'],
-            ['name' => 'Gogle FPV', 'model' => 'FPV-G1', 'category' => 'fpv', 'status' => 'dostepny', 'description' => 'Gogle treningowe'],
-            ['name' => 'Akumulator LiPo', 'model' => 'LIPO-5200', 'category' => 'battery', 'status' => 'dostepny', 'description' => 'Akumulator 5200mAh'],
-            ['name' => 'Ładowarka Smart', 'model' => 'CHG-S', 'category' => 'charger', 'status' => 'dostepny', 'description' => 'Inteligentna ładowarka wielokanałowa'],
-            ['name' => 'Tor transportowy', 'model' => 'BAG-XL', 'category' => 'bag', 'status' => 'dostepny', 'description' => 'Duży tor na sprzęt'],
-            ['name' => 'Kamera GoPro', 'model' => 'GP12', 'category' => 'camera', 'status' => 'dostepny', 'description' => 'Kamera akcji do nagrań'],
-            ['name' => 'Śmigła zapasowe', 'model' => 'PROP-S', 'category' => 'parts', 'status' => 'dostepny', 'description' => 'Zestaw śmigieł'],
-            ['name' => 'Kontroler RC Pro', 'model' => 'RC-PRO', 'category' => 'controller', 'status' => 'dostepny', 'description' => 'Kontroler profesjonalny'],
-            ['name' => 'Akumulator LiPo 2', 'model' => 'LIPO-5200', 'category' => 'battery', 'status' => 'dostepny', 'description' => 'Akumulator 5200mAh #2'],
+            ['name' => 'DJI Mavic 3', 'model' => 'M3-2025', 'category' => 'drone', 'status' => 'available', 'description' => 'Dron szkoleniowy klasy premium'],
+            ['name' => 'DJI Mini 4 Pro', 'model' => 'MN4P', 'category' => 'drone', 'status' => 'available', 'description' => 'Lekki dron do ćwiczeń'],
+            ['name' => 'Parrot Anafi', 'model' => 'ANA-1', 'category' => 'drone', 'status' => 'under_service', 'description' => 'Konserwacja kamery'],
+            ['name' => 'Kontroler RC', 'model' => 'RC-STD', 'category' => 'controller', 'status' => 'available', 'description' => 'Kontroler uniwersalny'],
+            ['name' => 'Gogle FPV', 'model' => 'FPV-G1', 'category' => 'fpv', 'status' => 'available', 'description' => 'Gogle treningowe'],
+            ['name' => 'Akumulator LiPo', 'model' => 'LIPO-5200', 'category' => 'battery', 'status' => 'available', 'description' => 'Akumulator 5200mAh'],
+            ['name' => 'Ładowarka Smart', 'model' => 'CHG-S', 'category' => 'charger', 'status' => 'available', 'description' => 'Inteligentna ładowarka wielokanałowa'],
+            ['name' => 'Tor transportowy', 'model' => 'BAG-XL', 'category' => 'bag', 'status' => 'available', 'description' => 'Duży tor na sprzęt'],
+            ['name' => 'Kamera GoPro', 'model' => 'GP12', 'category' => 'camera', 'status' => 'available', 'description' => 'Kamera akcji do nagrań'],
+            ['name' => 'Śmigła zapasowe', 'model' => 'PROP-S', 'category' => 'parts', 'status' => 'available', 'description' => 'Zestaw śmigieł'],
+            ['name' => 'Kontroler RC Pro', 'model' => 'RC-PRO', 'category' => 'controller', 'status' => 'available', 'description' => 'Kontroler profesjonalny'],
+            ['name' => 'Akumulator LiPo 2', 'model' => 'LIPO-5200', 'category' => 'battery', 'status' => 'available', 'description' => 'Akumulator 5200mAh #2'],
         ];
 
         $createdEquipment = [];

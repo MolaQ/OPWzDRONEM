@@ -47,17 +47,17 @@ class EquipmentSet extends Model
     public function isComplete(): bool
     {
         return $this->equipments()
-            ->where('status', '!=', 'dostepny')
+            ->where('status', '!=', 'available')
             ->doesntExist();
     }
 
     /**
-     * Get missing equipment (borrowed separately)
+     * Get missing equipment (not available)
      */
     public function missingEquipment()
     {
         return $this->equipments()
-            ->where('status', '!=', 'dostepny')
+            ->where('status', '!=', 'available')
             ->get();
     }
 
@@ -70,8 +70,53 @@ class EquipmentSet extends Model
             return false;
         }
 
-        // All equipment must be 'dostepny'
+        // All equipment must be 'available'
         return $this->isComplete();
+    }
+
+    /**
+     * Get the current status of the set based on equipment conditions.
+     * Returns: 'available', 'rented', 'damaged', 'maintenance', 'incomplete', 'unavailable'
+     */
+    public function getStatusAttribute(): string
+    {
+        // Check if set is currently rented
+        if ($this->rentals()->whereNull('returned_at')->exists()) {
+            return 'rented';
+        }
+
+        $equipmentStatuses = $this->equipments->pluck('status');
+
+        // Check for damaged equipment (highest priority)
+        if ($equipmentStatuses->contains('damaged')) {
+            return 'damaged';
+        }
+
+        // Check for maintenance/under service
+        if ($equipmentStatuses->contains('maintenance') || $equipmentStatuses->contains('under_service')) {
+            return 'maintenance';
+        }
+
+        // Check for rented equipment (incomplete set)
+        if ($equipmentStatuses->contains('rented')) {
+            return 'incomplete';
+        }
+
+        // All equipment available
+        if ($equipmentStatuses->every(fn($status) => $status === 'available')) {
+            return 'available';
+        }
+
+        // Retired or other statuses
+        return 'unavailable';
+    }
+
+    /**
+     * Get equipment by specific status.
+     */
+    public function equipmentByStatus(string $status)
+    {
+        return $this->equipments()->where('status', $status)->get();
     }
 
     /**

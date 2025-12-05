@@ -29,7 +29,7 @@ class Equipment extends Component
             'name' => 'required|string|max:255',
             'model' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:255',
-            'status' => 'required|string|in:available,rented,maintenance,retired',
+            'status' => 'required|string|in:available,rented,maintenance,under_service,damaged,retired',
             'description' => 'nullable|string|max:1000',
         ];
     }
@@ -126,6 +126,8 @@ class Equipment extends Component
             'available' => 'Dostępny',
             'rented' => 'Wypożyczony',
             'maintenance' => 'W naprawie',
+            'under_service' => 'Konserwacja',
+            'damaged' => 'Uszkodzony',
             'retired' => 'Wycofany',
         ];
 

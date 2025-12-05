@@ -97,21 +97,56 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex flex-col gap-1">
                                         @if($set->active)
-                                            @if($set->isAvailable())
-                                                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                                    Dostępny
+                                            @php
+                                                $setStatus = $set->status;
+                                                $statusConfig = [
+                                                    'available' => ['label' => 'Dostępny', 'color' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'],
+                                                    'rented' => ['label' => 'Wypożyczony', 'color' => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200'],
+                                                    'incomplete' => ['label' => 'Niekompletny', 'color' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'],
+                                                    'maintenance' => ['label' => 'W konserwacji', 'color' => 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'],
+                                                    'damaged' => ['label' => 'Uszkodzony', 'color' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'],
+                                                    'unavailable' => ['label' => 'Niedostępny', 'color' => 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'],
+                                                ];
+                                                $config = $statusConfig[$setStatus] ?? $statusConfig['unavailable'];
+                                            @endphp
+                                            <div class="flex items-center">
+                                                <span class="px-3 py-1 text-xs font-medium rounded-full {{ $config['color'] }}">
+                                                    {{ $config['label'] }}
                                                 </span>
-                                            @else
-                                                <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                                    Niekompletny
-                                                </span>
+                                            </div>
+                                            @if($setStatus !== 'available' && $setStatus !== 'rented')
+                                                @php
+                                                    $problematicEquipment = $set->missingEquipment();
+                                                @endphp
+                                                @if($problematicEquipment->count() > 0)
+                                                    <div class="text-xs text-neutral-600 dark:text-neutral-400 ml-1 mt-1">
+                                                        @foreach($problematicEquipment->take(3) as $equip)
+                                                            @php
+                                                                $equipStatusLabels = [
+                                                                    'rented' => 'Wypożyczony',
+                                                                    'maintenance' => 'W naprawie',
+                                                                    'under_service' => 'Konserwacja',
+                                                                    'damaged' => 'Uszkodzony',
+                                                                    'retired' => 'Wycofany',
+                                                                ];
+                                                                $equipStatusLabel = $equipStatusLabels[$equip->status] ?? ucfirst($equip->status);
+                                                            @endphp
+                                                            <div class="truncate">• {{ $equip->name }} ({{ $equipStatusLabel }})</div>
+                                                        @endforeach
+                                                        @if($problematicEquipment->count() > 3)
+                                                            <div class="text-xs italic">+{{ $problematicEquipment->count() - 3 }} więcej...</div>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                             @endif
                                         @else
-                                            <span class="px-2 py-1 text-xs rounded-full bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300">
-                                                Nieaktywny
-                                            </span>
+                                            <div class="flex items-center">
+                                                <span class="px-3 py-1 text-xs font-medium rounded-full bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300">
+                                                    Nieaktywny
+                                                </span>
+                                            </div>
                                         @endif
                                     </div>
                                 </td>
@@ -307,14 +342,32 @@
                                         @foreach($selectedEquipment as $eqId)
                                             @php
                                                 $eq = $availableEquipment->firstWhere('id', $eqId);
+                                                if ($eq) {
+                                                    $statusLabel = [
+                                                        'available' => 'Dostępny',
+                                                        'rented' => 'Wypożyczony',
+                                                        'maintenance' => 'W naprawie',
+                                                        'under_service' => 'Konserwacja',
+                                                        'damaged' => 'Uszkodzony',
+                                                        'retired' => 'Wycofany'
+                                                    ][$eq->status] ?? ucfirst($eq->status);
+                                                    $statusColorClass = [
+                                                        'available' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+                                                        'rented' => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
+                                                        'maintenance' => 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+                                                        'under_service' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+                                                        'damaged' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+                                                        'retired' => 'bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300'
+                                                    ][$eq->status] ?? 'bg-neutral-100 text-neutral-800';
+                                                }
                                             @endphp
                                             @if($eq)
                                                 <div wire:key="selected-{{ $eq->id }}" class="flex items-center justify-between p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-sm">
                                                     <div class="flex-1 min-w-0 mr-2">
                                                         <div class="flex items-center gap-2">
                                                             <span class="font-medium text-neutral-900 dark:text-neutral-100 truncate">{{ $eq->name }}</span>
-                                                            <span class="px-1.5 py-0.5 text-xs rounded-full bg-{{ $eq->status_color }}-100 text-{{ $eq->status_color }}-800 flex-shrink-0">
-                                                                {{ $eq->status_label }}
+                                                            <span class="px-2 py-0.5 text-xs font-medium rounded-full {{ $statusColorClass }} flex-shrink-0">
+                                                                {{ $statusLabel }}
                                                             </span>
                                                         </div>
                                                         <span class="text-xs font-mono text-neutral-500 dark:text-neutral-400">{{ $eq->barcode }}</span>
@@ -341,6 +394,24 @@
                                     </summary>
                                     <div class="max-h-48 overflow-y-auto p-2 space-y-1">
                                         @foreach($availableEquipment as $equipment)
+                                            @php
+                                                $statusLabel = [
+                                                    'available' => 'Dostępny',
+                                                    'rented' => 'Wypożyczony',
+                                                    'maintenance' => 'W naprawie',
+                                                    'under_service' => 'Konserwacja',
+                                                    'damaged' => 'Uszkodzony',
+                                                    'retired' => 'Wycofany'
+                                                ][$equipment->status] ?? ucfirst($equipment->status);
+                                                $statusColorClass = [
+                                                    'available' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+                                                    'rented' => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
+                                                    'maintenance' => 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+                                                    'under_service' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+                                                    'damaged' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+                                                    'retired' => 'bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300'
+                                                ][$equipment->status] ?? 'bg-neutral-100 text-neutral-800';
+                                            @endphp
                                             <label wire:key="equipment-{{ $equipment->id }}" class="flex items-center gap-2 p-2 hover:bg-neutral-50 dark:hover:bg-neutral-700 rounded-lg cursor-pointer transition">
                                                 <input
                                                     type="checkbox"
@@ -351,8 +422,8 @@
                                                 <div class="flex-1 min-w-0">
                                                     <div class="flex items-center gap-2">
                                                         <span class="font-medium text-neutral-900 dark:text-neutral-100 truncate">{{ $equipment->name }}</span>
-                                                        <span class="px-1.5 py-0.5 text-xs rounded-full bg-{{ $equipment->status_color }}-100 text-{{ $equipment->status_color }}-800 flex-shrink-0">
-                                                            {{ $equipment->status_label }}
+                                                        <span class="px-2 py-0.5 text-xs font-medium rounded-full {{ $statusColorClass }} flex-shrink-0">
+                                                            {{ $statusLabel }}
                                                         </span>
                                                     </div>
                                                     @if($equipment->model)

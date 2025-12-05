@@ -12,14 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('equipments', function (Blueprint $table) {
-            // Change enum to include Polish status names
-            $table->enum('status', [
-                'dostepny',      // available
-                'wypozyczony',   // borrowed
-                'w_uzyciu',      // in use (internal)
-                'konserwacja',   // maintenance
-                'uszkodzony'     // damaged
-            ])->default('dostepny')->change();
+            // Keep status as string - no change needed
+            // All statuses are: available, rented, maintenance, under_service, damaged, retired
         });
     }
 
@@ -28,8 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('equipments', function (Blueprint $table) {
-            $table->enum('status', ['available', 'in_use', 'maintenance', 'damaged'])->default('available')->change();
-        });
+        // No rollback needed
     }
 };

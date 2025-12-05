@@ -1,11 +1,11 @@
 <flux:main>
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+    <div class="flex h-full w-full flex-1 flex-col gap-4">
         <!-- Header -->
         <div class="space-y-3 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
             <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-3xl font-bold text-neutral-900 dark:text-white">Wyposażenie</h1>
-                    <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Zarządzaj pojedynczymi przedmiotami wyposażenia pracowni</p>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Zarządzaj przedmiotami wyposażenia pracowni</p>
                 </div>
                 <button
                     wire:click="create"
@@ -26,7 +26,7 @@
                     <input
                         type="text"
                         wire:model.live.debounce.300ms="search"
-                        placeholder="Szukaj wyposażenia po nazwie, kodzie, modelu lub kategorii..."
+                        placeholder="Szukaj wyposażenia po nazwie, kodzie, modelu..."
                         class="w-full px-4 py-2 pl-10 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-[#880000] focus:border-transparent"
                     >
                     <svg class="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,10 +35,12 @@
                 </div>
                 <select wire:model.live="statusFilter" class="rounded-lg border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
                     <option value="">— Wszystkie statusy —</option>
-                    <option value="available">Dostępny</option>
-                    <option value="rented">Wypożyczony</option>
-                    <option value="maintenance">W naprawie</option>
-                    <option value="retired">Wycofany</option>
+                    <option value="available">✓ Dostępny</option>
+                    <option value="rented">✗ Wypożyczony</option>
+                    <option value="maintenance">🔧 W naprawie</option>
+                    <option value="under_service">🛠️ Konserwacja</option>
+                    <option value="damaged">⚠️ Uszkodzony</option>
+                    <option value="retired">⊘ Wycofany</option>
                 </select>
             </div>
         </div>
@@ -47,7 +49,7 @@
         <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden flex-1 overflow-y-auto">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
-                    <thead class="bg-neutral-100 dark:bg-neutral-800">
+                    <thead class="bg-neutral-100 dark:bg-neutral-800 sticky top-0">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                                 Wyposażenie
@@ -66,14 +68,14 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-neutral-700">
+                    <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
                         @forelse($equipments as $equipment)
-                            <tr wire:key="equipment-{{ $equipment->id }}" class="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition">
+                            <tr wire:key="equipment-{{ $equipment->id }}" class="hover:bg-orange-50 dark:hover:bg-neutral-800 transition">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white flex-shrink-0">
+                                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white flex-shrink-0">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                             </svg>
                                         </div>
                                         <div>
@@ -89,9 +91,11 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="flex flex-col gap-1">
-                                        <canvas class="barcode-canvas" data-barcode="{{ $equipment->barcode }}" style="height: 50px;"></canvas>
-                                        <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400 text-center">{{ $equipment->barcode }}</span>
+                                    <div class="flex flex-col gap-1 items-center">
+                                        <div class="bg-white p-1 rounded border border-neutral-200 dark:border-neutral-600">
+                                            <canvas class="barcode-canvas" data-barcode="{{ $equipment->barcode }}" style="height: 40px; display: block;"></canvas>
+                                        </div>
+                                        <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400">{{ $equipment->barcode }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
@@ -100,7 +104,7 @@
                                             <div class="font-medium">{{ $equipment->model }}</div>
                                         @endif
                                         @if($equipment->category)
-                                            <div class="text-neutral-500 dark:text-neutral-400">{{ $equipment->category }}</div>
+                                            <div class="text-neutral-500 dark:text-neutral-400 text-xs">{{ $equipment->category }}</div>
                                         @endif
                                         @if(!$equipment->model && !$equipment->category)
                                             <span class="text-neutral-400">—</span>
@@ -109,22 +113,36 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
+                                        $statusIcons = [
+                                            'available' => '✓',
+                                            'rented' => '✗',
+                                            'maintenance' => '🔧',
+                                            'under_service' => '🛠️',
+                                            'damaged' => '⚠️',
+                                            'retired' => '⊘',
+                                        ];
                                         $statusColors = [
                                             'available' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-                                            'rented' => 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
-                                            'maintenance' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-                                            'retired' => 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300',
+                                            'rented' => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
+                                            'maintenance' => 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+                                            'under_service' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+                                            'damaged' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+                                            'retired' => 'bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300',
                                         ];
                                         $statusLabels = [
                                             'available' => 'Dostępny',
                                             'rented' => 'Wypożyczony',
                                             'maintenance' => 'W naprawie',
+                                            'under_service' => 'Konserwacja',
+                                            'damaged' => 'Uszkodzony',
                                             'retired' => 'Wycofany',
                                         ];
                                     @endphp
-                                    <span class="px-2 py-1 text-xs rounded-full {{ $statusColors[$equipment->status] ?? '' }}">
-                                        {{ $statusLabels[$equipment->status] ?? $equipment->status }}
-                                    </span>
+                                    <div class="flex items-center">
+                                        <span class="px-3 py-1 text-xs font-medium rounded-full {{ $statusColors[$equipment->status] ?? '' }}">
+                                            {{ $statusLabels[$equipment->status] ?? $equipment->status }}
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-3">
@@ -136,7 +154,7 @@
                                             type="button"
                                             wire:click="edit({{ $equipment->id }})"
                                             class="inline-flex items-center justify-center w-8 h-8 {{ $isRented ? 'bg-neutral-300 dark:bg-neutral-600 cursor-not-allowed' : 'bg-[#880000] hover:bg-red-900' }} text-white rounded border-2 border-white transition-colors"
-                                            title="{{ $isRented ? 'Nie można edytować wypożyczonego sprzętu' : 'Edytuj' }}"
+                                            title="{{ $isRented ? 'Nie można edytować wypożyczonego wyposażenia' : 'Edytuj' }}"
                                             @if($isRented) disabled @endif
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,155 +200,147 @@
 
         <!-- Create/Edit Modal -->
         @if($showModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto bg-black/50 py-6" wire:click="closeModal">
-            <div class="flex items-start justify-center min-h-full px-4">
-                <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all my-8" wire:click.stop>
+        <div class="fixed inset-0 z-50 overflow-y-auto bg-neutral-500 bg-opacity-75 dark:bg-neutral-900 dark:bg-opacity-75" wire:click="closeModal">
+            <div class="flex items-start justify-center min-h-full px-4 py-8">
+                <div class="bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl transform transition-all" wire:click.stop>
                     <!-- Header -->
-                    <div class="bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-6 py-4 border-b border-neutral-700 flex items-center justify-between rounded-t-2xl">
-                        <h3 class="text-xl font-bold text-white">
-                            {{ $editingEquipmentId ? '✏️ Edytuj wyposażenie' : '✨ Dodaj nowe wyposażenie' }}
-                        </h3>
-                        <button wire:click="closeModal" type="button" class="text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg p-2 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                    <div class="sticky top-0 bg-white dark:bg-neutral-800 pb-4 mb-4 border-b border-neutral-200 dark:border-neutral-700 px-6 py-4 z-10">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-neutral-900 dark:text-neutral-100">
+                                {{ $editingEquipmentId ? '✏️ Edytuj wyposażenie' : '✨ Nowe wyposażenie' }}
+                            </h3>
+                            <button
+                                type="button"
+                                wire:click="closeModal"
+                                class="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
+                            >
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Content -->
-                    <div class="px-6 py-5">
-                        <form wire:submit.prevent="save" class="space-y-5">
-                            <!-- Nazwa -->
-                            <div>
-                                <label for="name" class="block mb-1.5 text-sm font-medium text-neutral-300">
-                                    Nazwa <span class="text-red-500">*</span>
-                                </label>
-                                <input
-                                    id="name"
-                                    type="text"
-                                    wire:model="name"
-                                    placeholder="Wprowadź nazwę wyposażenia..."
-                                    class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
-                                />
-                                @error('name')<p class="mt-1 text-xs text-red-400">{{ $message }}</p>@enderror
-                            </div>
+                    <form wire:submit.prevent="save" class="px-6 pb-6 space-y-4">
+                        <!-- Nazwa -->
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                                Nazwa wyposażenia <span class="text-red-600 dark:text-red-400">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                wire:model="name"
+                                class="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                placeholder="np. DJI Mavic 3"
+                            >
+                            @error('name')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                            <!-- Model -->
-                            <div>
-                                <label for="model" class="block mb-1.5 text-sm font-medium text-neutral-300">
-                                    Model
-                                </label>
-                                <input
-                                    id="model"
-                                    type="text"
-                                    wire:model="model"
-                                    placeholder="Wprowadź model..."
-                                    class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
-                                />
-                                @error('model')<p class="mt-1 text-xs text-red-400">{{ $message }}</p>@enderror
-                            </div>
+                        <!-- Model -->
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                                Model
+                            </label>
+                            <input
+                                type="text"
+                                wire:model="model"
+                                class="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                placeholder="np. Mavic 3 Classic"
+                            >
+                            @error('model')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                            <!-- Kategoria -->
-                            <div>
-                                <label for="category" class="block mb-1.5 text-sm font-medium text-neutral-300">
-                                    Kategoria
-                                </label>
-                                <input
-                                    id="category"
-                                    type="text"
-                                    wire:model="category"
-                                    placeholder="Wprowadź kategorię..."
-                                    class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
-                                />
-                                @error('category')<p class="mt-1 text-xs text-red-400">{{ $message }}</p>@enderror
-                            </div>
+                        <!-- Kategoria -->
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                                Kategoria
+                            </label>
+                            <input
+                                type="text"
+                                wire:model="category"
+                                class="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                placeholder="np. Drona"
+                            >
+                            @error('category')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                            <!-- Status -->
-                            <div>
-                                <label class="block mb-2 text-sm font-medium text-neutral-300">
-                                    Status <span class="text-red-500">*</span>
+                        <!-- Status -->
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
+                                Status <span class="text-red-600 dark:text-red-400">*</span>
+                            </label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-green-500 transition has-[:checked]:border-green-500 has-[:checked]:bg-green-50 dark:has-[:checked]:bg-green-950/20">
+                                    <input type="radio" wire:model="status" value="available" class="w-4 h-4">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Dostępny</span>
                                 </label>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <label class="flex items-center gap-2.5 p-3 bg-neutral-800 border-2 border-neutral-700 rounded-lg cursor-pointer transition hover:border-green-600 has-[:checked]:border-green-600 has-[:checked]:bg-green-950/30">
-                                        <input
-                                            type="radio"
-                                            wire:model="status"
-                                            value="available"
-                                            class="w-4 h-4 text-green-600 focus:ring-green-500 focus:ring-2"
-                                        />
-                                        <span class="flex items-center gap-2 text-sm font-medium text-neutral-300">
-                                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                            Dostępny
-                                        </span>
-                                    </label>
-                                    <label class="flex items-center gap-2.5 p-3 bg-neutral-800 border-2 border-neutral-700 rounded-lg cursor-pointer transition hover:border-yellow-600 has-[:checked]:border-yellow-600 has-[:checked]:bg-yellow-950/30">
-                                        <input
-                                            type="radio"
-                                            wire:model="status"
-                                            value="maintenance"
-                                            class="w-4 h-4 text-yellow-600 focus:ring-yellow-500 focus:ring-2"
-                                        />
-                                        <span class="flex items-center gap-2 text-sm font-medium text-neutral-300">
-                                            <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                                            W naprawie
-                                        </span>
-                                    </label>
-                                    <label class="flex items-center gap-2.5 p-3 bg-neutral-800 border-2 border-neutral-700 rounded-lg cursor-pointer transition hover:border-neutral-500 has-[:checked]:border-neutral-500 has-[:checked]:bg-neutral-800/50">
-                                        <input
-                                            type="radio"
-                                            wire:model="status"
-                                            value="retired"
-                                            class="w-4 h-4 text-neutral-600 focus:ring-neutral-500 focus:ring-2"
-                                        />
-                                        <span class="flex items-center gap-2 text-sm font-medium text-neutral-300">
-                                            <span class="w-2 h-2 rounded-full bg-neutral-500"></span>
-                                            Wycofany
-                                        </span>
-                                    </label>
-                                </div>
-                                @error('status')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
+                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-cyan-500 transition has-[:checked]:border-cyan-500 has-[:checked]:bg-cyan-50 dark:has-[:checked]:bg-cyan-950/20">
+                                    <input type="radio" wire:model="status" value="rented" class="w-4 h-4">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200">Wypożyczony</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-orange-500 transition has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50 dark:has-[:checked]:bg-orange-950/20">
+                                    <input type="radio" wire:model="status" value="maintenance" class="w-4 h-4">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">W naprawie</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-yellow-500 transition has-[:checked]:border-yellow-500 has-[:checked]:bg-yellow-50 dark:has-[:checked]:bg-yellow-950/20">
+                                    <input type="radio" wire:model="status" value="under_service" class="w-4 h-4">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">Konserwacja</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-red-500 transition has-[:checked]:border-red-500 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-950/20">
+                                    <input type="radio" wire:model="status" value="damaged" class="w-4 h-4">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">Uszkodzony</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-neutral-500 transition has-[:checked]:border-neutral-500 has-[:checked]:bg-neutral-50 dark:has-[:checked]:bg-neutral-700/20">
+                                    <input type="radio" wire:model="status" value="retired" class="w-4 h-4">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300">Wycofany</span>
+                                </label>
                             </div>
+                            @error('status')
+                                <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                            <!-- Opis -->
-                            <div>
-                                <label for="description" class="block mb-1.5 text-sm font-medium text-neutral-300">
-                                    Opis
-                                </label>
-                                <textarea
-                                    id="description"
-                                    wire:model="description"
-                                    rows="3"
-                                    placeholder="Wprowadź opis..."
-                                    class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
-                                ></textarea>
-                                @error('description')<p class="mt-1 text-xs text-red-400">{{ $message }}</p>@enderror
-                            </div>
-                        </form>
-                    </div>
+                        <!-- Opis -->
+                        <div>
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                                Opis
+                            </label>
+                            <textarea
+                                wire:model="description"
+                                rows="3"
+                                class="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                placeholder="Opcjonalny opis wyposażenia..."
+                            ></textarea>
+                            @error('description')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </form>
 
                     <!-- Footer -->
-                    <div class="bg-neutral-900 px-6 py-4 border-t border-neutral-700 flex justify-end gap-3 rounded-b-2xl">
+                    <div class="sticky bottom-0 bg-white dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-700 px-6 py-4 flex justify-end gap-3">
                         <button
                             type="button"
                             wire:click="closeModal"
-                            class="px-5 py-2.5 rounded-lg border-2 border-neutral-600 bg-neutral-800 text-neutral-300 text-sm font-medium hover:bg-neutral-700 hover:border-neutral-500 transition-all"
+                            class="px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition"
                         >
                             Anuluj
                         </button>
                         <button
                             type="submit"
                             wire:click="save"
-                            class="px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#880000] to-red-900 hover:from-red-900 hover:to-[#880000] text-white text-sm font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center gap-2"
+                            class="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition"
                         >
                             @if($editingEquipmentId)
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
                                 Zapisz zmiany
                             @else
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                </svg>
                                 Dodaj wyposażenie
                             @endif
                         </button>
@@ -366,11 +376,11 @@
                     JsBarcode(canvas, barcode, {
                         format: 'CODE128',
                         width: 2,
-                        height: 50,
+                        height: 40,
                         displayValue: false,
-                        margin: 6,
+                        margin: 4,
                         lineColor: '#000000',
-                        background: 'transparent'
+                        background: '#ffffff'
                     });
                 } catch(e) {
                     console.error('Barcode generation error:', e);

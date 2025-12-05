@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('model')->nullable();
             $table->string('category')->nullable(); // np. 'drone', 'camera', 'battery', 'controller'
-            $table->enum('status', ['available', 'in_use', 'maintenance', 'damaged'])->default('available');
+            $table->string('status')->default('available'); // Statuses: available, rented, maintenance, under_service, damaged, retired
             $table->text('description')->nullable();
             $table->timestamps();
         });
