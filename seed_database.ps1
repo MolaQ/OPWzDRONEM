@@ -35,7 +35,8 @@ Write-Host "  Seedowanie zakonczone!" -ForegroundColor Green
 Write-Host "====================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "Dane logowania:" -ForegroundColor White
-Write-Host "  Admin: admin@exaple.com / Haslo1234" -ForegroundColor Cyan
+Write-Host "  Admin: admin@opwzdronem.pl / P@ssw0rd" -ForegroundColor Cyan
+Write-Host "  Koordynator: angelo1997@wp.pl / Pssw0rd" -ForegroundColor Cyan
 Write-Host "  Instruktor 1: jan.kowalski@example.com / Haslo1234" -ForegroundColor Cyan
 Write-Host "  Instruktor 2: anna.nowak@example.com / Haslo1234" -ForegroundColor Cyan
 Write-Host "  Wychowawca: piotr.wisniewski@example.com / Haslo1234" -ForegroundColor Cyan

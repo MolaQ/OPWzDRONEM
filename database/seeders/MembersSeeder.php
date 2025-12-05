@@ -8,10 +8,13 @@ use App\Models\Post;
 use App\Models\PostReaction;
 use App\Models\Comment;
 use App\Models\Equipment;
+use App\Models\EquipmentSet;
 use App\Services\BarcodeResolver;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class MembersSeeder extends Seeder
 {
@@ -20,6 +23,17 @@ class MembersSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        \App\Models\PostReaction::truncate();
+        \App\Models\Comment::truncate();
+        \App\Models\Post::truncate();
+        DB::table('equipment_set_items')->truncate();
+        EquipmentSet::truncate();
+        Equipment::truncate();
+        User::truncate();
+        Group::truncate();
+        Schema::enableForeignKeyConstraints();
+
         // Tworzymy grupy
         $groupAdmin = Group::create([
             'name' => 'Administracja',
@@ -36,9 +50,8 @@ class MembersSeeder extends Seeder
         // 1 Administrator
         $admin = User::create([
             'name' => 'Administrator Systemu',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('Haslo1234'),
-            'role' => 'admin',
+            'email' => 'admin@opwzdronem.pl',
+            'password' => Hash::make('P@ssw0rd'),
             'pilot_license' => 'PL-ADMIN-001',
             'operator_license' => 'OP-ADMIN-001',
             'license_expiry_date' => now()->addYears(2),
@@ -48,12 +61,25 @@ class MembersSeeder extends Seeder
         $admin->assignRole('admin');
         $admin->update(['barcode' => BarcodeResolver::generateStudentBarcode($admin->id)]);
 
+        // 1 Koordynator
+        $coordinator = User::create([
+            'name' => 'Bogusław Koordynator',
+            'email' => 'angelo1997@wp.pl',
+            'password' => Hash::make('Pssw0rd'),
+            'pilot_license' => 'PL-KOOR-001',
+            'operator_license' => 'OP-KOOR-001',
+            'license_expiry_date' => now()->addYears(2),
+            'active' => true,
+            'group_id' => $groupAdmin->id,
+        ]);
+        $coordinator->assignRole('koordynator');
+        $coordinator->update(['barcode' => BarcodeResolver::generateStudentBarcode($coordinator->id)]);
+
         // 2 Instruktorzy
         $instructor1 = User::create([
             'name' => 'Jan Kowalski',
             'email' => 'jan.kowalski@example.com',
             'password' => Hash::make('Haslo1234'),
-            'role' => 'instructor',
             'pilot_license' => 'PL-INST-001',
             'operator_license' => 'OP-INST-001',
             'license_expiry_date' => now()->addYears(2),
@@ -67,7 +93,6 @@ class MembersSeeder extends Seeder
             'name' => 'Anna Nowak',
             'email' => 'anna.nowak@example.com',
             'password' => Hash::make('Haslo1234'),
-            'role' => 'instructor',
             'pilot_license' => 'PL-INST-002',
             'operator_license' => 'OP-INST-002',
             'license_expiry_date' => now()->addYears(2),
@@ -82,14 +107,13 @@ class MembersSeeder extends Seeder
             'name' => 'Piotr Wiśniewski',
             'email' => 'piotr.wisniewski@example.com',
             'password' => Hash::make('Haslo1234'),
-            'role' => 'instructor',
             'pilot_license' => 'PL-WYCH-001',
             'operator_license' => 'OP-WYCH-001',
             'license_expiry_date' => now()->addYears(2),
             'active' => true,
             'group_id' => $group4OPW->id,
         ]);
-        $wychowawca->assignRole('instructor');
+        $wychowawca->assignRole('wychowawca');
         $wychowawca->update(['barcode' => BarcodeResolver::generateStudentBarcode($wychowawca->id)]);
 
         // 30 użytkowników (studentów) w grupie 4OPW
@@ -99,7 +123,6 @@ class MembersSeeder extends Seeder
                 'name' => fake()->firstName() . ' ' . fake()->lastName(),
                 'email' => 'student' . $i . '@example.com',
                 'password' => Hash::make('Haslo1234'),
-                'role' => 'student',
                 'pilot_license' => 'PL-STD-' . str_pad($i, 3, '0', STR_PAD_LEFT),
                 'operator_license' => 'OP-STD-' . str_pad($i, 3, '0', STR_PAD_LEFT),
                 'license_expiry_date' => now()->addYear(),
@@ -112,7 +135,7 @@ class MembersSeeder extends Seeder
         }
 
         // Zbieramy wszystkich użytkowników do losowania
-        $allUsers = collect([$admin, $instructor1, $instructor2, $wychowawca])->merge($students);
+        $allUsers = collect([$admin, $coordinator, $instructor1, $instructor2, $wychowawca])->merge($students);
 
         // 20 postów
         $posts = [];
@@ -166,6 +189,7 @@ class MembersSeeder extends Seeder
 
         $this->command->info('✅ Utworzono:');
         $this->command->info('   - 1 administratora');
+        $this->command->info('   - 1 koordynatora');
         $this->command->info('   - 2 instruktorów');
         $this->command->info('   - 1 wychowawcę');
         $this->command->info('   - 30 studentów w grupie 4OPW');

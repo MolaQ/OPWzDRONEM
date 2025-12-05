@@ -105,7 +105,7 @@
                         <flux:menu class="w-[240px]">
                             <flux:menu.item :href="route('settings.all')" icon="cog" wire:navigate>{{ __('Ustawienia') }}</flux:menu.item>
 
-                            @can('access admin panel')
+                            @can('admin.panel.access')
                                 <flux:menu.separator />
                                 <flux:menu.item :href="route('admin.dashboard')" icon="shield-check" wire:navigate>{{ __('Panel Admin') }}</flux:menu.item>
                                 <flux:menu.item :href="route('admin.posts')" icon="newspaper" wire:navigate>{{ __('Posty') }}</flux:menu.item>
@@ -181,7 +181,7 @@
                         {{ __('Ustawienia') }}
                     </a>
 
-                    @can('access admin panel')
+                    @can('admin.panel.access')
                         <p class="px-4 pt-4 text-xs uppercase text-neutral-400 font-semibold">{{ __('Administracja') }}</p>
                         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-300 hover:bg-[#2f76aa]/50">
                             {{ __('Panel Admin') }}

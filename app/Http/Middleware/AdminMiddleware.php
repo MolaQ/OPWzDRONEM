@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,8 +20,12 @@ class AdminMiddleware
             return Redirect::route('home')->with('error', 'Brak dostępu - konto nieaktywne');
         }
 
+        if (!$user instanceof User) {
+            return Redirect::route('home')->with('error', 'Brak autoryzacji');
+        }
+
         // Sprawdzenie czy użytkownik ma uprawnienia do panelu administracyjnego
-        if (!in_array($user->role, ['admin', 'instructor'])) {
+        if (!$user->hasPermissionTo('admin.panel.access')) {
             return Redirect::route('home')->with('error', 'Brak autoryzacji');
         }
 

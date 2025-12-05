@@ -27,7 +27,6 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => bcrypt('password'), // hasło testowe
-            'role' => fake()->randomElement(['student', 'admin', 'instructor']),
             'pilot_license' => 'PL-ADMIN-001',
             'operator_license' => 'OP-ADMIN-001',
             'license_expiry_date' => now()->addYear(),

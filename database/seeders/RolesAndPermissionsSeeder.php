@@ -5,88 +5,141 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
     public function run(): void
     {
-        // Reset cached roles and permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Create permissions
         $permissions = [
-            // Content permissions
-            'view posts',
-            'create posts',
-            'edit posts',
-            'delete posts',
-            'publish posts',
+            // Panel
+            'admin.panel.access',
+            'dashboard.view',
 
-            // Comment permissions
-            'view comments',
-            'create comments',
-            'edit comments',
-            'delete comments',
-            'moderate comments',
+            // Users
+            'users.view',
+            'users.create',
+            'users.update',
+            'users.delete',
+            'users.deactivate',
+            'users.reset-2fa',
+            'users.reset-password',
+            'users.assign-roles',
+            'users.assign-permissions',
 
-            // User management permissions
-            'view users',
-            'create users',
-            'edit users',
-            'delete users',
-            'manage user roles',
+            // Groups
+            'groups.view',
+            'groups.create',
+            'groups.update',
+            'groups.delete',
+            'groups.assign-users',
 
-            // Group permissions
-            'view groups',
-            'create groups',
-            'edit groups',
-            'delete groups',
+            // Equipment
+            'equipment.view',
+            'equipment.create',
+            'equipment.update',
+            'equipment.delete',
+            'equipment.change-status',
+            'equipment.assign-to-set',
+            'equipment.import',
+            'equipment.export',
 
-            // Admin dashboard
-            'access admin panel',
-            'view dashboard stats',
+            // Equipment sets
+            'equipment-sets.view',
+            'equipment-sets.create',
+            'equipment-sets.update',
+            'equipment-sets.delete',
+            'equipment-sets.change-status',
+            'equipment-sets.manage-items',
+            'equipment-sets.rent-out',
+            'equipment-sets.close-rental',
+
+            // Rentals
+            'rentals.view',
+            'rentals.create',
+            'rentals.extend',
+            'rentals.close',
+            'rentals.approve',
+            'rentals.mark-damage',
+            'rentals.manage-groups',
+
+            // Content
+            'posts.view',
+            'posts.create',
+            'posts.update',
+            'posts.delete',
+            'posts.publish',
+            'comments.view',
+            'comments.create',
+            'comments.update',
+            'comments.delete',
+            'comments.moderate',
+
+            // Course materials
+            'course-materials.view',
+            'course-materials.create',
+            'course-materials.update',
+            'course-materials.delete',
+            'course-materials.approve',
+
+            // System & reports
+            'settings.view',
+            'settings.update',
+            'roles.manage',
+            'permissions.manage',
+            'audit.logs.view',
+            'exports.run',
+            'exports.download',
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission], ['guard_name' => 'web']);
         }
 
-        // Create roles and assign permissions
+        $allPermissions = Permission::pluck('name')->toArray();
 
-        // Admin - full access
-        $admin = Role::create(['name' => 'admin']);
-        $admin->givePermissionTo(Permission::all());
+        $roleDefinitions = [
+            'admin' => $allPermissions,
+            'koordynator' => array_diff($allPermissions, ['roles.manage', 'permissions.manage', 'settings.update', 'audit.logs.view']),
+            'instructor' => [
+                'admin.panel.access', 'dashboard.view',
+                'users.view',
+                'groups.view',
+                'equipment.view', 'equipment.create', 'equipment.update', 'equipment.change-status', 'equipment.assign-to-set',
+                'equipment-sets.view', 'equipment-sets.create', 'equipment-sets.update', 'equipment-sets.manage-items', 'equipment-sets.change-status', 'equipment-sets.rent-out', 'equipment-sets.close-rental',
+                'rentals.view', 'rentals.create', 'rentals.extend', 'rentals.close', 'rentals.mark-damage', 'rentals.manage-groups',
+                'posts.view', 'posts.create', 'posts.update', 'posts.delete', 'posts.publish',
+                'comments.view', 'comments.create', 'comments.update', 'comments.delete', 'comments.moderate',
+                'course-materials.view', 'course-materials.create', 'course-materials.update', 'course-materials.delete', 'course-materials.approve',
+                'exports.run'
+            ],
+            'wychowawca' => [
+                'admin.panel.access', 'dashboard.view',
+                'users.view', 'groups.view', 'groups.assign-users',
+                'rentals.view', 'rentals.create', 'rentals.close',
+                'equipment.view', 'equipment-sets.view',
+                'posts.view', 'comments.view', 'comments.create'
+            ],
+            'nauczyciel' => [
+                'admin.panel.access', 'dashboard.view',
+                'posts.view', 'posts.create', 'posts.update',
+                'comments.view', 'comments.create', 'comments.update',
+                'course-materials.view', 'course-materials.create', 'course-materials.update'
+            ],
+            'student' => [
+                'posts.view', 'comments.view', 'comments.create',
+                'course-materials.view'
+            ],
+            'guest' => [
+                'posts.view', 'comments.view'
+            ],
+        ];
 
-        // Instructor - can manage content and view users
-        $instructor = Role::create(['name' => 'instructor']);
-        $instructor->givePermissionTo([
-            'view posts',
-            'create posts',
-            'edit posts',
-            'delete posts',
-            'publish posts',
-            'view comments',
-            'create comments',
-            'moderate comments',
-            'view users',
-            'view groups',
-            'access admin panel',
-            'view dashboard stats',
-        ]);
-
-        // Student - basic access
-        $student = Role::create(['name' => 'student']);
-        $student->givePermissionTo([
-            'view posts',
-            'view comments',
-            'create comments',
-        ]);
-
-        // Guest - minimal access
-        $guest = Role::create(['name' => 'guest']);
-        $guest->givePermissionTo([
-            'view posts',
-            'view comments',
-        ]);
+        foreach ($roleDefinitions as $roleName => $permissionNames) {
+            $role = Role::firstOrCreate(['name' => $roleName], ['guard_name' => 'web']);
+            $role->syncPermissions($permissionNames);
+        }
     }
 }

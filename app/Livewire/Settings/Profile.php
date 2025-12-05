@@ -4,6 +4,7 @@ namespace App\Livewire\Settings;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -23,7 +24,7 @@ class Profile extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
-        $this->canChangeName = in_array(Auth::user()->role, ['admin', 'instructor']);
+        $this->canChangeName = Gate::allows('users.update');
     }
 
     /**

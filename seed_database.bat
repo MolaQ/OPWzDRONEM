@@ -36,7 +36,8 @@ echo   Seedowanie zakonczone!
 echo ====================================
 echo.
 echo Dane logowania:
-echo   Admin: admin@exaple.com / Haslo1234
+echo   Admin: admin@opwzdronem.pl / P@ssw0rd
+echo   Koordynator: angelo1997@wp.pl / Pssw0rd
 echo   Instruktor 1: jan.kowalski@example.com / Haslo1234
 echo   Instruktor 2: anna.nowak@example.com / Haslo1234
 echo   Wychowawca: piotr.wisniewski@example.com / Haslo1234

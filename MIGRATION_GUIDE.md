@@ -13,29 +13,33 @@
 ### 3. Utworzone role i uprawnienia
 
 #### Role:
-- **admin** - pełny dostęp do wszystkich funkcji
-- **instructor** - zarządzanie treściami i przeglądanie użytkowników
-- **student** - podstawowy dostęp (przeglądanie postów, komentowanie)
-- **guest** - minimalny dostęp (tylko przeglądanie)
+- **admin** – pełny dostęp do całej aplikacji
+- **koordynator** – szerokie uprawnienia operacyjne bez możliwości modyfikacji ustawień systemowych
+- **instructor** – zarządza treściami, sprzętem i wypożyczeniami
+- **wychowawca** – pilnuje swojej klasy, może inicjować wypożyczenia
+- **nauczyciel** – przygotowuje materiały i treści edukacyjne
+- **student** – konsumpcja treści, komentowanie, dostęp do materiałów
+- **guest** – wyłącznie przeglądanie publicznych treści
 
 #### Uprawnienia:
-- `view posts`, `create posts`, `edit posts`, `delete posts`, `publish posts`
-- `view comments`, `create comments`, `edit comments`, `delete comments`, `moderate comments`
-- `view users`, `create users`, `edit users`, `delete users`, `manage user roles`
-- `view groups`, `create groups`, `edit groups`, `delete groups`
-- `access admin panel`, `view dashboard stats`
+Nowe uprawnienia korzystają z notacji `obszar.akcja`, np. `users.view` albo `equipment-sets.manage-items`. Główne grupy:
+- Panel: `admin.panel.access`, `dashboard.view`
+- Użytkownicy i grupy: `users.*`, `groups.*`
+- Sprzęt i zestawy: `equipment.*`, `equipment-sets.*`, `rentals.*`
+- Treści: `posts.*`, `comments.*`, `course-materials.*`
+- Konfiguracja i raporty: `settings.*`, `roles.manage`, `permissions.manage`, `audit.logs.view`, `exports.*`
 
 ### 4. Zaktualizowane pliki
 
 #### Backend:
-- `app/Providers/AuthServiceProvider.php` - dodano gates: `isAdmin`, `isInstructor`, `accessAdminPanel`
-- `app/Http/Middleware/AdminMiddleware.php` - zmieniono na sprawdzanie `can('access admin panel')`
+- `app/Providers/AuthServiceProvider.php` - gates korzystają z ról `admin|koordynator|instructor` i uprawnienia `admin.panel.access`
+- `app/Http/Middleware/AdminMiddleware.php` - weryfikuje `can('admin.panel.access')`
 - `app/Livewire/Settings/Profile.php` - `hasRole(['admin', 'instructor'])` zamiast `in_array`
 - `app/Livewire/Admin/Members.php` - pełna integracja z systemem ról Spatie
 
 #### Frontend:
-- `resources/views/components/layouts/app/usersidebar.blade.php` - `@can('access admin panel')` zamiast `@if(in_array(...))`
-- `resources/views/components/layouts/app/sidebar.blade.php` - `@can('view users')` zamiast `@if(in_array(...))`
+- `resources/views/components/layouts/app/usersidebar.blade.php` - `@can('admin.panel.access')` steruje linkami administracyjnymi
+- `resources/views/components/layouts/app/sidebar.blade.php` - sekcje używają `@canany(['users.view', ...])` oraz `@can('admin.panel.access')`
 - `resources/views/livewire/admin/members.blade.php` - wyświetlanie ról z systemu Spatie
 
 #### Seeders:
@@ -88,7 +92,8 @@ php artisan db:seed --class=RolesAndPermissionsSeeder
 php artisan db:seed --class=MembersSeeder
 ```
 To utworzy:
-- **1 administratora**: admin@exaple.com / Haslo1234
+- **1 administratora**: admin@opwzdronem.pl / P@ssw0rd
+- **1 koordynatora**: angelo1997@wp.pl / Pssw0rd
 - **2 instruktorów**: jan.kowalski@example.com, anna.nowak@example.com / Haslo1234
 - **1 wychowawcę**: piotr.wisniewski@example.com / Haslo1234
 - **30 studentów** w grupie 4OPW (student1@example.com - student30@example.com / Haslo1234)
@@ -116,7 +121,7 @@ if (auth()->user()->hasRole('admin')) { ... }
 if (auth()->user()->hasRole(['admin', 'instructor'])) { ... }
 
 // Sprawdzenie uprawnienia
-if (auth()->user()->can('create posts')) { ... }
+if (auth()->user()->can('posts.create')) { ... }
 
 // Przypisanie roli
 $user->assignRole('student');
@@ -125,7 +130,7 @@ $user->syncRoles(['admin']); // usuwa wszystkie inne role
 
 ### W blade templates:
 ```blade
-@can('access admin panel')
+@can('admin.panel.access')
     <!-- Treść dla użytkowników z dostępem do panelu -->
 @endcan
 
@@ -179,10 +184,8 @@ public function down()
 
 Po uruchomieniu seedera `MembersSeeder` system utworzy:
 
-### Użytkownicy:
-- **Administrator**: admin@example.com / Haslo1234 (grupa: Administracja)
-// poprawiono powyżej; zachowujemy spójność danych
-- **Administrator**: admin@exaple.com / Haslo1234 (grupa: Administracja)
+- **Administrator**: admin@opwzdronem.pl / P@ssw0rd (grupa: Administracja)
+- **Koordynator**: angelo1997@wp.pl / Pssw0rd (grupa: Administracja)
 - **Instruktor 1**: jan.kowalski@example.com / Haslo1234 (grupa: Administracja)
 - **Instruktor 2**: anna.nowak@example.com / Haslo1234 (grupa: Administracja)
 - **Wychowawca**: piotr.wisniewski@example.com / Haslo1234 (grupa: 4OPW)
@@ -197,7 +200,7 @@ Po uruchomieniu seedera `MembersSeeder` system utworzy:
 - **60 reakcji** - losowe polubienia/niepolubienia postów przez użytkowników
 - **50 komentarzy** - losowe komentarze pod postami
 
-Wszystkie konta mają to samo hasło: **Haslo1234**
+Hasła są opisane powyżej (admin oraz koordynator mają dedykowane hasła, pozostali `Haslo1234`).
 
 ## Uwagi
 - Stare pole 'role' jest nadal w bazie danych dla bezpieczeństwa

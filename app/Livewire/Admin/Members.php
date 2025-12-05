@@ -7,6 +7,8 @@ use Livewire\WithPagination;
 use App\Models\User;
 use App\Models\Group;
 use App\Services\BarcodeResolver;
+use Spatie\Permission\Models\Role;
+use Illuminate\Validation\Rule;
 
 class Members extends Component
 {
@@ -72,10 +74,12 @@ class Members extends Component
 
     public function saveUser()
     {
+        $availableRoles = Role::orderBy('name')->pluck('name')->toArray();
+
         $rules = [
             'editingUser.name' => 'required|string|max:255',
             'editingUser.email' => 'required|email|unique:users,email,' . ($this->editingUser['id'] ?? 'NULL'),
-            'editingUser.role' => 'required|string|in:student,admin,instructor,guest',
+            'editingUser.role' => ['required','string', Rule::in($availableRoles)],
             'editingUser.group_id' => 'nullable|exists:groups,id',
             'editingUser.active' => 'required|boolean',
         ];
@@ -131,6 +135,7 @@ class Members extends Component
             'group_id' => null,
             'active' => true,
             'password' => '',
+            'barcode' => '',
         ];
     }
 

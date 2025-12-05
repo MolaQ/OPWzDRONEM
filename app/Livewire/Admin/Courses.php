@@ -8,6 +8,7 @@ use Livewire\WithFileUploads;
 use App\Models\Course;
 use App\Models\CourseUnit;
 use App\Models\CourseMaterial;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 #[Layout('components.layouts.app.sidebar')]
@@ -401,7 +402,7 @@ class Courses extends Component
 
         $user = auth()->guard('web')->user();
         $material->uploaded_by_id = $user?->id;
-        $material->is_approved = in_array($user?->role, ['admin', 'instructor']);
+        $material->is_approved = $user ? Gate::forUser($user)->allows('course-materials.approve') : false;
 
         if ($this->materialType === 'pdf' && $this->materialFile) {
             $path = $this->materialFile->store('course_materials', 'public');

@@ -21,11 +21,11 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('isInstructor', function (User $user) {
-            return $user->hasRole(['admin', 'instructor']);
+            return $user->hasAnyRole(['admin', 'koordynator', 'instructor']);
         });
 
         Gate::define('accessAdminPanel', function (User $user) {
-            return $user->can('access admin panel');
+            return $user->can('admin.panel.access');
         });
     }
 }
