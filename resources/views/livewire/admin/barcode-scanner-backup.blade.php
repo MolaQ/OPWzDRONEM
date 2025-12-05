@@ -66,7 +66,7 @@
                     <div class="flex-1">
                         <p class="text-sm font-medium text-red-800 dark:text-red-200">{{ $error }}</p>
                     </div>
-                    <button wire:click="clear" class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200">
+                    <button wire:click="clear" class="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white border border-neutral-300 dark:border-neutral-600 rounded p-1">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -290,7 +290,7 @@
                         <a
                             href="{{ route('admin.members') }}"
                             wire:navigate
-                            class="px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition flex items-center gap-2 border border-blue-500/70 dark:border-blue-500"
+                            class="px-4 py-2 rounded-lg bg-white text-neutral-900 font-medium hover:border-neutral-400 hover:shadow-lg transition-all flex items-center gap-2 border-2 border-neutral-300 dark:bg-neutral-800 dark:text-white dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:shadow-lg"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

@@ -9,7 +9,7 @@
                 </div>
                 <button
                     wire:click="create"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm border border-blue-500/70 dark:border-blue-500"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-white text-neutral-900 border-2 border-neutral-300 hover:border-neutral-400 hover:shadow-lg text-sm font-medium rounded-lg transition-all dark:bg-neutral-800 dark:text-white dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -153,7 +153,7 @@
                                         <button
                                             type="button"
                                             wire:click="edit({{ $equipment->id }})"
-                                            class="inline-flex items-center justify-center w-7 h-7 {{ $isRented ? 'text-neutral-400 dark:text-neutral-600 cursor-not-allowed' : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20' }} rounded transition-colors"
+                                            class="inline-flex items-center justify-center w-7 h-7 {{ $isRented ? 'text-neutral-400 dark:text-neutral-600 cursor-not-allowed' : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 border border-neutral-300 dark:border-neutral-600' }} rounded transition-colors"
                                             title="{{ $isRented ? 'Nie można edytować wypożyczonego wyposażenia' : 'Edytuj' }}"
                                             @if($isRented) disabled @endif
                                         >

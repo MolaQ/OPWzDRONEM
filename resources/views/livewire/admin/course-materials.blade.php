@@ -41,10 +41,10 @@
 
                 <button
                     wire:click="openMaterialEditor(null, null)"
-                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors shadow-sm
-                           bg-white text-blue-700 hover:bg-blue-50 border border-blue-500/80
-                           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500
-                           dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700 dark:border-blue-500"
+                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all shadow-md
+                           bg-white text-neutral-900 hover:border-neutral-400 hover:shadow-lg border-2 border-neutral-300
+                           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                           dark:bg-neutral-800 dark:text-white dark:hover:border-neutral-500 dark:hover:shadow-lg dark:border-neutral-600"
                     title="Dodaj materiał"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -56,8 +56,13 @@
         </div>
 
         <!-- Tytuł kursu -->
-        <div class="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
-            <h2 class="text-xl font-semibold text-neutral-900 dark:text-white">{{ $course ? $course->name : 'Materiały do zajęć' }}</h2>
+        <div class="flex items-start justify-between gap-4 p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <div class="flex flex-col gap-1">
+                <h2 class="text-xl font-semibold text-neutral-900 dark:text-white">{{ $course ? $course->name : 'Materiały do zajęć' }}</h2>
+                @if($course && $course->description)
+                    <p class="text-sm text-neutral-600 dark:text-neutral-300 max-w-3xl">{{ $course->description }}</p>
+                @endif
+            </div>
         </div>
 
         <!-- Struktura bloków i materiałów -->
@@ -126,10 +131,10 @@
 
                                     <!-- Przyciski akcji -->
                                     <div class="flex items-center gap-2 flex-shrink-0 px-3">
-                                        <button wire:click="openMaterialEditor({{ $material->id }})" class="inline-flex items-center justify-center w-7 h-7 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors" title="Edytuj">
+                                        <button wire:click="openMaterialEditor({{ $material->id }})" class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 rounded transition-colors border border-neutral-300 dark:border-neutral-600" title="Edytuj">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
                                         </button>
-                                        <button wire:click="deleteMaterial({{ $material->id }})" wire:confirm="Usunąć ten materiał?" class="inline-flex items-center justify-center w-7 h-7 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors" title="Usuń">
+                                        <button wire:click="deleteMaterial({{ $material->id }})" wire:confirm="Usuńąć ten materiał?" class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 rounded transition-colors border border-neutral-300 dark:border-neutral-600" title="Usuń">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                                         </button>
                                     </div>
@@ -198,10 +203,10 @@
 
                                                     <!-- Przyciski akcji -->
                                                     <div class="flex items-center gap-2 flex-shrink-0 px-3">
-                                                        <button wire:click="openMaterialEditor({{ $material->id }})" class="inline-flex items-center justify-center w-7 h-7 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors" title="Edytuj">
+                                                        <button wire:click="openMaterialEditor({{ $material->id }})" class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 rounded transition-colors border border-neutral-300 dark:border-neutral-600" title="Edytuj">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
                                                         </button>
-                                                        <button wire:click="deleteMaterial({{ $material->id }})" wire:confirm="Usunąć ten materiał?" class="inline-flex items-center justify-center w-7 h-7 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors" title="Usuń">
+                                                        <button wire:click="deleteMaterial({{ $material->id }})" wire:confirm="Usunąć ten materiał?" class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 rounded transition-colors border border-neutral-300 dark:border-neutral-600" title="Usuń">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                                                         </button>
                                                     </div>
@@ -289,10 +294,10 @@
                         </button>
                         <button
                             wire:click="saveMaterial"
-                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded shadow-sm transition
-                                   bg-white text-blue-700 hover:bg-blue-50 border border-blue-500/80
-                                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500
-                                   dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700 dark:border-blue-500"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded shadow-md transition-all
+                                   bg-white text-neutral-900 hover:border-neutral-400 hover:shadow-lg border-2 border-neutral-300
+                                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                                   dark:bg-neutral-800 dark:text-white dark:hover:border-neutral-500 dark:hover:shadow-lg dark:border-neutral-600"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                             Zapisz materiał

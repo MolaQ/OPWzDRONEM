@@ -35,6 +35,7 @@ class Courses extends Component
     // Course editor state
     public bool $showCourseEditor = false;
     public string $courseTitle = '';
+    public ?string $courseDescription = null;
     public ?int $courseId = null;
 
     // Materials state
@@ -56,6 +57,7 @@ class Courses extends Component
         $course = Course::find($this->courseId);
         if ($course) {
             $this->courseTitle = $course->name;
+            $this->courseDescription = $course->description;
         }
     }
 
@@ -156,6 +158,7 @@ class Courses extends Component
             $course = Course::find($this->courseId);
             if ($course) {
                 $this->courseTitle = $course->name;
+                $this->courseDescription = $course->description;
                 $this->showCourseEditor = true;
             }
         }
@@ -165,14 +168,19 @@ class Courses extends Component
     {
         $this->validate([
             'courseTitle' => 'required|string|min:3|max:255',
+            'courseDescription' => 'nullable|string|max:1000',
         ]);
 
         if ($this->courseId) {
             $course = Course::find($this->courseId);
             if ($course) {
-                $course->update(['name' => $this->courseTitle]);
+                $course->update([
+                    'name' => $this->courseTitle,
+                    'description' => $this->courseDescription,
+                ]);
                 // Ensure the property is synced
                 $this->courseTitle = $course->name;
+                $this->courseDescription = $course->description;
                 $this->dispatch('notify', type: 'success', message: 'Kurs zaktualizowany.');
                 $this->showCourseEditor = false;
             }

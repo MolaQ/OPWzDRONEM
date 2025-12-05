@@ -9,7 +9,7 @@
                 </div>
                 <button
                     wire:click="create"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm border border-blue-500/70 dark:border-blue-500"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-white text-neutral-900 border-2 border-neutral-300 hover:border-neutral-400 hover:shadow-lg text-sm font-medium rounded-lg transition-all dark:bg-neutral-800 dark:text-white dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />

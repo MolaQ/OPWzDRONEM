@@ -3,10 +3,13 @@
 namespace App\Livewire\Settings;
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 
 #[Layout('components.layouts.app.sidebar')]
 class Password extends Component
@@ -33,9 +36,14 @@ class Password extends Component
             throw $e;
         }
 
-        Auth::user()->update([
-            'password' => $validated['password'],
-        ]);
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        abort_unless($user instanceof User, Response::HTTP_UNAUTHORIZED);
+
+        $user->forceFill([
+            'password' => Hash::make($validated['password']),
+        ])->save();
 
         $this->reset('current_password', 'password', 'password_confirmation');
 

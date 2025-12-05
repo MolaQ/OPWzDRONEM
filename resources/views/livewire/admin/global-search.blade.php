@@ -99,7 +99,7 @@
                                             </div>
                                         </button>
                                         <div class="flex items-center gap-2">
-                                            <a href="{{ route('admin.members') }}" class="px-3 py-2 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-lg border border-blue-500/70 dark:border-blue-500">Uczniowie</a>
+                                            <a href="{{ route('admin.members') }}" class="px-3 py-2 text-xs bg-white text-neutral-900 border-2 border-neutral-300 hover:border-neutral-400 hover:shadow-lg rounded-lg transition-all dark:bg-neutral-800 dark:text-white dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:shadow-lg">Uczniowie</a>
                                             <a href="{{ route('admin.rentals') }}" class="px-3 py-2 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg border border-indigo-500/70 dark:border-indigo-500">Wypożyczenia</a>
                                         </div>
                                     </div>
@@ -365,7 +365,7 @@
                         </div>
 
                         <div class="pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                            <a href="{{ route('admin.members') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition border border-blue-500/70 dark:border-blue-500">
+                            <a href="{{ route('admin.members') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-neutral-900 border-2 border-neutral-300 hover:border-neutral-400 hover:shadow-lg rounded-lg transition-all dark:bg-neutral-800 dark:text-white dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:shadow-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
@@ -438,7 +438,7 @@
                                 </svg>
                                 Zwroty
                             </a>
-                            <a href="{{ route('admin.rentals') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition border border-blue-500/70 dark:border-blue-500">
+                            <a href="{{ route('admin.rentals') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-neutral-900 border-2 border-neutral-300 hover:border-neutral-400 hover:shadow-lg rounded-lg transition-all dark:bg-neutral-800 dark:text-white dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:shadow-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                 </svg>

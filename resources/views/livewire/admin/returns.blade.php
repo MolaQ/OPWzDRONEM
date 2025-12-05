@@ -165,7 +165,7 @@
                             <button
                                 type="button"
                                 wire:click="$set('noteType', 'info')"
-                                class="px-4 py-2 rounded-lg font-medium transition {{ $noteType === 'info' ? 'bg-blue-600 text-white border border-blue-500/70 dark:border-blue-500' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-600' }}"
+                                class="px-4 py-2 rounded-lg font-medium transition {{ $noteType === 'info' ? 'bg-white text-neutral-900 border-2 border-neutral-300 dark:bg-neutral-800 dark:text-white dark:border-neutral-600' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-600' }}"
                             >
                                 Info
                             </button>
