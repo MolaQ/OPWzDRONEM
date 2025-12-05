@@ -36,11 +36,11 @@
                     </select>
                 </div>
 
-                <button wire:click="showCreateModal" class="inline-flex items-center gap-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-[#880000] text-xs font-bold rounded transition-colors">
-                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-[#880000] flex-shrink-0">
-                        <span class="text-sm">+</span>
-                    </span>
-                    DODAJ UŻYTKOWNIKA
+                <button wire:click="showCreateModal" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm border border-blue-500/70 dark:border-blue-500">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Dodaj użytkownika
                 </button>
             </div>
         </div>
@@ -70,12 +70,12 @@
                                     {{ $user->active ? 'Aktywny' : 'Nieaktywny' }}
                                 </span>
                             </td>
-                            <td class="py-2 px-3 flex gap-3">
-                                <button type="button" wire:click="editUser({{ $user->id }})" class="inline-flex items-center justify-center w-8 h-8 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors cursor-pointer" title="Edytuj użytkownika">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                            <td class="py-2 px-3 flex gap-2">
+                                <button type="button" wire:click="editUser({{ $user->id }})" class="inline-flex items-center justify-center w-7 h-7 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors" title="Edytuj">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
                                 </button>
-                                <button type="button" wire:click="deleteUser({{ $user->id }})" wire:confirm="Czy na pewno usunąć tego użytkownika?" class="inline-flex items-center justify-center w-8 h-8 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors cursor-pointer" title="Usuń użytkownika">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                <button type="button" wire:click="deleteUser({{ $user->id }})" wire:confirm="Czy na pewno usunąć tego użytkownika?" class="inline-flex items-center justify-center w-7 h-7 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors" title="Usuń">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                                 </button>
                             </td>
                         </tr>
@@ -96,61 +96,57 @@
 
         <!-- Paginacja -->
         <div class="mt-6">{{ $users->links() }}</div>
-    </div>
-</flux:main>
-
-    @if ($showModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" wire:click="closeModal">
-            <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all" wire:click.stop>
-                <!-- Modal Header with Barcode at the top -->
-                <div class="p-6 border-b border-neutral-800">
-                    <div class="flex items-center justify-between gap-6">
-                        <h3 class="text-2xl font-bold text-white flex-1">
-                            {{ $editingUser['id'] ? 'Edytuj użytkownika' : 'Dodaj nowego użytkownika' }}
-                        </h3>
-                        @if($editingUser['id'] && $editingUser['barcode'])
-                        <div
-                            class="inline-block bg-white dark:bg-neutral-100 rounded-lg px-4 py-3"
-                            x-data="{
-                                render() {
-                                    const el = document.getElementById('barcode-top-{{ $editingUser['id'] }}');
-                                    if (!el || typeof JsBarcode === 'undefined') { setTimeout(()=>this.render(), 100); return; }
-                                    try {
-                                        JsBarcode(el, '{{ $editingUser['barcode'] }}', {
-                                            format: 'CODE128',
-                                            width: 2,
-                                            height: 50,
-                                            displayValue: false,
-                                            margin: 6,
-                                            lineColor: '#000000',
-                                            background: 'transparent'
-                                        });
-                                    } catch(e) { console.error(e); }
+        @if ($showModal)
+            <div class="fixed inset-0 z-50 overflow-y-auto bg-black/50 py-6" wire:click="closeModal">
+                <div class="flex items-start justify-center min-h-full px-4">
+                    <div class="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all my-8" wire:click.stop>
+                        <!-- Modal Header with Barcode at the top -->
+                        <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex items-center justify-between gap-6 rounded-t-2xl">
+                            <h3 class="text-xl font-bold text-neutral-900 dark:text-white flex-1">
+                                {{ $editingUser['id'] ? 'Edytuj użytkownika' : 'Dodaj nowego użytkownika' }}
+                            </h3>
+                            @if($editingUser['id'] && $editingUser['barcode'])
+                            <div
+                                class="inline-block bg-white dark:bg-neutral-100 rounded-lg px-4 py-3"
+                                x-data="{
+                                    render() {
+                                        const el = document.getElementById('barcode-top-{{ $editingUser['id'] }}');
+                                        if (!el || typeof JsBarcode === 'undefined') { setTimeout(()=>this.render(), 100); return; }
+                                        try {
+                                            JsBarcode(el, '{{ $editingUser['barcode'] }}', {
+                                                format: 'CODE128',
+                                                width: 2,
+                                                height: 50,
+                                                displayValue: false,
+                                                margin: 6,
+                                                lineColor: '#000000',
+                                                background: 'transparent'
+                                            });
+                                        } catch(e) { console.error(e); }
+                                    }
                                 }
-                            }"
-                            x-init="$nextTick(()=>render())"
-                            @showModal.window="render()"
-                        >
-                            <div class="text-center" wire:ignore>
-                                <svg id="barcode-top-{{ $editingUser['id'] }}"></svg>
-                                <p class="mt-1 text-xs font-mono text-neutral-900">{{ $editingUser['barcode'] }}</p>
+                                x-init="$nextTick(()=>render())"
+                                @showModal.window="render()"
+                            >
+                                <div class="text-center" wire:ignore>
+                                    <svg id="barcode-top-{{ $editingUser['id'] }}"></svg>
+                                    <p class="mt-1 text-xs font-mono text-neutral-900">{{ $editingUser['barcode'] }}</p>
+                                </div>
                             </div>
+                            @endif
+                            <button wire:click="closeModal" class="text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 transition rounded-lg p-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
-                        @endif
-                        <button wire:click="closeModal" class="text-neutral-400 hover:text-neutral-300 transition">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
 
-                <!-- Modal Body (scrollable if needed) -->
-                <form wire:submit.prevent="saveUser" class="space-y-6 p-6 max-h-[70vh] overflow-y-auto" autocomplete="off">
+                        <!-- Modal Body (scrollable if needed) -->
+                        <form wire:submit.prevent="saveUser" class="space-y-6 p-6 max-h-[70vh] overflow-y-auto" autocomplete="off">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Imię i nazwisko -->
                         <div class="md:col-span-2">
-                            <label for="name" class="block mb-2 text-sm font-semibold text-neutral-300">
+                            <label for="name" class="block mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
                                 Imię i nazwisko <span class="text-red-500">*</span>
                             </label>
                             <input
@@ -158,14 +154,14 @@
                                 type="text"
                                 wire:model.defer="editingUser.name"
                                 placeholder="Jan Kowalski"
-                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
+                                class="w-full rounded-lg bg-white border border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700 px-4 py-3 text-neutral-900 dark:text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
                             />
                             @error('editingUser.name')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>
 
                         <!-- Email -->
                         <div class="md:col-span-2">
-                            <label for="email" class="block mb-2 text-sm font-semibold text-neutral-300">
+                            <label for="email" class="block mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
                                 Adres email <span class="text-red-500">*</span>
                             </label>
                             <input
@@ -173,20 +169,20 @@
                                 type="email"
                                 wire:model.defer="editingUser.email"
                                 placeholder="jan.kowalski@example.com"
-                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
+                                class="w-full rounded-lg bg-white border border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700 px-4 py-3 text-neutral-900 dark:text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
                             />
                             @error('editingUser.email')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>
 
                         <!-- Rola -->
                         <div>
-                            <label for="role" class="block mb-2 text-sm font-semibold text-neutral-300">
+                            <label for="role" class="block mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
                                 Rola <span class="text-red-500">*</span>
                             </label>
                             <select
                                 id="role"
                                 wire:model.defer="editingUser.role"
-                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
+                                class="w-full rounded-lg bg-white border border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700 px-4 py-3 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
                             >
                                 <option value="student">👤 Student</option>
                                 <option value="admin">⚡ Administrator</option>
@@ -198,13 +194,13 @@
 
                         <!-- Grupa -->
                         <div>
-                            <label for="group_id" class="block mb-2 text-sm font-semibold text-neutral-300">
+                            <label for="group_id" class="block mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
                                 Grupa
                             </label>
                             <select
                                 id="group_id"
                                 wire:model.defer="editingUser.group_id"
-                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
+                                class="w-full rounded-lg bg-white border border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700 px-4 py-3 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
                             >
                                 <option value="">Brak przypisania</option>
                                 @foreach($groups as $g)
@@ -216,7 +212,7 @@
 
                         <!-- Hasło -->
                         <div class="md:col-span-2">
-                            <label for="password" class="block mb-2 text-sm font-semibold text-neutral-300">
+                            <label for="password" class="block mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
                                 Hasło @if(!$editingUser['id'])<span class="text-red-500">*</span>@endif
                                 @if($editingUser['id'])<span class="text-neutral-500 text-xs">(pozostaw puste, aby nie zmieniać)</span>@endif
                             </label>
@@ -225,17 +221,17 @@
                                 type="password"
                                 wire:model.defer="editingUser.password"
                                 placeholder="{{ $editingUser['id'] ? 'Pozostaw puste, aby nie zmieniać hasła' : 'Minimum 8 znaków' }}"
-                                class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3 text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
+                                class="w-full rounded-lg bg-white border border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700 px-4 py-3 text-neutral-900 dark:text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
                             />
                             @error('editingUser.password')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>
 
                         <!-- Status konta -->
                         <div class="md:col-span-2">
-                            <label class="block mb-2 text-sm font-semibold text-neutral-300">
+                            <label class="block mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
                                 Status konta <span class="text-red-500">*</span>
                             </label>
-                            <div class="flex items-center gap-4 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
+                            <div class="flex items-center gap-4 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700">
                                 <label class="flex items-center gap-3 cursor-pointer flex-1">
                                     <input
                                         type="radio"
@@ -243,7 +239,7 @@
                                         value="1"
                                         class="w-4 h-4 text-green-600 focus:ring-green-500 focus:ring-2"
                                     />
-                                    <span class="flex items-center gap-2 text-sm font-medium text-neutral-300">
+                                    <span class="inline-flex items-center gap-2 text-sm font-semibold px-3 py-1 rounded-full border border-green-500 text-green-700 bg-green-50 dark:bg-green-900/20 dark:text-green-200">
                                         <span class="w-2 h-2 rounded-full bg-green-500"></span>
                                         Aktywne
                                     </span>
@@ -255,7 +251,7 @@
                                         value="0"
                                         class="w-4 h-4 text-red-600 focus:ring-red-500 focus:ring-2"
                                     />
-                                    <span class="flex items-center gap-2 text-sm font-medium text-neutral-300">
+                                    <span class="inline-flex items-center gap-2 text-sm font-semibold px-3 py-1 rounded-full border border-red-500 text-red-700 bg-red-50 dark:bg-red-900/20 dark:text-red-200">
                                         <span class="w-2 h-2 rounded-full bg-red-500"></span>
                                         Nieaktywne
                                     </span>
@@ -282,19 +278,19 @@
                     </div>
 
                     <!-- Przyciski akcji -->
-                    <div class="flex justify-end gap-3 pt-4 border-t border-neutral-700">
+                    <div class="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
                         <button
                             type="button"
                             wire:click="closeModal"
-                            class="px-6 py-2.5 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-300 font-medium hover:bg-neutral-700 transition"
+                            class="px-6 py-2.5 rounded-lg border border-neutral-300 text-neutral-700 bg-white hover:bg-neutral-50 font-medium transition dark:border-neutral-600 dark:text-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700"
                         >
                             Anuluj
                         </button>
                         <button
                             type="submit"
-                            class="px-6 py-2.5 rounded-lg bg-[#880000] hover:bg-red-900 text-white font-semibold shadow-lg hover:shadow-xl transition transform hover:scale-105"
+                            class="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm border border-blue-500/70 dark:border-blue-500"
                         >
-                            {{ $editingUser['id'] ? '💾 Zapisz zmiany' : '➕ Dodaj użytkownika' }}
+                            {{ $editingUser['id'] ? 'Zapisz zmiany' : 'Dodaj użytkownika' }}
                         </button>
                     </div>
                 </form>
@@ -339,4 +335,5 @@
         @endif
     @endif
 
-</div>
+    </div>
+</flux:main>

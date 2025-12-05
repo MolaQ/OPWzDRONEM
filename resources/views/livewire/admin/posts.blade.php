@@ -35,11 +35,11 @@
                     </select>
                 </div>
 
-                <button wire:click="showCreateModal" class="inline-flex items-center gap-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-[#880000] text-xs font-bold rounded transition-colors">
-                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-[#880000] flex-shrink-0">
-                        <span class="text-sm">+</span>
-                    </span>
-                    DODAJ POST
+                <button wire:click="showCreateModal" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm border border-blue-500/70 dark:border-blue-500">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Dodaj post
                 </button>
             </div>
         </div>
@@ -92,12 +92,12 @@
                         </div>
 
                         <!-- Kolumna 3: Akcje -->
-                        <div class="flex items-center gap-3 flex-shrink-0 px-3">
-                            <button type="button" wire:click="editPost({{ $post->id }})" class="inline-flex items-center justify-center w-8 h-8 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors cursor-pointer" title="Edytuj post">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                        <div class="flex items-center gap-2 flex-shrink-0 px-3">
+                            <button type="button" wire:click="editPost({{ $post->id }})" class="inline-flex items-center justify-center w-7 h-7 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors" title="Edytuj">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
                             </button>
-                            <button type="button" wire:click="deletePost({{ $post->id }})" wire:confirm="Czy na pewno usunąć ten post?" class="inline-flex items-center justify-center w-8 h-8 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors cursor-pointer" title="Usuń post">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            <button type="button" wire:click="deletePost({{ $post->id }})" wire:confirm="Czy na pewno usunąć ten post?" class="inline-flex items-center justify-center w-7 h-7 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors" title="Usuń">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                             </button>
                         </div>
                     </div>
@@ -119,14 +119,13 @@
         @if ($showModal)
             <div class="fixed inset-0 z-50 overflow-y-auto bg-black/50 py-6" wire:click="closeModal">
                 <div class="flex items-start justify-center min-h-full px-4">
-                    <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all my-8" wire:click.stop>
-                    <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all my-8" wire:click.stop>
+                    <div class="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all my-8" wire:click.stop>
                         <!-- Header -->
-                        <div class="bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-6 py-4 border-b border-neutral-700 flex items-center justify-between rounded-t-2xl">
-                            <h3 class="text-xl font-bold text-white">
+                        <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex items-center justify-between rounded-t-2xl">
+                            <h3 class="text-xl font-bold text-neutral-900 dark:text-white">
                                 {{ $editingPost['id'] ? '✏️ Edytuj post' : '✨ Dodaj nowy post' }}
                             </h3>
-                            <button wire:click="closeModal" type="button" class="text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg p-2 transition">
+                            <button wire:click="closeModal" type="button" class="text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 rounded-lg p-2 transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
@@ -138,7 +137,7 @@
                         <form wire:submit.prevent="savePost" class="space-y-5" id="postForm">
                     <!-- Tytuł -->
                     <div>
-                        <label for="title" class="block mb-1.5 text-sm font-medium text-neutral-300">
+                        <label for="title" class="block mb-1.5 text-sm font-medium text-neutral-700 dark:text-neutral-200">
                             Tytuł <span class="text-red-500">*</span>
                         </label>
                         <input
@@ -146,14 +145,14 @@
                             type="text"
                             wire:model="editingPost.title"
                             placeholder="Wprowadź tytuł postu..."
-                            class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
+                            class="w-full rounded-lg bg-white border border-neutral-300 px-3 py-2 text-sm text-neutral-900 placeholder-neutral-400 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100"
                         />
                         @error('editingPost.title')<p class="mt-1 text-xs text-red-400">{{ $message }}</p>@enderror
                     </div>
 
                     <!-- Treść -->
                     <div wire:ignore>
-                        <label for="content" class="block mb-1.5 text-sm font-medium text-neutral-300">
+                        <label for="content" class="block mb-1.5 text-sm font-medium text-neutral-700 dark:text-neutral-200">
                             Treść <span class="text-red-500">*</span>
                         </label>
                         <textarea
@@ -165,11 +164,11 @@
                     </div>
 
                     <!-- Separator -->
-                    <div class="border-t border-neutral-700"></div>
+                    <div class="border-t border-neutral-200 dark:border-neutral-700"></div>
 
                     <!-- Obrazek -->
                     <div class="space-y-3">
-                        <h4 class="text-sm font-semibold text-neutral-400 uppercase tracking-wider flex items-center gap-2">
+                        <h4 class="text-sm font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
@@ -179,15 +178,15 @@
                                 <div class="flex gap-4 items-start">
                                     @if($editingPost['image'] && !$image)
                                         <div class="flex-shrink-0">
-                                            <img src="{{ asset('storage/' . $editingPost['image']) }}" alt="Current" class="w-24 h-24 object-cover rounded-lg border-2 border-neutral-600">
+                                            <img src="{{ asset('storage/' . $editingPost['image']) }}" alt="Current" class="w-24 h-24 object-cover rounded-lg border-2 border-neutral-200 dark:border-neutral-600">
                                             <p class="text-xs text-neutral-500 mt-1 text-center">Aktualny</p>
                                         </div>
                                     @endif
 
                                     @if($image)
                                         <div class="flex-shrink-0">
-                                            <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="w-24 h-24 object-cover rounded-lg border-2 border-[#880000]">
-                                            <p class="text-xs text-[#880000] mt-1 text-center font-medium">Nowy</p>
+                                            <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="w-24 h-24 object-cover rounded-lg border-2 border-blue-500">
+                                            <p class="text-xs text-blue-600 dark:text-blue-300 mt-1 text-center font-medium">Nowy</p>
                                         </div>
                                     @endif
 
@@ -197,13 +196,13 @@
                                             type="file"
                                             wire:model="image"
                                             accept="image/*"
-                                            class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-3 py-2 text-sm text-neutral-100 file:mr-3 file:py-1.5 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-[#880000] file:text-white file:cursor-pointer hover:file:bg-red-900 transition"
+                                            class="w-full rounded-lg bg-white border border-neutral-300 px-3 py-2 text-sm text-neutral-900 file:mr-3 file:py-1.5 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-blue-600 file:text-white file:cursor-pointer hover:file:bg-blue-700 transition dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100"
                                         />
                                         <p class="text-xs text-neutral-500 mt-2 flex items-center gap-1.5">
                                             <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
-                                            <span class="leading-tight">Maksymalny rozmiar: 2MB (JPG, PNG, GIF)</span>
+                                            <span class="leading-tight text-neutral-600 dark:text-neutral-300">Maksymalny rozmiar: 2MB (JPG, PNG, GIF)</span>
                                         </p>
                                         @error('image')<p class="mt-1.5 text-xs text-red-400 flex items-center gap-1.5">
                                             <svg class="w-3 h-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -216,7 +215,7 @@
                             </div>
 
                             <!-- Separator -->
-                            <div class="border-t border-neutral-700"></div>
+                            <div class="border-t border-neutral-200 dark:border-neutral-700"></div>
 
                             <!-- Sekcja: Ustawienia publikacji -->
                             <div class="space-y-4">
@@ -230,30 +229,30 @@
                                 <div class="grid grid-cols-1 gap-4">
                                     <!-- Status publikacji -->
                                     <div>
-                                        <label class="block mb-2 text-sm font-medium text-neutral-300">
+                                        <label class="block mb-2 text-sm font-medium text-neutral-700 dark:text-neutral-200">
                                             Status <span class="text-red-500">*</span>
                                         </label>
                                         <div class="grid grid-cols-2 gap-3">
-                                            <label class="flex items-center gap-2.5 p-3 bg-neutral-800 border-2 border-neutral-700 rounded-lg cursor-pointer transition hover:border-green-600 has-[:checked]:border-green-600 has-[:checked]:bg-green-950/30">
+                                            <label class="flex items-center gap-2.5 p-3 bg-neutral-50 border-2 border-neutral-200 rounded-lg cursor-pointer transition hover:border-green-600 has-[:checked]:border-green-600 has-[:checked]:bg-green-50 dark:bg-neutral-800 dark:border-neutral-700 dark:has-[:checked]:bg-green-950/30">
                                                 <input
                                                     type="radio"
                                                     wire:model="editingPost.is_published"
                                                     value="1"
                                                     class="w-4 h-4 text-green-600 focus:ring-green-500 focus:ring-2"
                                                 />
-                                                <span class="flex items-center gap-2 text-sm font-medium text-neutral-300">
+                                                <span class="flex items-center gap-2 text-sm font-semibold text-neutral-800 dark:text-neutral-300">
                                                     <span class="w-2 h-2 rounded-full bg-green-500"></span>
                                                     Opublikowany
                                                 </span>
                                             </label>
-                                            <label class="flex items-center gap-2.5 p-3 bg-neutral-800 border-2 border-neutral-700 rounded-lg cursor-pointer transition hover:border-yellow-600 has-[:checked]:border-yellow-600 has-[:checked]:bg-yellow-950/30">
+                                            <label class="flex items-center gap-2.5 p-3 bg-neutral-50 border-2 border-neutral-200 rounded-lg cursor-pointer transition hover:border-yellow-600 has-[:checked]:border-yellow-600 has-[:checked]:bg-yellow-50 dark:bg-neutral-800 dark:border-neutral-700 dark:has-[:checked]:bg-yellow-950/30">
                                                 <input
                                                     type="radio"
                                                     wire:model="editingPost.is_published"
                                                     value="0"
                                                     class="w-4 h-4 text-yellow-600 focus:ring-yellow-500 focus:ring-2"
                                                 />
-                                                <span class="flex items-center gap-2 text-sm font-medium text-neutral-300">
+                                                <span class="flex items-center gap-2 text-sm font-semibold text-neutral-800 dark:text-neutral-300">
                                                     <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
                                                     Szkic
                                                 </span>
@@ -264,14 +263,14 @@
 
                                     <!-- Data publikacji -->
                                     <div>
-                                        <label for="published_at" class="block mb-2 text-sm font-medium text-neutral-300">
+                                        <label for="published_at" class="block mb-2 text-sm font-medium text-neutral-700 dark:text-neutral-200">
                                             Data publikacji
                                         </label>
                                         <input
                                             id="published_at"
                                             type="datetime-local"
                                             wire:model="editingPost.published_at"
-                                            class="w-full rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:ring-2 focus:ring-[#880000] focus:border-transparent transition"
+                                            class="w-full rounded-lg bg-white border border-neutral-300 px-4 py-2.5 text-sm text-neutral-900 placeholder-neutral-400 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100"
                                         />
                                         <p class="text-xs text-neutral-500 mt-1.5">Zostaw puste dla automatycznej daty publikacji</p>
                                         @error('editingPost.published_at')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
@@ -282,18 +281,18 @@
                         </div>
 
                         <!-- Footer -->
-                        <div class="bg-neutral-900 px-6 py-4 border-t border-neutral-700 flex justify-end gap-3 rounded-b-2xl">
+                        <div class="bg-white dark:bg-neutral-900 px-6 py-4 border-t border-neutral-200 dark:border-neutral-700 flex justify-end gap-3 rounded-b-2xl">
                         <button
                             type="button"
                             wire:click="closeModal"
-                            class="px-5 py-2.5 rounded-lg border-2 border-neutral-600 bg-neutral-800 text-neutral-300 text-sm font-medium hover:bg-neutral-700 hover:border-neutral-500 transition-all"
+                            class="px-5 py-2.5 rounded-lg border border-neutral-300 bg-white text-neutral-700 text-sm font-medium hover:bg-neutral-50 transition dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                         >
                             Anuluj
                         </button>
                         <button
                             type="submit"
                             form="postForm"
-                            class="px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#880000] to-red-900 hover:from-red-900 hover:to-[#880000] text-white text-sm font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center gap-2"
+                            class="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm border border-blue-500/70 dark:border-blue-500 transition flex items-center gap-2"
                         >
                             @if($editingPost['id'])
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

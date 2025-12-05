@@ -48,15 +48,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/course-materials', CourseMaterials::class)->name('admin.course-materials');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/all');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/settings', AllSettings::class)->name('settings.all');
+    Route::get('/admin/settings/profile', Profile::class)->name('profile.edit');
+    Route::get('/admin/settings/password', Password::class)->name('user-password.edit');
+    Route::get('/admin/settings/appearance', Appearance::class)->name('appearance.edit');
 
-    Route::get('settings/all', AllSettings::class)->name('settings.all');
-    Route::get('settings/profile', Profile::class)->name('profile.edit');
-    Route::get('settings/password', Password::class)->name('user-password.edit');
-    Route::get('settings/appearance', Appearance::class)->name('appearance.edit');
-
-    Route::get('settings/two-factor', TwoFactor::class)
+    Route::get('/admin/settings/two-factor', TwoFactor::class)
         ->middleware(
             when(
                 Features::canManageTwoFactorAuthentication()

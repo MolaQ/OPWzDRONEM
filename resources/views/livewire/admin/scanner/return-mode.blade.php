@@ -22,7 +22,7 @@
                     </div>
                     <button
                         wire:click="scanForReturn"
-                        class="px-6 py-3 rounded-lg bg-orange-600 text-white font-semibold hover:bg-orange-700"
+                        class="px-6 py-3 rounded-lg bg-orange-600 text-white font-semibold hover:bg-orange-700 border border-orange-500/70 dark:border-orange-500"
                     >
                         Szukaj
                     </button>
@@ -183,7 +183,7 @@
                 </button>
                 <button
                     wire:click="confirmReturn"
-                    class="px-6 py-3 rounded-lg bg-orange-600 text-white font-semibold hover:bg-orange-700"
+                    class="px-6 py-3 rounded-lg bg-orange-600 text-white font-semibold hover:bg-orange-700 border border-orange-500/70 dark:border-orange-500"
                 >
                     Potwierdź zwrot
                 </button>

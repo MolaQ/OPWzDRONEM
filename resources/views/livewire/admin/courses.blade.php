@@ -29,25 +29,30 @@
                     </div>
                 </div>
 
-                <!-- Tytuł kursu z edycją -->
                 <div class="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
                     <h2 class="text-xl font-semibold text-neutral-900 dark:text-white">{{ $course ? $course->name : '' }}</h2>
-                    <button wire:click="editCourse" class="inline-flex items-center gap-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-[#880000] text-xs font-bold rounded transition-colors" title="Edytuj tytuł">
-                        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-[#880000] flex-shrink-0">
-                            <span class="text-sm">+</span>
-                        </span>
-                        EDYTUJ TYTUŁ
+                    <button wire:click="editCourse" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm border border-blue-500/70 dark:border-blue-500" title="Edytuj tytuł">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                        </svg>
+                        Edytuj tytuł
                     </button>
                 </div>
 
                 <!-- DODAJ BLOK Header -->
                 <div class="border-t border-neutral-200 dark:border-neutral-700 px-4 py-3 flex items-center justify-end bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 pr-4">
-                    <!-- DODAJ BLOK z ikoną + -->
-                    <button wire:click="startCreateBlock" class="inline-flex items-center gap-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-[#880000] text-xs font-bold rounded transition-colors" title="Dodaj blok">
-                        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-[#880000] flex-shrink-0">
-                            <span class="text-sm">+</span>
-                        </span>
-                        DODAJ BLOK
+                    <button
+                        wire:click="startCreateBlock"
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors shadow-sm
+                               bg-neutral-900 text-white border border-neutral-900 hover:bg-neutral-800
+                               focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800
+                               dark:bg-white dark:text-neutral-900 dark:border-white dark:hover:bg-neutral-200"
+                        title="Dodaj blok"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Dodaj blok
                     </button>
                 </div>
 
@@ -83,12 +88,12 @@
                                 </div>
 
                                 <!-- Kolumna 3: Przyciski akcji -->
-                                <div class="flex items-center gap-3 flex-shrink-0 px-3">
-                                    <button wire:click="editUnit({{ $block->id }})" class="inline-flex items-center justify-center w-6 h-6 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors" title="Edytuj blok">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                <div class="flex items-center gap-2 flex-shrink-0 px-3">
+                                    <button wire:click="editUnit({{ $block->id }})" class="inline-flex items-center justify-center w-7 h-7 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors" title="Edytuj">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
                                     </button>
-                                    <button wire:click="deleteUnit({{ $block->id }})" wire:confirm="Czy na pewno usunąć ten blok?" class="inline-flex items-center justify-center w-6 h-6 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors" title="Usuń blok">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    <button wire:click="deleteUnit({{ $block->id }})" wire:confirm="Czy na pewno usunąć ten blok?" class="inline-flex items-center justify-center w-7 h-7 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors" title="Usuń">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                                     </button>
                                 </div>
 
@@ -107,12 +112,18 @@
 
                             <!-- Zagadnienia Header - DODAJ ZAGADNIENIE -->
                             <div class="border-t border-neutral-200 dark:border-neutral-700 px-4 py-3 flex items-center justify-end bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 pr-4">
-                                <!-- DODAJ ZAGADNIENIE z ikoną + -->
-                                <button wire:click="startCreateTopic({{ $block->id }})" class="inline-flex items-center gap-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-[#880000] text-xs font-bold rounded transition-colors" title="Dodaj zagadnienie">
-                                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-[#880000] flex-shrink-0">
-                                        <span class="text-sm">+</span>
-                                    </span>
-                                    DODAJ ZAGADNIENIE
+                                <button
+                                    wire:click="startCreateTopic({{ $block->id }})"
+                                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors shadow-sm
+                                           bg-neutral-900 text-white border border-neutral-900 hover:bg-neutral-800
+                                           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800
+                                           dark:bg-white dark:text-neutral-900 dark:border-white dark:hover:bg-neutral-200"
+                                    title="Dodaj zagadnienie"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                    Dodaj zagadnienie
                                 </button>
                             </div>
 
@@ -150,12 +161,12 @@
                                             </div>
 
                                             <!-- Kolumna 4: Przyciski akcji -->
-                                            <div class="flex items-center gap-3 flex-shrink-0 px-3">
-                                                <button wire:click="editUnit({{ $topic->id }})" class="inline-flex items-center justify-center w-6 h-6 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors" title="Edytuj zagadnienie">
-                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                            <div class="flex items-center gap-2 flex-shrink-0 px-3">
+                                                <button wire:click="editUnit({{ $topic->id }})" class="inline-flex items-center justify-center w-7 h-7 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors" title="Edytuj">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
                                                 </button>
-                                                <button wire:click="deleteUnit({{ $topic->id }})" wire:confirm="Czy na pewno usunąć to zagadnienie?" class="inline-flex items-center justify-center w-6 h-6 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors" title="Usuń zagadnienie">
-                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                                <button wire:click="deleteUnit({{ $topic->id }})" wire:confirm="Czy na pewno usunąć to zagadnienie?" class="inline-flex items-center justify-center w-7 h-7 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors" title="Usuń">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                                                 </button>
                                             </div>
 
@@ -216,21 +227,21 @@
         <!-- Modal edycji jednostki (blok/zagadnienie) -->
         @if($editingUnitId !== null || $editingParentId !== null)
             <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" wire:click="resetUnitEditor">
-                <div class="bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl transform transition-all max-w-2xl w-full max-h-[90vh] overflow-y-auto" wire:click.stop>
-                    <div class="px-6 py-4 border-b border-neutral-800 flex items-center justify-between sticky top-0 bg-neutral-900">
-                        <h2 class="text-lg font-semibold text-white">{{ $editingParentId ? 'EDYCJA ZAGADNIENIA: ' : 'EDYCJA BLOKU: ' }}{{ $unitTitle }}</h2>
-                        <button wire:click="resetUnitEditor" class="text-neutral-400 hover:text-neutral-300 transition-colors">
+                <div class="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-2xl shadow-2xl transform transition-all max-w-2xl w-full max-h-[90vh] overflow-y-auto" wire:click.stop>
+                    <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-700 flex items-center justify-between sticky top-0 bg-white dark:bg-neutral-900">
+                        <h2 class="text-lg font-semibold text-neutral-900 dark:text-white">{{ $editingParentId ? 'EDYCJA ZAGADNIENIA: ' : 'EDYCJA BLOKU: ' }}{{ $unitTitle }}</h2>
+                        <button wire:click="resetUnitEditor" class="text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 transition-colors">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
                     <div class="p-6 space-y-4">
                         <div>
-                            <label class="text-sm font-medium text-neutral-100">Tytuł</label>
-                            <input type="text" wire:model.live="unitTitle" class="w-full px-4 py-2 rounded border border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-2 focus:ring-[#880000]" />
+                            <label class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Tytuł</label>
+                            <input type="text" wire:model.live="unitTitle" class="w-full px-4 py-2 rounded border border-neutral-300 bg-white text-neutral-900 focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" />
                         </div>
                         <div>
-                            <label class="text-sm font-medium text-neutral-100">Opis</label>
-                            <textarea wire:model.live="unitDescription" rows="3" class="w-full px-4 py-2 rounded border border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-2 focus:ring-[#880000]"></textarea>
+                            <label class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Opis</label>
+                            <textarea wire:model.live="unitDescription" rows="3" class="w-full px-4 py-2 rounded border border-neutral-300 bg-white text-neutral-900 focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100"></textarea>
                         </div>
 
                         @if($editingParentId === null)
@@ -239,8 +250,8 @@
                                 @php($editedBlock = \App\Models\CourseUnit::find($editingUnitId))
                                 @php($totalBlockMinutes = $editedBlock?->children->sum('duration_minutes') ?? 0)
                                 @if($totalBlockMinutes > 0)
-                                    <div class="p-3 bg-blue-900/30 rounded-lg border border-blue-800">
-                                        <div class="text-sm font-semibold text-blue-100">Łączny czas realizacji treści w bloku: {{ $totalBlockMinutes }} minut</div>
+                                    <div class="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                                        <div class="text-sm font-semibold text-blue-800 dark:text-blue-100">Łączny czas realizacji treści w bloku: {{ $totalBlockMinutes }} minut</div>
                                     </div>
                                 @endif
                             @endif
@@ -248,36 +259,36 @@
 
                         <div class="grid grid-cols-2 gap-4">
                             <label class="inline-flex items-center gap-2 text-sm cursor-pointer">
-                                <input type="checkbox" wire:model.live="unitIsRequired" class="rounded text-[#880000] focus:ring-[#880000]" />
-                                <span class="text-neutral-100">Wymagany</span>
+                                <input type="checkbox" wire:model.live="unitIsRequired" class="rounded text-blue-600 focus:ring-blue-600" />
+                                <span class="text-neutral-800 dark:text-neutral-200">Wymagany</span>
                             </label>
                             @if($editingParentId !== null)
                                 <!-- Tylko dla zagadnień: czas -->
                                 <div>
-                                    <label class="text-sm font-medium text-neutral-100">Czas (minuty)</label>
-                                    <input type="number" min="0" wire:model.live="unitDurationMinutes" class="w-full px-4 py-2 rounded border border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-2 focus:ring-[#880000]" />
+                                    <label class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Czas (minuty)</label>
+                                    <input type="number" min="0" wire:model.live="unitDurationMinutes" class="w-full px-4 py-2 rounded border border-neutral-300 bg-white text-neutral-900 focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" />
                                 </div>
                             @endif
                         </div>
 
                         <!-- Sekcja materiałów (read-only) -->
                         @if($editingUnitId && $editingUnitId > 0)
-                            <div class="border-t border-neutral-800 pt-4 mt-4">
-                                <h3 class="text-sm font-semibold text-neutral-100 mb-3">Materiały do {{ $editingParentId ? 'zagadnienia' : 'bloku' }}</h3>
+                            <div class="border-t border-neutral-200 dark:border-neutral-800 pt-4 mt-4">
+                                <h3 class="text-sm font-semibold text-neutral-800 dark:text-neutral-100 mb-3">Materiały do {{ $editingParentId ? 'zagadnienia' : 'bloku' }}</h3>
 
                                 <!-- Lista materiałów (tylko wyświetlanie) -->
                                 @if(count($unitMaterials) > 0)
-                                    <div class="space-y-2 mb-4 max-h-48 overflow-y-auto bg-neutral-800/50 rounded p-3 border border-neutral-700">
+                                    <div class="space-y-2 mb-4 max-h-48 overflow-y-auto bg-neutral-50 dark:bg-neutral-800/50 rounded p-3 border border-neutral-200 dark:border-neutral-700">
                                         @foreach($unitMaterials as $material)
-                                            <div class="flex items-center justify-between text-xs bg-neutral-800 p-2 rounded border border-neutral-700">
+                                            <div class="flex items-center justify-between text-xs bg-white dark:bg-neutral-800 p-2 rounded border border-neutral-200 dark:border-neutral-700">
                                                 <div class="flex-1">
-                                                    <div class="font-medium text-neutral-100">{{ $material['title'] }}</div>
+                                                    <div class="font-medium text-neutral-900 dark:text-neutral-100">{{ $material['title'] }}</div>
                                                     @if(!empty($material['description']))
-                                                        <div class="text-neutral-300 mt-1">{{ $material['description'] }}</div>
+                                                        <div class="text-neutral-600 dark:text-neutral-300 mt-1">{{ $material['description'] }}</div>
                                                     @endif
-                                                    <div class="text-neutral-400 mt-1">{{ ucfirst(str_replace('_', ' ', $material['type'])) }} • {{ $material['uploaded_by'] }}</div>
+                                                    <div class="text-neutral-500 dark:text-neutral-400 mt-1">{{ ucfirst(str_replace('_', ' ', $material['type'])) }} • {{ $material['uploaded_by'] }}</div>
                                                     @if(!$material['is_approved'])
-                                                        <div class="text-yellow-400">Czeka na zatwierdzenie</div>
+                                                        <div class="text-yellow-600 dark:text-yellow-400">Czeka na zatwierdzenie</div>
                                                     @endif
                                                 </div>
                                             </div>
@@ -291,16 +302,22 @@
                                 <div class="text-xs text-blue-300 italic">Zarządzanie materiałami dostępne w sekcji "Materiały do zajęć" w menu.</div>
                             </div>
                         @else
-                            <div class="border-t border-neutral-800 pt-4 mt-4">
-                                <div class="text-xs text-yellow-400 italic">Materiały można przeglądać po zapisaniu bloku/zagadnienia.</div>
+                            <div class="border-t border-neutral-200 dark:border-neutral-800 pt-4 mt-4">
+                                <div class="text-xs text-yellow-700 dark:text-yellow-400 italic">Materiały można przeglądać po zapisaniu bloku/zagadnienia.</div>
                             </div>
                         @endif
                     </div>
-                    <div class="px-6 py-4 border-t border-neutral-800 flex items-center justify-end gap-2 sticky bottom-0 bg-neutral-900">
-                        <button wire:click="resetUnitEditor" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded transition">
+                    <div class="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-end gap-2 sticky bottom-0 bg-white dark:bg-neutral-900">
+                        <button wire:click="resetUnitEditor" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-neutral-300 text-neutral-700 bg-white rounded hover:bg-neutral-50 transition dark:border-neutral-600 dark:text-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700">
                             Anuluj
                         </button>
-                        <button wire:click="saveUnit" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition">
+                        <button
+                            wire:click="saveUnit"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded shadow-sm transition
+                                   bg-neutral-900 text-white border border-neutral-900 hover:bg-neutral-800
+                                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800
+                                   dark:bg-white dark:text-neutral-900 dark:border-white dark:hover:bg-neutral-200"
+                        >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                             Zapisz jednostkę
                         </button>
@@ -312,24 +329,30 @@
         <!-- Modal edycji kursu -->
         @if($showCourseEditor)
             <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" wire:click="closeCourseEditor">
-                <div class="bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl transform transition-all max-w-2xl w-full max-h-[90vh] overflow-y-auto" wire:click.stop>
-                    <div class="px-6 py-4 border-b border-neutral-800 flex items-center justify-between sticky top-0 bg-neutral-900">
-                        <h2 class="text-lg font-semibold text-white">Edytuj kurs</h2>
-                        <button wire:click="closeCourseEditor" class="text-neutral-400 hover:text-neutral-300 transition-colors">
+                <div class="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-2xl shadow-2xl transform transition-all max-w-2xl w-full max-h-[90vh] overflow-y-auto" wire:click.stop>
+                    <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-700 flex items-center justify-between sticky top-0 bg-white dark:bg-neutral-900">
+                        <h2 class="text-lg font-semibold text-neutral-900 dark:text-white">Edytuj kurs</h2>
+                        <button wire:click="closeCourseEditor" class="text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 transition-colors">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
                     <div class="p-6 space-y-4">
                         <div>
-                            <label class="text-sm font-medium text-neutral-100">Nazwa kursu</label>
-                            <input type="text" wire:model.live="courseTitle" class="w-full px-4 py-2 rounded border border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-2 focus:ring-[#880000]" placeholder="Nazwa kursu" />
+                            <label class="text-sm font-medium text-neutral-700 dark:text-neutral-200">Nazwa kursu</label>
+                            <input type="text" wire:model.live="courseTitle" class="w-full px-4 py-2 rounded border border-neutral-300 bg-white text-neutral-900 focus:ring-2 focus:ring-blue-600 focus:border-transparent dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100" placeholder="Nazwa kursu" />
                         </div>
                     </div>
-                    <div class="px-6 py-4 border-t border-neutral-800 flex items-center justify-end gap-2 sticky bottom-0 bg-neutral-900">
-                        <button wire:click="closeCourseEditor" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded transition">
+                    <div class="px-6 py-4 border-t border-neutral-200 dark:border-neutral-700 flex items-center justify-end gap-2 sticky bottom-0 bg-white dark:bg-neutral-900">
+                        <button wire:click="closeCourseEditor" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium border border-neutral-300 text-neutral-700 bg-white rounded hover:bg-neutral-50 transition dark:border-neutral-600 dark:text-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700">
                             Anuluj
                         </button>
-                        <button wire:click="saveCourse" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition">
+                        <button
+                            wire:click="saveCourse"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded shadow-sm transition
+                                   bg-neutral-900 text-white border border-neutral-900 hover:bg-neutral-800
+                                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-800
+                                   dark:bg-white dark:text-neutral-900 dark:border-white dark:hover:bg-neutral-200"
+                        >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                             Zapisz kurs
                         </button>

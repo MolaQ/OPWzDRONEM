@@ -131,8 +131,12 @@
                                     <button
                                         wire:click="forceReturn({{ $rental->id }})"
                                         wire:confirm="Czy na pewno chcesz wymusić zwrot tego sprzętu?"
-                                        class="px-3 py-1.5 text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 rounded transition"
+                                        class="inline-flex items-center justify-center gap-2 px-3 py-1.5 text-sm font-medium text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded transition"
+                                        title="Wymuś zwrot"
                                     >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                                        </svg>
                                         Wymuś zwrot
                                     </button>
                                 @endif

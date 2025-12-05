@@ -58,7 +58,7 @@
             <div class="mt-4 flex gap-2">
                 <button
                     wire:click="scanForReturn"
-                    class="px-6 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition shadow-sm"
+                    class="px-6 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition shadow-sm border border-orange-500/70 dark:border-orange-500"
                 >
                     Szukaj
                 </button>
@@ -165,28 +165,28 @@
                             <button
                                 type="button"
                                 wire:click="$set('noteType', 'info')"
-                                class="px-4 py-2 rounded-lg font-medium transition {{ $noteType === 'info' ? 'bg-blue-600 text-white' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300' }}"
+                                class="px-4 py-2 rounded-lg font-medium transition {{ $noteType === 'info' ? 'bg-blue-600 text-white border border-blue-500/70 dark:border-blue-500' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-600' }}"
                             >
                                 Info
                             </button>
                             <button
                                 type="button"
                                 wire:click="$set('noteType', 'warning')"
-                                class="px-4 py-2 rounded-lg font-medium transition {{ $noteType === 'warning' ? 'bg-yellow-600 text-white' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300' }}"
+                                class="px-4 py-2 rounded-lg font-medium transition {{ $noteType === 'warning' ? 'bg-yellow-600 text-white border border-yellow-500/70 dark:border-yellow-500' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-600' }}"
                             >
                                 Ostrzeżenie
                             </button>
                             <button
                                 type="button"
                                 wire:click="$set('noteType', 'damage')"
-                                class="px-4 py-2 rounded-lg font-medium transition {{ $noteType === 'damage' ? 'bg-red-600 text-white' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300' }}"
+                                class="px-4 py-2 rounded-lg font-medium transition {{ $noteType === 'damage' ? 'bg-red-600 text-white border border-red-500/70 dark:border-red-500' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-600' }}"
                             >
                                 Uszkodzenie
                             </button>
                             <button
                                 type="button"
                                 wire:click="$set('noteType', 'maintenance')"
-                                class="px-4 py-2 rounded-lg font-medium transition {{ $noteType === 'maintenance' ? 'bg-purple-600 text-white' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300' }}"
+                                class="px-4 py-2 rounded-lg font-medium transition {{ $noteType === 'maintenance' ? 'bg-purple-600 text-white border border-purple-500/70 dark:border-purple-500' : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-600' }}"
                             >
                                 Konserwacja
                             </button>
@@ -208,7 +208,7 @@
                     <div class="flex gap-3">
                         <button
                             wire:click="processReturn"
-                            class="px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition shadow-sm"
+                            class="px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition shadow-sm border border-orange-500/70 dark:border-orange-500"
                         >
                             Potwierdź zwrot
                         </button>

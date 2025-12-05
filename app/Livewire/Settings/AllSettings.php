@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Models\User;
 
-#[Layout('components.layouts.user')]
+#[Layout('components.layouts.app.sidebar')]
 class AllSettings extends Component
 {
     public string $name = '';

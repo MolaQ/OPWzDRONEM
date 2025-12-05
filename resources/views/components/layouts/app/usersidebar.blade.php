@@ -103,8 +103,6 @@
                             </div>
                         </flux:button>
                         <flux:menu class="w-[240px]">
-                            <flux:menu.item :href="route('settings.all')" icon="cog" wire:navigate>{{ __('Ustawienia') }}</flux:menu.item>
-
                             @can('admin.panel.access')
                                 <flux:menu.separator />
                                 <flux:menu.item :href="route('admin.dashboard')" icon="shield-check" wire:navigate>{{ __('Panel Admin') }}</flux:menu.item>
@@ -176,11 +174,6 @@
 
                 @auth
                 <div class="pt-6 mt-6 border-t border-[#2f76aa] space-y-1">
-                    <p class="px-4 text-xs uppercase text-neutral-400 font-semibold mb-2">{{ __('Konto') }}</p>
-                    <a href="{{ route('settings.all') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-300 hover:bg-[#2f76aa]/50">
-                        {{ __('Ustawienia') }}
-                    </a>
-
                     @can('admin.panel.access')
                         <p class="px-4 pt-4 text-xs uppercase text-neutral-400 font-semibold">{{ __('Administracja') }}</p>
                         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-300 hover:bg-[#2f76aa]/50">

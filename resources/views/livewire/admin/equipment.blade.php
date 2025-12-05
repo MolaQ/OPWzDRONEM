@@ -9,12 +9,12 @@
                 </div>
                 <button
                     wire:click="create"
-                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-[#880000] text-xs font-bold rounded transition-colors"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm border border-blue-500/70 dark:border-blue-500"
                 >
-                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-[#880000] flex-shrink-0">
-                        <span class="text-sm">+</span>
-                    </span>
-                    DODAJ WYPOSAŻENIE
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Dodaj wyposażenie
                 </button>
             </div>
         </div>
@@ -145,7 +145,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <div class="flex items-center justify-end gap-3">
+                                    <div class="flex items-center justify-end gap-2">
                                         @php
                                             $isRented = $equipment->rentals()->whereNull('returned_at')->exists();
                                         @endphp
@@ -153,23 +153,23 @@
                                         <button
                                             type="button"
                                             wire:click="edit({{ $equipment->id }})"
-                                            class="inline-flex items-center justify-center w-8 h-8 {{ $isRented ? 'bg-neutral-300 dark:bg-neutral-600 cursor-not-allowed' : 'bg-[#880000] hover:bg-red-900' }} text-white rounded border-2 border-white transition-colors"
+                                            class="inline-flex items-center justify-center w-7 h-7 {{ $isRented ? 'text-neutral-400 dark:text-neutral-600 cursor-not-allowed' : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20' }} rounded transition-colors"
                                             title="{{ $isRented ? 'Nie można edytować wypożyczonego wyposażenia' : 'Edytuj' }}"
                                             @if($isRented) disabled @endif
                                         >
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                             </svg>
                                         </button>
                                         <button
                                             type="button"
                                             wire:click="delete({{ $equipment->id }})"
                                             wire:confirm="Czy na pewno chcesz usunąć to wyposażenie?"
-                                            class="inline-flex items-center justify-center w-8 h-8 bg-[#880000] hover:bg-red-900 text-white rounded border-2 border-white transition-colors cursor-pointer"
+                                            class="inline-flex items-center justify-center w-7 h-7 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
                                             title="Usuń"
                                         >
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                             </svg>
                                         </button>
                                     </div>
@@ -279,27 +279,27 @@
                             <div class="grid grid-cols-2 gap-3">
                                 <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-green-500 transition has-[:checked]:border-green-500 has-[:checked]:bg-green-50 dark:has-[:checked]:bg-green-950/20">
                                     <input type="radio" wire:model="status" value="available" class="w-4 h-4">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Dostępny</span>
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-green-400 bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-200 dark:border-green-600">Dostępny</span>
                                 </label>
                                 <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-cyan-500 transition has-[:checked]:border-cyan-500 has-[:checked]:bg-cyan-50 dark:has-[:checked]:bg-cyan-950/20">
                                     <input type="radio" wire:model="status" value="rented" class="w-4 h-4">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200">Wypożyczony</span>
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-cyan-400 bg-cyan-50 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-200 dark:border-cyan-600">Wypożyczony</span>
                                 </label>
                                 <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-orange-500 transition has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50 dark:has-[:checked]:bg-orange-950/20">
                                     <input type="radio" wire:model="status" value="maintenance" class="w-4 h-4">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">W naprawie</span>
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-orange-400 bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-200 dark:border-orange-600">W naprawie</span>
                                 </label>
                                 <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-yellow-500 transition has-[:checked]:border-yellow-500 has-[:checked]:bg-yellow-50 dark:has-[:checked]:bg-yellow-950/20">
                                     <input type="radio" wire:model="status" value="under_service" class="w-4 h-4">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">Konserwacja</span>
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-yellow-400 bg-yellow-50 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-200 dark:border-yellow-600">Konserwacja</span>
                                 </label>
                                 <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-red-500 transition has-[:checked]:border-red-500 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-950/20">
                                     <input type="radio" wire:model="status" value="damaged" class="w-4 h-4">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">Uszkodzony</span>
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-red-400 bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-200 dark:border-red-600">Uszkodzony</span>
                                 </label>
                                 <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-neutral-500 transition has-[:checked]:border-neutral-500 has-[:checked]:bg-neutral-50 dark:has-[:checked]:bg-neutral-700/20">
                                     <input type="radio" wire:model="status" value="retired" class="w-4 h-4">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300">Wycofany</span>
+                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-neutral-400 bg-neutral-100 text-neutral-700 dark:bg-neutral-700/40 dark:text-neutral-200 dark:border-neutral-600">Wycofany</span>
                                 </label>
                             </div>
                             @error('status')
@@ -336,7 +336,7 @@
                         <button
                             type="submit"
                             wire:click="save"
-                            class="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition"
+                            class="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-medium transition border border-orange-500/70 dark:border-orange-500"
                         >
                             @if($editingEquipmentId)
                                 Zapisz zmiany
