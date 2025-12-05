@@ -81,9 +81,11 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="flex flex-col gap-1">
-                                        <canvas class="barcode-canvas" data-barcode="{{ $set->barcode }}" style="height: 50px;"></canvas>
-                                        <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400 text-center">{{ $set->barcode }}</span>
+                                    <div class="flex flex-col gap-1 items-center">
+                                        <div class="bg-white p-1 rounded border border-neutral-200 dark:border-neutral-600">
+                                            <canvas class="barcode-canvas" data-barcode="{{ $set->barcode }}" style="height: 50px;"></canvas>
+                                        </div>
+                                        <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400">{{ $set->barcode }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
@@ -159,7 +161,7 @@
                                         <button
                                             type="button"
                                             wire:click="edit({{ $set->id }})"
-                                            class="inline-flex items-center justify-center w-7 h-7 {{ $isRented ? 'text-neutral-400 dark:text-neutral-600 cursor-not-allowed' : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20' }} rounded transition-colors"
+                                            class="inline-flex items-center justify-center w-7 h-7 {{ $isRented ? 'text-neutral-400 dark:text-neutral-600 cursor-not-allowed' : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 border border-neutral-300 dark:border-neutral-600' }} rounded transition-colors"
                                             title="{{ $isRented ? 'Nie można edytować wypożyczonego zestawu' : 'Edytuj' }}"
                                             @if($isRented) disabled @endif
                                         >
@@ -188,7 +190,7 @@
                                             type="button"
                                             wire:click="delete({{ $set->id }})"
                                             wire:confirm="Czy na pewno chcesz usunąć ten zestaw?"
-                                            class="inline-flex items-center justify-center w-7 h-7 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                                            class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 rounded transition-colors border border-neutral-300 dark:border-neutral-600"
                                             title="Usuń"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">

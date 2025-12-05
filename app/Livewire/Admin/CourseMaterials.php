@@ -171,6 +171,11 @@ class CourseMaterials extends Component
         $this->dispatch('notify', type: 'success', message: 'Materiał usunięty.');
     }
 
+    public function editCourse()
+    {
+        return redirect()->route('admin.courses');
+    }
+
     public function closeMaterialEditor()
     {
         $this->showMaterialEditor = false;
