@@ -39,13 +39,13 @@
                                 <span class="text-xs text-neutral-500 dark:text-neutral-400">•</span>
                                 <span class="text-xs text-neutral-500 dark:text-neutral-400">{{ $comment->created_at->format('d.m.Y H:i') }}</span>
                             </div>
-                        
+
                             <a href="{{ route('post.view', $comment->post->id) }}" target="_blank" class="text-xs text-[#880000] hover:underline mb-2 block">
                                 Post: {{ Str::limit($comment->post->title, 50) }}
                             </a>
-                        
+
                             <p class="text-sm text-neutral-700 dark:text-neutral-200 mb-2">{{ $comment->content }}</p>
-                        
+
                             <div class="flex items-center gap-4 text-xs">
                                 <span class="flex items-center gap-1 text-green-600">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
