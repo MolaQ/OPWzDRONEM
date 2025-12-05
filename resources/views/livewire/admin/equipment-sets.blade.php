@@ -20,7 +20,7 @@
         </div>
 
     <!-- Flash Messages - Usuń bo używamy SweetAlert -->
-    
+
     <!-- Search -->
     <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4">
         <div class="relative">
