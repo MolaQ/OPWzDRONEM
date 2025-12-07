@@ -77,12 +77,12 @@ class TeacherOverview extends Component
     {
         try {
             $student = User::find($studentId);
-            
+
             if (!$student) {
                 $this->dispatch('star-error', ['message' => 'Nie znaleziono ucznia']);
                 return;
             }
-            
+
             UserAchievement::updateOrCreate(
                 [
                     'user_id' => $studentId,
@@ -94,7 +94,7 @@ class TeacherOverview extends Component
                     'assigned_at' => now(),
                 ]
             );
-            
+
             // Wyślij event z typem gwiazdki dla SweetAlert
             $this->dispatch('star-assigned', ['starType' => $starType]);
         } catch (\Exception $e) {
@@ -108,7 +108,7 @@ class TeacherOverview extends Component
             UserAchievement::where('user_id', $studentId)
                 ->where('course_unit_id', $topicId)
                 ->delete();
-            
+
             $this->dispatch('star-removed');
         } catch (\Exception $e) {
             $this->dispatch('star-error', ['message' => 'Wystąpił błąd podczas usuwania gwiazdki']);
@@ -123,7 +123,7 @@ class TeacherOverview extends Component
         // Domyślne, aby uniknąć niezainicjalizowanych zmiennych w scenariuszach bez grupy
         $achievements = collect();
         $students = collect();
-        
+
         // Pobierz grupy
         if ($user->hasRole('admin') || $user->hasRole('koordynator')) {
             $groups = Group::where('active', true)
@@ -156,7 +156,7 @@ class TeacherOverview extends Component
 
         // Pobierz osiągnięcia
         $achievementsQuery = UserAchievement::with(['user', 'courseUnit']);
-        
+
         // Jeśli grupa jest wybrana, filtruj
         if ($this->selectedGroupId) {
             $selectedGroup = Group::find($this->selectedGroupId);
@@ -176,17 +176,17 @@ class TeacherOverview extends Component
 
                 // Pobierz unikalnych studentów z osiągnięciami
                 $studentIds = $achievements->pluck('user_id')->unique();
-                
+
                 // Pobierz również studentów bez osiągnięć
                 $studentsQuery = $selectedGroup->users()
                     ->where('active', true)
                     ->role('student');
-                
+
                 // Wyszukiwanie po imieniu/nazwisku
                 if ($this->searchStudent) {
                     $studentsQuery->where('name', 'like', '%' . $this->searchStudent . '%');
                 }
-                
+
                 $students = $studentsQuery->get();
 
                 // Sortuj
@@ -212,10 +212,10 @@ class TeacherOverview extends Component
 
         // Pobierz zagadnienia bez osiągnięć dla wybranej grupy
         $topicsWithoutAchievements = $this->getTopicsWithoutAchievements($this->selectedGroupId);
-        
+
         // Pobierz dane o poprawkach (uczniowie z failed/bronze w każdym zagadnieniu)
         $correctionsData = $this->getCorrectionsData($this->selectedGroupId, $this->searchStudent);
-        
+
         // Jeśli wybrany student, pobierz jego pełny indeks
         $studentDetail = null;
         if ($this->selectedStudentId) {
@@ -257,7 +257,7 @@ class TeacherOverview extends Component
         $totalStudents = $students->count();
         $totalAchievements = $achievements->count();
         $studentsWithAchievements = $achievements->groupBy('user_id')->count();
-        
+
         return [
             'totalStudents' => $totalStudents,
             'totalAchievements' => $totalAchievements,
@@ -275,21 +275,21 @@ class TeacherOverview extends Component
         if (!$groupId) {
             return collect();
         }
-        
+
         $group = Group::find($groupId);
         if (!$group) {
             return collect();
         }
-        
+
         $studentsQuery = $group->users()->where('active', true)->role('student');
-        
+
         // Zastosuj filtr wyszukiwania
         if ($searchStudent) {
             $studentsQuery->where('name', 'like', '%' . $searchStudent . '%');
         }
-        
+
         $studentIds = $studentsQuery->pluck('id');
-        
+
         // Pobierz wszystkie bloki z zagadnieniami
         $blocks = CourseUnit::where('parent_id', null)
             ->where('is_required', true)
@@ -298,15 +298,15 @@ class TeacherOverview extends Component
             }])
             ->orderBy('position')
             ->get();
-        
+
         $corrections = [];
-        
+
         foreach ($blocks as $block) {
             $blockData = [
                 'block' => $block,
                 'topics' => []
             ];
-            
+
             foreach ($block->children as $topic) {
                 // Znajdź uczniów z failed lub bronze w tym zagadnieniu
                 $studentsNeedingCorrection = UserAchievement::where('course_unit_id', $topic->id)
@@ -314,7 +314,7 @@ class TeacherOverview extends Component
                     ->whereIn('star_type', ['failed', 'bronze'])
                     ->with('user')
                     ->get();
-                
+
                 if ($studentsNeedingCorrection->isNotEmpty()) {
                     $blockData['topics'][] = [
                         'topic' => $topic,
@@ -322,22 +322,22 @@ class TeacherOverview extends Component
                     ];
                 }
             }
-            
+
             if (!empty($blockData['topics'])) {
                 $corrections[] = $blockData;
             }
         }
-        
+
         return collect($corrections);
     }
-    
+
     private function getStudentDetail($studentId)
     {
         $student = User::find($studentId);
         if (!$student) {
             return null;
         }
-        
+
         // Pobierz wszystkie bloki z zagadnieniami i osiągnięciami ucznia
         $blocks = CourseUnit::where('parent_id', null)
             ->where('is_required', true)
@@ -350,7 +350,7 @@ class TeacherOverview extends Component
             }])
             ->orderBy('position')
             ->get();
-        
+
         return [
             'student' => $student,
             'blocks' => $blocks

@@ -14,7 +14,7 @@
         <div class="p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700">
             <div class="flex flex-wrap items-center gap-6">
                 <span class="text-xs font-semibold text-neutral-900 dark:text-white uppercase tracking-wider">Legenda ocen:</span>
-                
+
                 <div class="flex items-center gap-1.5">
                     <svg class="w-5 h-5" fill="rgb(234, 179, 8)" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Progress bar -->
                         <div class="mt-3 h-2 bg-neutral-300 dark:bg-neutral-700 rounded-full overflow-hidden">
                             <div class="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-500" style="width: {{ $blockProgress[$block->id]['percentage'] ?? 0 }}%;"></div>
@@ -149,7 +149,7 @@
                 $silverCount = $achievements->where('star_type', 'silver')->count();
                 $bronzeCount = $achievements->where('star_type', 'bronze')->count();
             )
-            
+
             <div class="p-4 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
                 <div class="text-sm text-neutral-600 dark:text-neutral-400">Całkowity postęp</div>
                 <div class="text-3xl font-bold text-neutral-900 dark:text-white mt-2">

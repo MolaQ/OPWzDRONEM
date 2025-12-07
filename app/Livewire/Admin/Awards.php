@@ -30,17 +30,17 @@ class Awards extends Component
     protected $updatesQueryString = ['selectedGroupId', 'selectedBlockId', 'selectedTopicId', 'search', 'page'];
 
     public function updatingSearch() { $this->resetPage(); }
-    public function updatingSelectedGroupId() { 
+    public function updatingSelectedGroupId() {
         $this->selectedBlockId = null;
         $this->selectedTopicId = null;
-        $this->resetPage(); 
+        $this->resetPage();
     }
-    public function updatingSelectedBlockId() { 
+    public function updatingSelectedBlockId() {
         $this->selectedTopicId = null;
-        $this->resetPage(); 
+        $this->resetPage();
     }
-    public function updatingSelectedTopicId() { 
-        $this->resetPage(); 
+    public function updatingSelectedTopicId() {
+        $this->resetPage();
     }
 
     public function mount()
@@ -51,13 +51,13 @@ class Awards extends Component
     public function assignStar($studentId, $starType)
     {
         $this->authorize('achievements.assign');
-        
+
         if (!$this->selectedTopicId) {
             return;
         }
 
         $student = User::find($studentId);
-        
+
         UserAchievement::updateOrCreate(
             [
                 'user_id' => $studentId,
@@ -69,7 +69,7 @@ class Awards extends Component
                 'assigned_at' => now(),
             ]
         );
-        
+
         // Dispatchuj event z informacją o przydzielonej gwieździe
         $starLabels = [
             'gold' => 'Złoto ⭐ (90-100%)',
@@ -77,22 +77,22 @@ class Awards extends Component
             'bronze' => 'Brąz ⭐ (50-69%)',
             'failed' => 'Szary ⭐ (<50%)',
         ];
-        
+
         $this->dispatch('star-awarded', studentName: $student->name, starLabel: $starLabels[$starType] ?? 'Nieznana');
     }
 
     public function removeStar($studentId)
     {
         $this->authorize('achievements.remove');
-        
+
         if (!$this->selectedTopicId) {
             return;
         }
-        
+
         UserAchievement::where('user_id', $studentId)
             ->where('course_unit_id', $this->selectedTopicId)
             ->delete();
-        
+
         $this->dispatch('award-removed');
     }
 
@@ -118,7 +118,7 @@ class Awards extends Component
     {
         $user = Auth::user();
         $userRoles = $user->roles->pluck('name');
-        
+
         // Pobierz grupy z aktywnymi uczniami
         $groups = collect();
         if ($userRoles->contains('instructor') || $userRoles->contains('wychowawca')) {
@@ -160,10 +160,10 @@ class Awards extends Component
         $students = collect();
         $selectedTopic = null;
         $achievements = collect();
-        
+
         if ($this->selectedGroupId && $this->selectedBlockId && $this->selectedTopicId) {
             $selectedTopic = CourseUnit::find($this->selectedTopicId);
-            
+
             $studentsQuery = User::role('student')
                 ->where('active', true)
                 ->where('group_id', $this->selectedGroupId);
@@ -177,7 +177,7 @@ class Awards extends Component
             }
 
             $students = $studentsQuery->orderBy('name')->get();
-            
+
             // Załaduj osiągnięcia dla wybranego zagadnienia
             $achievements = UserAchievement::where('course_unit_id', $this->selectedTopicId)
                 ->whereIn('user_id', $students->pluck('id'))

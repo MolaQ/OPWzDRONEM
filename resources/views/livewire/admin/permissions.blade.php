@@ -23,7 +23,7 @@
             <h3 class="text-lg font-semibold text-neutral-900 dark:text-white capitalize">{{ $group }}</h3>
             <p class="text-xs text-neutral-500 dark:text-neutral-400">{{ $groupPermissions->count() }} uprawnień</p>
         </div>
-        
+
         <div class="divide-y divide-neutral-200 dark:divide-neutral-700">
             @foreach($groupPermissions as $permission)
             <div class="px-4 py-3 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-800 transition">
@@ -74,7 +74,7 @@
                     {{ $editMode ? 'Edytuj Uprawnienie' : 'Nowe Uprawnienie' }}
                 </h2>
             </div>
-            
+
             <div class="p-6 space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Nazwa uprawnienia</label>
@@ -110,7 +110,7 @@
                 timer: 3000
             });
         });
-        
+
         Livewire.on('permission-updated', () => {
             Swal.fire({
                 icon: 'success',
@@ -122,7 +122,7 @@
                 timer: 3000
             });
         });
-        
+
         Livewire.on('permission-deleted', () => {
             Swal.fire({
                 icon: 'success',

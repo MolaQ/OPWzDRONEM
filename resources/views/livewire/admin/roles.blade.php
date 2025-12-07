@@ -46,7 +46,7 @@
                     @endcan
                 </div>
             </div>
-            
+
             <div class="space-y-1">
                 <p class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-2">Uprawnienia ({{ $role->permissions->count() }})</p>
                 <div class="flex flex-wrap gap-1">
@@ -75,7 +75,7 @@
                     {{ $editMode ? 'Edytuj Rolę' : 'Nowa Rola' }}
                 </h2>
             </div>
-            
+
             <div class="p-6 space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Nazwa roli</label>
@@ -122,7 +122,7 @@
                 timer: 3000
             });
         });
-        
+
         Livewire.on('role-updated', () => {
             Swal.fire({
                 icon: 'success',
@@ -134,7 +134,7 @@
                 timer: 3000
             });
         });
-        
+
         Livewire.on('role-deleted', () => {
             Swal.fire({
                 icon: 'success',

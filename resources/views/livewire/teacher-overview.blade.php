@@ -9,10 +9,10 @@
                     </svg>
                     <h2 class="text-lg font-semibold text-neutral-900 dark:text-white">Wybierz grupę</h2>
                 </div>
-                
+
                 <div class="flex flex-wrap gap-2">
                     @foreach($groups as $group)
-                        <button 
+                        <button
                             wire:click="selectGroup({{ $group->id }})"
                             class="px-4 py-2 rounded-lg font-medium transition-all border-2 text-sm
                             @if($selectedGroupId === $group->id)
@@ -37,9 +37,9 @@
                         </svg>
                         <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">Widok</h3>
                     </div>
-                    
+
                     <div class="flex gap-2 mt-3">
-                        <button 
+                        <button
                             wire:click="setViewMode('all')"
                             class="px-4 py-2 rounded-lg font-medium transition-all border-2 text-sm
                             @if($viewMode === 'all')
@@ -50,7 +50,7 @@
                             ">
                             📊 Wyniki całej grupy
                         </button>
-                        <button 
+                        <button
                             wire:click="setViewMode('corrections')"
                             class="px-4 py-2 rounded-lg font-medium transition-all border-2 text-sm
                             @if($viewMode === 'corrections')
@@ -74,7 +74,7 @@
                             </svg>
                             <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">Statystyki klasy</h3>
                         </div>
-                        <svg class="w-5 h-5 text-neutral-700 dark:text-neutral-300 transition-transform" 
+                        <svg class="w-5 h-5 text-neutral-700 dark:text-neutral-300 transition-transform"
                              :class="showStats ? 'rotate-180' : ''"
                              fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
@@ -126,7 +126,7 @@
                     <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4 space-y-4">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <button 
+                                <button
                                     wire:click="backToList"
                                     class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition"
                                 >
@@ -162,7 +162,7 @@
                                                     </div>
                                                     <div class="flex-shrink-0 flex items-center gap-1">
                                                         <!-- Gold Star -->
-                                                        <button 
+                                                        <button
                                                             wire:click="assignStar({{ $studentDetail['student']->id }}, {{ $topic->id }}, 'gold')"
                                                             class="p-2 rounded transition-all {{ $currentStar === 'gold' ? 'bg-amber-100 dark:bg-amber-900/30' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800' }}"
                                                             title="Złoto (90-100%)"
@@ -173,7 +173,7 @@
                                                         </button>
 
                                                         <!-- Silver Star -->
-                                                        <button 
+                                                        <button
                                                             wire:click="assignStar({{ $studentDetail['student']->id }}, {{ $topic->id }}, 'silver')"
                                                             class="p-2 rounded transition-all {{ $currentStar === 'silver' ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800' }}"
                                                             title="Srebro (70-89%)"
@@ -184,7 +184,7 @@
                                                         </button>
 
                                                         <!-- Bronze Star -->
-                                                        <button 
+                                                        <button
                                                             wire:click="assignStar({{ $studentDetail['student']->id }}, {{ $topic->id }}, 'bronze')"
                                                             class="p-2 rounded transition-all {{ $currentStar === 'bronze' ? 'bg-orange-100 dark:bg-orange-900/30' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800' }}"
                                                             title="Brąz (50-69%)"
@@ -195,7 +195,7 @@
                                                         </button>
 
                                                         <!-- Gray Star -->
-                                                        <button 
+                                                        <button
                                                             wire:click="assignStar({{ $studentDetail['student']->id }}, {{ $topic->id }}, 'failed')"
                                                             class="p-2 rounded transition-all {{ $currentStar === 'failed' ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800' }}"
                                                             title="Szary (<50%)"
@@ -207,7 +207,7 @@
 
                                                         <!-- Remove Star -->
                                                         @if($currentStar)
-                                                            <button 
+                                                            <button
                                                                 wire:click="removeStar({{ $studentDetail['student']->id }}, {{ $topic->id }})"
                                                                 class="p-2 rounded transition-all hover:bg-red-100 dark:hover:bg-red-900/30 ml-1"
                                                                 title="Usuń"
@@ -241,7 +241,7 @@
                                                 <h4 class="font-medium text-neutral-900 dark:text-white mb-3">{{ $topicData['topic']->title }}</h4>
                                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                                                     @foreach($topicData['students'] as $achievement)
-                                                        <button 
+                                                        <button
                                                             wire:click="selectStudent({{ $achievement->user->id }})"
                                                             class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition text-left"
                                                         >
@@ -282,14 +282,14 @@
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-neutral-900 dark:text-white">🔍 Wyszukaj ucznia</label>
                         <div class="flex gap-2">
-                            <input 
-                                wire:model.live="searchStudent" 
-                                type="text" 
+                            <input
+                                wire:model.live="searchStudent"
+                                type="text"
                                 placeholder="Wpisz imię lub nazwisko..."
                                 class="flex-1 px-4 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-500"
                             >
                             @if($searchStudent)
-                                <button 
+                                <button
                                     wire:click="clearSearch"
                                     class="px-4 py-2 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-600 transition text-sm font-medium"
                                 >
@@ -302,7 +302,7 @@
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-neutral-900 dark:text-white">⭐ Filtruj po gwiazdach</label>
                         <div class="flex flex-wrap gap-2">
-                            <button 
+                            <button
                                 wire:click="setFilterStar('gold')"
                                 class="px-3 py-1 rounded-full text-xs font-medium transition-all border
                                 @if($filterStar === 'gold')
@@ -314,7 +314,7 @@
                                 <svg class="w-3 h-3 inline mr-1 text-amber-500 dark:text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                                 Złoto
                             </button>
-                            <button 
+                            <button
                                 wire:click="setFilterStar('silver')"
                                 class="px-3 py-1 rounded-full text-xs font-medium transition-all border
                                 @if($filterStar === 'silver')
@@ -326,7 +326,7 @@
                                 <svg class="w-3 h-3 inline mr-1 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                                 Srebro
                             </button>
-                            <button 
+                            <button
                                 wire:click="setFilterStar('bronze')"
                                 class="px-3 py-1 rounded-full text-xs font-medium transition-all border
                                 @if($filterStar === 'bronze')
@@ -344,7 +344,7 @@
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-neutral-900 dark:text-white">🔀 Sortuj po</label>
                         <div class="flex gap-2">
-                            <button 
+                            <button
                                 wire:click="setSortBy('name')"
                                 class="px-3 py-1 rounded-lg text-xs font-medium transition-all
                                 @if($sortBy === 'name')
@@ -355,7 +355,7 @@
                                 ">
                                 Imię (A-Z)
                             </button>
-                            <button 
+                            <button
                                 wire:click="setSortBy('name_desc')"
                                 class="px-3 py-1 rounded-lg text-xs font-medium transition-all
                                 @if($sortBy === 'name_desc')
@@ -366,7 +366,7 @@
                                 ">
                                 Imię (Z-A)
                             </button>
-                            <button 
+                            <button
                                 wire:click="setSortBy('progress')"
                                 class="px-3 py-1 rounded-lg text-xs font-medium transition-all
                                 @if($sortBy === 'progress')
@@ -395,7 +395,7 @@
                             <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
                                 @forelse($students as $student)
                                     @php($studentAchievements = $achievements->where('user_id', $student->id))
-                                    <tr 
+                                    <tr
                                         wire:click="selectStudent({{ $student->id }})"
                                         class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors cursor-pointer"
                                     >
@@ -420,7 +420,7 @@
                                                 @php($goldCount = $studentAchievements->where('star_type', 'gold')->count())
                                                 @php($silverCount = $studentAchievements->where('star_type', 'silver')->count())
                                                 @php($bronzeCount = $studentAchievements->where('star_type', 'bronze')->count())
-                                                
+
                                                 @if($goldCount > 0)
                                                     <span class="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-medium bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-200 rounded">
                                                         <svg class="w-3 h-3 text-amber-500 dark:text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -473,7 +473,7 @@
                         </svg>
                         <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">Poprawki (&lt;50% uczniów)</h3>
                     </div>
-                    
+
                     <div class="space-y-2">
                         @foreach($topicsWithoutAchievements->take(5) as $item)
                             @php($topic = $item['topic'])
@@ -522,9 +522,9 @@
                 'bronze': { icon: '🥉', text: 'Brązową gwiazdę', color: '#ea580c' },
                 'gray': { icon: '⚫', text: 'Szarą gwiazdę', color: '#737373' }
             };
-            
+
             const star = starTypes[event[0].starType] || starTypes['gold'];
-            
+
             Swal.fire({
                 title: 'Sukces!',
                 html: `<div style="font-size: 3rem; margin: 20px 0;">${star.icon}</div><div style="font-size: 1.1rem;">Przyznano <strong>${star.text}</strong></div>`,
@@ -536,7 +536,7 @@
                 color: document.documentElement.classList.contains('dark') ? '#ffffff' : '#000000'
             });
         });
-        
+
         Livewire.on('star-removed', () => {
             Swal.fire({
                 title: 'Usunięto',
@@ -549,7 +549,7 @@
                 color: document.documentElement.classList.contains('dark') ? '#ffffff' : '#000000'
             });
         });
-        
+
         Livewire.on('star-error', (event) => {
             Swal.fire({
                 title: 'Błąd',

@@ -39,7 +39,7 @@ class Roles extends Component
     public function createRole()
     {
         $this->authorize('roles.create');
-        
+
         $this->validate([
             'roleName' => 'required|string|max:255|unique:roles,name',
         ]);
@@ -84,7 +84,7 @@ class Roles extends Component
         $this->authorize('roles.delete');
 
         $role = Role::findOrFail($roleId);
-        
+
         // Nie pozwól usunąć systemowych ról
         if (in_array($role->name, ['admin', 'student', 'instruktor', 'wychowawca', 'koordynator'])) {
             $this->dispatch('role-delete-error', message: 'Nie można usunąć systemowej roli');

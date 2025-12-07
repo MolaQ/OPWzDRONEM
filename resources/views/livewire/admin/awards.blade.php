@@ -91,10 +91,10 @@
                     </svg>
                     Szukaj
                 </label>
-                <input 
-                    type="text" 
-                    wire:model.live="search" 
-                    placeholder="Imię lub email..." 
+                <input
+                    type="text"
+                    wire:model.live="search"
+                    placeholder="Imię lub email..."
                     class="w-full px-4 py-2 bg-white dark:bg-neutral-700 border-2 border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:ring-2 focus:ring-offset-0 focus:ring-neutral-400 dark:focus:ring-neutral-500 transition-colors"
                 >
             </div>
@@ -125,7 +125,7 @@
                                 <td class="px-6 py-4">
                                     <div class="flex justify-center gap-1">
                                         <!-- Gold Star -->
-                                        <button 
+                                        <button
                                             wire:click="assignStar({{ $student->id }}, 'gold')"
                                             class="p-2 rounded transition-all {{ $currentStar === 'gold' ? 'bg-amber-100 dark:bg-amber-900' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800' }}"
                                             title="Złoto (90-100%)"
@@ -136,7 +136,7 @@
                                         </button>
 
                                         <!-- Silver Star -->
-                                        <button 
+                                        <button
                                             wire:click="assignStar({{ $student->id }}, 'silver')"
                                             class="p-2 rounded transition-all {{ $currentStar === 'silver' ? 'bg-gray-200 dark:bg-gray-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800' }}"
                                             title="Srebro (70-89%)"
@@ -147,7 +147,7 @@
                                         </button>
 
                                         <!-- Bronze Star -->
-                                        <button 
+                                        <button
                                             wire:click="assignStar({{ $student->id }}, 'bronze')"
                                             class="p-2 rounded transition-all {{ $currentStar === 'bronze' ? 'bg-orange-100 dark:bg-orange-900' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800' }}"
                                             title="Brąz (50-69%)"
@@ -158,7 +158,7 @@
                                         </button>
 
                                         <!-- Gray Star -->
-                                        <button 
+                                        <button
                                             wire:click="assignStar({{ $student->id }}, 'failed')"
                                             class="p-2 rounded transition-all hover:bg-neutral-100 dark:hover:bg-neutral-800"
                                             title="Szary (<50%)"
@@ -171,7 +171,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     @if($currentStar)
-                                        <button 
+                                        <button
                                             type="button"
                                             wire:click="removeStar({{ $student->id }})"
                                             class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 border-2 border-neutral-300 hover:border-neutral-400 hover:text-neutral-700 rounded transition-all dark:text-neutral-400 dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:text-neutral-300"
@@ -193,7 +193,7 @@
             <div class="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700">
                 <div class="flex flex-wrap items-center gap-4">
                     <span class="text-xs font-semibold text-neutral-900 dark:text-white uppercase tracking-wider">Legenda:</span>
-                    
+
                     <div class="flex items-center gap-1.5">
                         <svg class="w-5 h-5" fill="rgb(234, 179, 8)" viewBox="0 0 20 20">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>

@@ -47,7 +47,7 @@ class UserAchievement extends Model
     /**
      * Oblicza typ biretu (czapki) dla danego użytkownika
      * na podstawie większości gwiazdek (bronze/silver/gold)
-     * 
+     *
      * @param int $userId
      * @return string|null 'bronze', 'silver', 'gold' lub null jeśli brak
      */
@@ -90,7 +90,7 @@ class UserAchievement extends Model
 
     /**
      * Pomocnicza metoda do sprawdzenia, czy użytkownik może otrzymać biret
-     * 
+     *
      * @param int $userId
      * @return bool
      */
@@ -102,14 +102,14 @@ class UserAchievement extends Model
     /**
      * Zwraca przewidywany typ biretu na podstawie obecnych gwiazdek
      * (nie wymaga kompletności wszystkich wymaganych jednostek)
-     * 
+     *
      * @param int $userId
      * @return string|null
      */
     public static function predictBiretType(int $userId): ?string
     {
         $requiredUnits = CourseUnit::where('is_required', true)->pluck('id');
-        
+
         $achievements = self::where('user_id', $userId)
             ->whereIn('course_unit_id', $requiredUnits)
             ->get();

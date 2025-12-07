@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamp('assigned_at')->useCurrent();
             $table->timestamps();
-            
+
             // Jeden uczeń może mieć tylko jedną gwiazdkę za jedno zagadnienie
             $table->unique(['user_id', 'course_unit_id']);
         });

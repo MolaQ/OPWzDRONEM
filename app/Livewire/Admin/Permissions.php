@@ -41,7 +41,7 @@ class Permissions extends Component
     public function createPermission()
     {
         $this->authorize('permissions.create');
-        
+
         $this->validate([
             'permissionName' => 'required|string|max:255|unique:permissions,name',
         ]);
@@ -84,7 +84,7 @@ class Permissions extends Component
 
         $permission = Permission::findOrFail($permissionId);
         $permission->delete();
-        
+
         $this->dispatch('permission-deleted');
     }
 
