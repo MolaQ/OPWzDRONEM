@@ -53,7 +53,6 @@
         <!-- Lista postów -->
         <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden flex-1 overflow-y-auto">
             @forelse($posts as $post)
-            <div wire:key="post-{{ $post->id }}"
             <div wire:key="post-{{ $post->id }}" class="overflow-hidden border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
                     <div class="px-4 py-3 flex items-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors gap-3">
                         <!-- Kolumna 1: Status publikacji -->
@@ -62,6 +61,13 @@
                                 {{ $post->is_published ? '✓' : '○' }}
                             </span>
                         </div>
+
+                        <!-- Kolumna 1b: Miniaturka -->
+                        @if($post->image)
+                            <div class="flex-shrink-0" style="width: 56px; height: 56px;">
+                                <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover rounded-lg border border-neutral-200 dark:border-neutral-600" style="display: block; width: 56px; height: 56px; object-fit: cover;">
+                            </div>
+                        @endif
 
                         <!-- Kolumna 2: Informacje o poście -->
                         <div class="ml-2 flex-1 min-w-0">

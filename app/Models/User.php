@@ -10,6 +10,16 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @method bool hasRole(string|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles, string|null $guard = null)
+ * @method bool hasAnyRole(string|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles, string|null $guard = null)
+ * @method bool hasAllRoles(string|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles, string|null $guard = null)
+ * @method $this assignRole(...$roles)
+ * @method $this removeRole($role)
+ * @method $this syncRoles(...$roles)
+ * @method bool hasPermissionTo(string|int|\Spatie\Permission\Contracts\Permission $permission, string|null $guard = null)
+ * @method bool can(string $ability, mixed $arguments = [])
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -53,6 +63,14 @@ class User extends Authenticatable
     public function activeRentals()
     {
         return $this->rentals()->whereNull('returned_at');
+    }
+
+    /**
+     * Osiągnięcia użytkownika (gwiazdki)
+     */
+    public function achievements()
+    {
+        return $this->hasMany(UserAchievement::class);
     }
 
     /**

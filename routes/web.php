@@ -21,6 +21,11 @@ use App\Livewire\Admin\Equipment;
 use App\Livewire\Admin\EquipmentSets;
 use App\Livewire\Admin\Courses;
 use App\Livewire\Admin\CourseMaterials;
+use App\Livewire\Admin\Awards;
+use App\Livewire\Admin\Roles;
+use App\Livewire\Admin\Permissions;
+use App\Livewire\StudentDashboard;
+use App\Livewire\TeacherOverview;
 use App\Livewire\PostView;
 use App\Livewire\NewsPage;
 
@@ -32,6 +37,11 @@ Route::get('/', function () {
 
 Route::get('/news', NewsPage::class)->name('news');
 Route::get('/post/{id}', PostView::class)->name('post.view');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/student/achievements', StudentDashboard::class)->name('student.achievements');
+    Route::get('/teacher/overview', TeacherOverview::class)->name('teacher.overview');
+});
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', Dashboard::class)->name('admin.dashboard');
@@ -46,6 +56,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/equipment-sets', EquipmentSets::class)->name('admin.equipment-sets');
     Route::get('/admin/courses', Courses::class)->name('admin.courses');
     Route::get('/admin/course-materials', CourseMaterials::class)->name('admin.course-materials');
+    Route::get('/admin/awards', Awards::class)->name('admin.awards');
+    Route::get('/admin/roles', Roles::class)->name('admin.roles');
+    Route::get('/admin/permissions', Permissions::class)->name('admin.permissions');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

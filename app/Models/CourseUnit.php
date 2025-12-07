@@ -47,6 +47,14 @@ class CourseUnit extends Model
         return $this->hasMany(CourseMaterial::class, 'course_unit_id')->where('is_approved', true);
     }
 
+    /**
+     * Osiągnięcia (gwiazdki) przyznane za tę jednostkę
+     */
+    public function achievements(): HasMany
+    {
+        return $this->hasMany(UserAchievement::class, 'course_unit_id');
+    }
+
     public function scopeCategory($query, ?string $category)
     {
         if ($category) {

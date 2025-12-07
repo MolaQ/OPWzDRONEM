@@ -84,6 +84,27 @@ class RolesAndPermissionsSeeder extends Seeder
             'course-materials.delete',
             'course-materials.approve',
 
+            // Achievements (gwiazdki)
+            'achievements.view',
+            'achievements.assign',
+            'achievements.remove',
+
+            // Roles & Permissions management
+            'roles.view',
+            'roles.create',
+            'roles.edit',
+            'roles.delete',
+            'permissions.view',
+            'permissions.create',
+            'permissions.edit',
+            'permissions.delete',
+
+            // Courses
+            'courses.view',
+            'courses.create',
+            'courses.edit',
+            'courses.delete',
+
             // System & reports
             'settings.view',
             'settings.update',
@@ -113,6 +134,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'posts.view', 'posts.create', 'posts.update', 'posts.delete', 'posts.publish',
                 'comments.view', 'comments.create', 'comments.update', 'comments.delete', 'comments.moderate',
                 'course-materials.view', 'course-materials.create', 'course-materials.update', 'course-materials.delete', 'course-materials.approve',
+                'achievements.view', 'achievements.assign', 'achievements.remove',
                 'exports.run'
             ],
             'wychowawca' => [
@@ -120,7 +142,8 @@ class RolesAndPermissionsSeeder extends Seeder
                 'users.view', 'groups.view', 'groups.assign-users',
                 'rentals.view', 'rentals.create', 'rentals.close',
                 'equipment.view', 'equipment-sets.view',
-                'posts.view', 'comments.view', 'comments.create'
+                'posts.view', 'comments.view', 'comments.create',
+                'achievements.view'
             ],
             'nauczyciel' => [
                 'admin.panel.access', 'dashboard.view',
@@ -130,7 +153,8 @@ class RolesAndPermissionsSeeder extends Seeder
             ],
             'student' => [
                 'posts.view', 'comments.view', 'comments.create',
-                'course-materials.view'
+                'course-materials.view',
+                'achievements.view'
             ],
             'guest' => [
                 'posts.view', 'comments.view'
