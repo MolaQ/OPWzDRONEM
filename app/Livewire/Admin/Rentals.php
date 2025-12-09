@@ -221,7 +221,7 @@ class Rentals extends Component
     public function handleBarcode(string $barcode = '')
     {
         $barcode = $barcode ?: $this->barcodeInput;
-
+        
         if (empty($barcode)) {
             return;
         }
@@ -229,16 +229,14 @@ class Rentals extends Component
         $resolver = new BarcodeResolver();
         $result = $resolver->resolve($barcode);
 
-        if (!$result['success']) {
+        if (!$result['found']) {
             session()->flash('error', 'Nieznany kod kreskowy');
             $this->barcodeInput = '';
             return;
         }
 
         $entity = $result['entity'];
-        $type = $result['type'];
-
-        try {
+        $type = $result['type'];        try {
             if ($type === 'student') {
                 // Add student to selection
                 if (!in_array($entity->id, $this->selectedStudents)) {
