@@ -74,6 +74,24 @@ class User extends Authenticatable
     }
 
     /**
+     * Grupy, w których użytkownik pełni funkcję wychowawcy
+     */
+    public function supervisedGroups()
+    {
+        return $this->belongsToMany(Group::class, 'group_supervisors')
+            ->withTimestamps();
+    }
+
+    /**
+     * Grupy, w których użytkownik pełni funkcję instruktora
+     */
+    public function instructedGroups()
+    {
+        return $this->belongsToMany(Group::class, 'group_instructors')
+            ->withTimestamps();
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>

@@ -123,7 +123,8 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $roleDefinitions = [
             'admin' => $allPermissions,
-            'koordynator' => array_diff($allPermissions, ['roles.manage', 'permissions.manage', 'settings.update', 'audit.logs.view']),
+            'coordinator' => array_diff($allPermissions, ['roles.manage', 'permissions.manage', 'settings.update']),
+            'director' => array_diff($allPermissions, ['roles.manage', 'permissions.manage']),
             'instructor' => [
                 'admin.panel.access', 'dashboard.view',
                 'users.view',

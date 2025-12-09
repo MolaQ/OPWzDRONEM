@@ -50,7 +50,11 @@
                 <tbody class="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-neutral-700">
                     @forelse($groups as $group)
                         <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
-                            <td class="py-2 px-3 font-semibold text-neutral-900 dark:text-white">{{ $group->name }}</td>
+                            <td class="py-2 px-3 font-semibold text-neutral-900 dark:text-white">
+                                <a href="{{ route('admin.group.detail', $group->id) }}" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                    {{ $group->name }}
+                                </a>
+                            </td>
                             <td class="py-2 px-3 text-neutral-600 dark:text-neutral-400">{{ $group->description ?? '—' }}</td>
                             <td class="py-2 px-3 text-center">
                                 <span class="px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-800 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-200 dark:border-blue-700">

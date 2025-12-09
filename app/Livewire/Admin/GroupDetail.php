@@ -27,12 +27,12 @@ class GroupDetail extends Component
         }
 
         $group = Group::findOrFail($id);
-        
+
         $this->groupId = $group->id;
         $this->groupName = $group->name;
         $this->groupDescription = $group->description ?? '';
         $this->groupActive = $group->active;
-        
+
         // Pobierz studentów grupy
         $this->students = $group->users()
             ->get()
@@ -43,7 +43,7 @@ class GroupDetail extends Component
                 'barcode' => $user->barcode ?? '',
             ])
             ->toArray();
-        
+
         // Pobierz wychowawców grupy
         $this->supervisors = $group->supervisors()
             ->get()
@@ -53,7 +53,7 @@ class GroupDetail extends Component
                 'email' => $user->email,
             ])
             ->toArray();
-        
+
         // Pobierz instruktorów grupy
         $this->instructors = $group->instructors()
             ->get()

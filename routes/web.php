@@ -22,6 +22,7 @@ use App\Livewire\Admin\EquipmentSets;
 use App\Livewire\Admin\EquipmentDetail;
 use App\Livewire\Admin\EquipmentSetDetail;
 use App\Livewire\Admin\MemberDetail;
+use App\Livewire\Admin\GroupDetail;
 use App\Livewire\Admin\QrCodes;
 use App\Livewire\Admin\Courses;
 use App\Livewire\Admin\CourseMaterials;
@@ -54,7 +55,9 @@ Route::middleware(['auth'])->group(function () {
     // Content management
     Route::get('/dashboard/members', Members::class)->name('admin.members');
     Route::get('/dashboard/members/{id}', MemberDetail::class)->name('admin.member.detail');
+    Route::get('/dashboard/instructors/{id}', MemberDetail::class)->name('admin.instructor.detail');
     Route::get('/dashboard/groups', Groups::class)->name('admin.groups');
+    Route::get('/dashboard/groups/{id}', GroupDetail::class)->name('admin.group.detail');
     Route::get('/dashboard/posts', Posts::class)->name('admin.posts');
     Route::get('/dashboard/comments', Comments::class)->name('admin.comments');
 

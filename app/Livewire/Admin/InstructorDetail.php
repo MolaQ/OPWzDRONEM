@@ -27,14 +27,14 @@ class InstructorDetail extends Component
         }
 
         $instructor = User::findOrFail($id);
-        
+
         // Przechowuj tylko skalarne wartości
         $this->instructorId = $instructor->id;
         $this->name = $instructor->name;
         $this->email = $instructor->email;
         $this->roles = $instructor->getRoleNames()->toArray();
         $this->createdAt = $instructor->created_at->format('d.m.Y H:i');
-        
+
         // Grupy, w których pełni funkcję wychowawcy
         $this->supervisedGroups = $instructor->supervisedGroups()
             ->get()
@@ -44,7 +44,7 @@ class InstructorDetail extends Component
                 'studentCount' => $group->users()->count(),
             ])
             ->toArray();
-        
+
         // Grupy, w których pełni funkcję instruktora
         $this->instructedGroups = $instructor->instructedGroups()
             ->get()

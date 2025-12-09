@@ -32,18 +32,32 @@ class MembersSeeder extends Seeder
         Equipment::truncate();
         User::truncate();
         Group::truncate();
+        DB::table('group_supervisors')->truncate();
+        DB::table('group_instructors')->truncate();
         Schema::enableForeignKeyConstraints();
 
-        // Tworzymy grupy
-        $groupAdmin = Group::create([
-            'name' => 'Administracja',
-            'description' => 'Grupa administratorów systemu',
+        // Tworzymy grupy uczniowskie
+        $group4OPW1a = Group::create([
+            'name' => '4OPW1',
+            'description' => 'Klasa przygotowania wojskowego - 14 uczniów',
             'active' => true,
         ]);
 
-        $group4OPW = Group::create([
-            'name' => '4OPW',
-            'description' => 'Klasa 4OPW 2025/2026',
+        $group4OPW1b = Group::create([
+            'name' => '4OPW2',
+            'description' => 'Klasa przygotowania wojskowego - 12 uczniów',
+            'active' => true,
+        ]);
+
+        $group5CM = Group::create([
+            'name' => '5CM',
+            'description' => 'Klasa CyberMIL - 3 uczniów',
+            'active' => true,
+        ]);
+
+        $group3OPW1 = Group::create([
+            'name' => '3OPW1',
+            'description' => 'Klasa przygotowania wojskowego - 1 uczeń',
             'active' => true,
         ]);
 
@@ -56,26 +70,40 @@ class MembersSeeder extends Seeder
             'operator_license' => 'OP-ADMIN-001',
             'license_expiry_date' => now()->addYears(2),
             'active' => true,
-            'group_id' => $groupAdmin->id,
+            'group_id' => null,
         ]);
         $admin->assignRole('admin');
         $admin->update(['barcode' => BarcodeResolver::generateStudentBarcode($admin->id)]);
 
-        // 1 Koordynator
+        // Koordynator (global)
         $coordinator = User::create([
-            'name' => 'Bogusław Koordynator',
-            'email' => 'angelo1997@wp.pl',
-            'password' => Hash::make('Pssw0rd'),
+            'name' => 'Bogusław Kaczmarek',
+            'email' => 'boguslaw.kaczmarek@example.com',
+            'password' => Hash::make('Haslo1234'),
             'pilot_license' => 'PL-KOOR-001',
             'operator_license' => 'OP-KOOR-001',
             'license_expiry_date' => now()->addYears(2),
             'active' => true,
-            'group_id' => $groupAdmin->id,
+            'group_id' => null,
         ]);
-        $coordinator->assignRole('koordynator');
+        $coordinator->assignRole('coordinator');
         $coordinator->update(['barcode' => BarcodeResolver::generateStudentBarcode($coordinator->id)]);
 
-        // 2 Instruktorzy
+        // Dyrektor (global)
+        $director = User::create([
+            'name' => 'Daria Szostak',
+            'email' => 'daria.szostak@example.com',
+            'password' => Hash::make('Haslo1234'),
+            'pilot_license' => 'PL-DYR-001',
+            'operator_license' => 'OP-DYR-001',
+            'license_expiry_date' => now()->addYears(2),
+            'active' => true,
+            'group_id' => null,
+        ]);
+        $director->assignRole('director');
+        $director->update(['barcode' => BarcodeResolver::generateStudentBarcode($director->id)]);
+
+        // Instruktorzy (mogą być też wychowawcami)
         $instructor1 = User::create([
             'name' => 'Jan Kowalski',
             'email' => 'jan.kowalski@example.com',
@@ -84,7 +112,7 @@ class MembersSeeder extends Seeder
             'operator_license' => 'OP-INST-001',
             'license_expiry_date' => now()->addYears(2),
             'active' => true,
-            'group_id' => $groupAdmin->id,
+            'group_id' => null,
         ]);
         $instructor1->assignRole('instructor');
         $instructor1->update(['barcode' => BarcodeResolver::generateStudentBarcode($instructor1->id)]);
@@ -97,49 +125,58 @@ class MembersSeeder extends Seeder
             'operator_license' => 'OP-INST-002',
             'license_expiry_date' => now()->addYears(2),
             'active' => true,
-            'group_id' => $groupAdmin->id,
+            'group_id' => null,
         ]);
         $instructor2->assignRole('instructor');
         $instructor2->update(['barcode' => BarcodeResolver::generateStudentBarcode($instructor2->id)]);
+        // Wychowawcy (tu przypisujemy istniejących instruktorów jako wychowawców)
+        $supervisor1 = $instructor1; // dla 4OPW1 (14 uczniów)
+        $supervisor1->assignRole('wychowawca');
+        $supervisor2 = $instructor2; // dla 4OPW1 (12 uczniów)
+        $supervisor2->assignRole('wychowawca');
 
-        // 1 Wychowawca
-        $wychowawca = User::create([
-            'name' => 'Piotr Wiśniewski',
-            'email' => 'piotr.wisniewski@example.com',
+        // Możemy mieć jeszcze jednego wychowawcę/instruktora
+        $instructor3 = User::create([
+            'name' => 'Karol Mazur',
+            'email' => 'karol.mazur@example.com',
             'password' => Hash::make('Haslo1234'),
-            'pilot_license' => 'PL-WYCH-001',
-            'operator_license' => 'OP-WYCH-001',
+            'pilot_license' => 'PL-INST-003',
+            'operator_license' => 'OP-INST-003',
             'license_expiry_date' => now()->addYears(2),
             'active' => true,
-            'group_id' => $group4OPW->id,
+            'group_id' => null,
         ]);
-        $wychowawca->assignRole('wychowawca');
-        $wychowawca->update(['barcode' => BarcodeResolver::generateStudentBarcode($wychowawca->id)]);
+        $instructor3->assignRole('instructor');
+        $instructor3->assignRole('wychowawca');
+        $instructor3->update(['barcode' => BarcodeResolver::generateStudentBarcode($instructor3->id)]);
 
-        // 30 użytkowników (studentów) w grupie 4OPW
-        $students = [];
-        for ($i = 1; $i <= 30; $i++) {
-            $student = User::create([
-                'name' => fake()->firstName() . ' ' . fake()->lastName(),
-                'email' => 'student' . $i . '@example.com',
-                'password' => Hash::make('Haslo1234'),
-                'pilot_license' => 'PL-STD-' . str_pad($i, 3, '0', STR_PAD_LEFT),
-                'operator_license' => 'OP-STD-' . str_pad($i, 3, '0', STR_PAD_LEFT),
-                'license_expiry_date' => now()->addYear(),
-                'active' => true,
-                'group_id' => $group4OPW->id,
-            ]);
-            $student->assignRole('student');
-            $student->update(['barcode' => BarcodeResolver::generateStudentBarcode($student->id)]);
-            $students[] = $student;
-        }
+        // Studenci w grupach
+        $students = collect();
 
-        // Zbieramy wszystkich użytkowników do losowania
-        $allUsers = collect([$admin, $coordinator, $instructor1, $instructor2, $wychowawca])->merge($students);
+        $students = $students->merge($this->seedStudentsForGroup($group4OPW1a, 14));
+        $students = $students->merge($this->seedStudentsForGroup($group4OPW1b, 12));
+        $students = $students->merge($this->seedStudentsForGroup($group5CM, 3));
+        $students = $students->merge($this->seedStudentsForGroup($group3OPW1, 1));
+
+        // Przypisujemy wychowawców do grup (pivot)
+        $group4OPW1a->supervisors()->attach($supervisor1->id);
+        $group4OPW1b->supervisors()->attach($supervisor2->id);
+        $group5CM->supervisors()->attach($instructor3->id);
+        // Grupa 3OPW1 bez wychowawcy (dozwolone)
+
+        // Przypisujemy instruktorów do grup (pivot) - min 1, max 5
+        $group4OPW1a->instructors()->attach([$instructor1->id, $instructor2->id]);
+        $group4OPW1b->instructors()->attach([$instructor2->id, $instructor3->id]);
+        $group5CM->instructors()->attach([$instructor3->id]);
+        $group3OPW1->instructors()->attach([$instructor1->id]);
+
+        // Zbieramy wszystkich użytkowników do losowania treści
+        $allUsers = collect([$admin, $coordinator, $director, $instructor1, $instructor2, $instructor3])
+            ->merge($students);
 
         // 20 postów
         $posts = [];
-        $authors = collect([$admin, $instructor1, $instructor2, $wychowawca]);
+        $authors = collect([$admin, $instructor1, $instructor2, $instructor3, $coordinator, $director]);
 
         for ($i = 1; $i <= 20; $i++) {
             $author = $authors->random();
@@ -190,9 +227,10 @@ class MembersSeeder extends Seeder
         $this->command->info('✅ Utworzono:');
         $this->command->info('   - 1 administratora');
         $this->command->info('   - 1 koordynatora');
-        $this->command->info('   - 2 instruktorów');
-        $this->command->info('   - 1 wychowawcę');
-        $this->command->info('   - 30 studentów w grupie 4OPW');
+        $this->command->info('   - 1 dyrektora');
+        $this->command->info('   - 3 instruktorów (w tym wychowawcy)');
+        $this->command->info('   - 4 grupy uczniowskie: 4OPW1 (14), 4OPW2 (12), 5CM (3), 3OPW1 (1)');
+        $this->command->info('   - 30 studentów łącznie w grupach');
         $this->command->info('   - 20 postów');
         $this->command->info('   - 60 reakcji na posty');
         $this->command->info('   - 50 komentarzy');
@@ -317,5 +355,32 @@ class MembersSeeder extends Seeder
         $this->command->info('   - 7 zestawów DJI Mini 5 Pro Fly More Combo (RC2): ' . implode(', ', $miniCodes));
         $this->command->info('   - 7 zestawów DJI Avata 2 Fly More Combo: ' . implode(', ', $avataCodes));
         $this->command->info('   - Łącznie 14 zestawów z kodami ZXXXXXXXXXX');
+    }
+
+    /**
+     * Tworzy wskazaną liczbę studentów w danej grupie.
+     */
+    protected function seedStudentsForGroup(Group $group, int $count)
+    {
+        $students = collect();
+        $offset = User::count();
+
+        for ($i = 1; $i <= $count; $i++) {
+            $student = User::create([
+                'name' => fake()->firstName() . ' ' . fake()->lastName(),
+                'email' => 'student' . ($offset + $i) . '@example.com',
+                'password' => Hash::make('Haslo1234'),
+                'pilot_license' => 'PL-STD-' . str_pad($offset + $i, 3, '0', STR_PAD_LEFT),
+                'operator_license' => 'OP-STD-' . str_pad($offset + $i, 3, '0', STR_PAD_LEFT),
+                'license_expiry_date' => now()->addYear(),
+                'active' => true,
+                'group_id' => $group->id,
+            ]);
+            $student->assignRole('student');
+            $student->update(['barcode' => BarcodeResolver::generateStudentBarcode($student->id)]);
+            $students->push($student);
+        }
+
+        return $students;
     }
 }

@@ -36,7 +36,7 @@ class MemberDetail extends Component
         }
 
         $member = User::findOrFail($id);
-        
+
         // Przechowuj tylko skalarne wartości
         $this->memberId = $member->id;
         $this->name = $member->name;
@@ -45,17 +45,17 @@ class MemberDetail extends Component
         $this->active = $member->active;
         $this->roles = $member->getRoleNames()->toArray();
         $this->createdAt = $member->created_at->format('d.m.Y H:i');
-        
+
         // Sprawdź role
         $this->isStudent = $member->hasRole('student');
         $this->isSupervisor = $member->supervisedGroups()->exists();
         $this->isInstructor = $member->instructedGroups()->exists();
-        
+
         // Jeśli student - pobierz jego grupę
         if ($this->isStudent) {
             $this->groupName = $member->group?->name ?? null;
             $this->groupId = $member->group?->id ?? null;
-            
+
             // Pobierz wychowawców i instruktorów grupy studenta
             if ($member->group) {
                 $this->supervisors = $member->group->supervisors()
@@ -66,7 +66,7 @@ class MemberDetail extends Component
                         'email' => $user->email,
                     ])
                     ->toArray();
-                
+
                 $this->instructors = $member->group->instructors()
                     ->get()
                     ->map(fn($user) => [
@@ -77,7 +77,7 @@ class MemberDetail extends Component
                     ->toArray();
             }
         }
-        
+
         // Jeśli wychowawca - pobierz grupy które nadzoruje
         if ($this->isSupervisor) {
             $this->supervisedGroups = $member->supervisedGroups()
@@ -98,7 +98,7 @@ class MemberDetail extends Component
                 ])
                 ->toArray();
         }
-        
+
         // Jeśli instruktor - pobierz grupy które prowadzi
         if ($this->isInstructor) {
             $this->instructedGroups = $member->instructedGroups()

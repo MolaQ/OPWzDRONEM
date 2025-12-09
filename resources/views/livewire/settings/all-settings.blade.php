@@ -1,6 +1,6 @@
 <div class="max-w-4xl mx-auto p-3">
     <div class="mb-4">
-        <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center text-[#106c21] hover:text-[#2f76aa] transition">
+            <a href="{{ route('dashboard') }}" class="inline-flex items-center text-[#106c21] hover:text-[#2f76aa] transition">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
