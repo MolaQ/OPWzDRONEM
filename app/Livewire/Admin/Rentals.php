@@ -221,7 +221,7 @@ class Rentals extends Component
     public function handleBarcode(string $barcode = '')
     {
         $barcode = $barcode ?: $this->barcodeInput;
-        
+
         if (empty($barcode)) {
             return;
         }
