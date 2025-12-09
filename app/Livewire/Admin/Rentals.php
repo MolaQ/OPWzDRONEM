@@ -20,19 +20,19 @@ class Rentals extends Component
 
     public string $search = '';
     public string $filter = 'active'; // active, all, overdue
-    
+
     // Modal states
     public bool $showNewRentalModal = false;
     public string $studentSearch = '';
     public array $selectedStudents = [];
     public string $equipmentSearch = '';
     public array $selectedEquipment = [];
-    
+
     // Rental form
     public string $rentalNotes = '';
     public array $availableEquipment = [];
     public array $searchResults = [];
-    
+
     // Barcode scanning
     public string $barcodeInput = '';
 
@@ -221,7 +221,7 @@ class Rentals extends Component
     public function handleBarcode(string $barcode = '')
     {
         $barcode = $barcode ?: $this->barcodeInput;
-        
+
         if (empty($barcode)) {
             return;
         }
@@ -260,7 +260,7 @@ class Rentals extends Component
             } elseif ($type === 'equipment_set') {
                 // Add all equipment from set
                 $setEquipment = $entity->equipments->where('status', 'available')->pluck('id')->toArray();
-                
+
                 if (empty($setEquipment)) {
                     session()->flash('error', "Zestaw '{$entity->name}' nie ma dostępnego sprzętu");
                 } else {
@@ -271,7 +271,7 @@ class Rentals extends Component
                             $added++;
                         }
                     }
-                    
+
                     if ($added > 0) {
                         session()->flash('success', "Dodany zestaw: {$entity->name} ($added przedmiotów)");
                     } else {
