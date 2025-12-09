@@ -48,8 +48,36 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
-
+    // Main dashboard
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    
+    // Content management
+    Route::get('/dashboard/members', Members::class)->name('admin.members');
+    Route::get('/dashboard/members/{id}', MemberDetail::class)->name('admin.member.detail');
+    Route::get('/dashboard/groups', Groups::class)->name('admin.groups');
+    Route::get('/dashboard/posts', Posts::class)->name('admin.posts');
+    Route::get('/dashboard/comments', Comments::class)->name('admin.comments');
+    
+    // Equipment management
+    Route::get('/dashboard/rentals', Rentals::class)->name('admin.rentals');
+    Route::get('/dashboard/returns', Returns::class)->name('admin.returns');
+    Route::get('/dashboard/equipment', Equipment::class)->name('admin.equipment');
+    Route::get('/dashboard/equipment/{id}', EquipmentDetail::class)->name('admin.equipment.detail');
+    Route::get('/dashboard/equipment-sets', EquipmentSets::class)->name('admin.equipment-sets');
+    Route::get('/dashboard/equipment-sets/{id}', EquipmentSetDetail::class)->name('admin.equipment-set.detail');
+    Route::get('/dashboard/barcodes', QrCodes::class)->name('admin.qr-codes');
+    
+    // Courses
+    Route::get('/dashboard/courses', Courses::class)->name('admin.courses');
+    Route::get('/dashboard/course-materials', CourseMaterials::class)->name('admin.course-materials');
+    Route::get('/dashboard/awards', Awards::class)->name('admin.awards');
+    
+    // Admin tools
+    Route::get('/dashboard/roles', Roles::class)->name('admin.roles');
+    Route::get('/dashboard/permissions', Permissions::class)->name('admin.permissions');
+    Route::get('/dashboard/search', GlobalSearch::class)->name('admin.search');
+    
+    // Settings
     Route::get('/settings', AllSettings::class)->name('settings.all');
     Route::get('/settings/profile', Profile::class)->name('profile.edit');
     Route::get('/settings/password', Password::class)->name('user-password.edit');
@@ -65,26 +93,4 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
-});
-
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', Dashboard::class)->name('admin.dashboard');
-    Route::get('/admin/members', Members::class)->name('admin.members');
-    Route::get('/admin/members/{id}', MemberDetail::class)->name('admin.member.detail');
-    Route::get('/admin/groups', Groups::class)->name('admin.groups');
-    Route::get('/admin/posts', Posts::class)->name('admin.posts');
-    Route::get('/admin/comments', Comments::class)->name('admin.comments');
-    Route::get('/admin/search', GlobalSearch::class)->name('admin.search');
-    Route::get('/admin/rentals', Rentals::class)->name('admin.rentals');
-    Route::get('/admin/returns', Returns::class)->name('admin.returns');
-    Route::get('/admin/equipment', Equipment::class)->name('admin.equipment');
-    Route::get('/admin/equipment/{id}', EquipmentDetail::class)->name('admin.equipment.detail');
-    Route::get('/admin/equipment-sets', EquipmentSets::class)->name('admin.equipment-sets');
-    Route::get('/admin/equipment-sets/{id}', EquipmentSetDetail::class)->name('admin.equipment-set.detail');
-    Route::get('/admin/qr-codes', QrCodes::class)->name('admin.qr-codes');
-    Route::get('/admin/courses', Courses::class)->name('admin.courses');
-    Route::get('/admin/course-materials', CourseMaterials::class)->name('admin.course-materials');
-    Route::get('/admin/awards', Awards::class)->name('admin.awards');
-    Route::get('/admin/roles', Roles::class)->name('admin.roles');
-    Route::get('/admin/permissions', Permissions::class)->name('admin.permissions');
 });

@@ -8,7 +8,7 @@
         <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-            <a href="{{ route('admin.dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+            <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
                 <x-app-logo />
             </a>
 
@@ -33,7 +33,7 @@
 
                 {{-- Sekcja Struktura Kursu --}}
                 @canany(['admin.panel.access', 'courses.view', 'achievements.view'])
-                <div x-data="{ open: {{ request()->routeIs(['admin.dashboard', 'admin.courses', 'admin.course-materials', 'admin.awards']) ? 'true' : 'false' }} }" class="mb-2">
+                <div x-data="{ open: {{ request()->routeIs(['dashboard', 'admin.courses', 'admin.course-materials', 'admin.awards']) ? 'true' : 'false' }} }" class="mb-2">
                     <button @click="open = !open" class="flex w-full items-center justify-between px-2 py-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition">
                         <span class="flex items-center gap-2">
                             <svg class="w-4 h-4 text-zinc-600 dark:text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6l7 4-7 4-7-4 7-4zm0 8v4m0-12V2"/></svg>
@@ -44,7 +44,7 @@
                     </button>
                     <div x-show="open" x-collapse class="mt-1 space-y-1">
                         @can('admin.panel.access')
-                        <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>Pulpit</flux:navlist.item>
+                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>Pulpit</flux:navlist.item>
                         @endcan
                         @can('courses.view')
                         <flux:navlist.item icon="academic-cap" :href="route('admin.courses')" :current="request()->routeIs('admin.courses')" wire:navigate>Program kursu</flux:navlist.item>
