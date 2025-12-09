@@ -120,9 +120,9 @@
                                 x-data="{
                                     render() {
                                         const el = document.getElementById('barcode-top-{{ $editingUser['id'] }}');
-                                        if (!el || typeof JsBarcode === 'undefined') { 
-                                            setTimeout(() => this.render(), 100); 
-                                            return; 
+                                        if (!el || typeof JsBarcode === 'undefined') {
+                                            setTimeout(() => this.render(), 100);
+                                            return;
                                         }
                                         const isDark = document.documentElement.classList.contains('dark');
                                         try {
@@ -135,8 +135,8 @@
                                                 lineColor: isDark ? '#ffffff' : '#000000',
                                                 background: 'transparent'
                                             });
-                                        } catch(e) { 
-                                            console.error(e); 
+                                        } catch(e) {
+                                            console.error(e);
                                         }
                                     }
                                 }"
