@@ -203,87 +203,119 @@ class MembersSeeder extends Seeder
 
     protected function seedEquipments(): void
     {
-        $equipments = [
-            ['name' => 'DJI Mavic 3', 'model' => 'M3-2025', 'category' => 'drone', 'status' => 'available', 'description' => 'Dron szkoleniowy klasy premium'],
-            ['name' => 'DJI Mini 4 Pro', 'model' => 'MN4P', 'category' => 'drone', 'status' => 'available', 'description' => 'Lekki dron do ćwiczeń'],
-            ['name' => 'Parrot Anafi', 'model' => 'ANA-1', 'category' => 'drone', 'status' => 'under_service', 'description' => 'Konserwacja kamery'],
-            ['name' => 'Kontroler RC', 'model' => 'RC-STD', 'category' => 'controller', 'status' => 'available', 'description' => 'Kontroler uniwersalny'],
-            ['name' => 'Gogle FPV', 'model' => 'FPV-G1', 'category' => 'fpv', 'status' => 'available', 'description' => 'Gogle treningowe'],
-            ['name' => 'Akumulator LiPo', 'model' => 'LIPO-5200', 'category' => 'battery', 'status' => 'available', 'description' => 'Akumulator 5200mAh'],
-            ['name' => 'Ładowarka Smart', 'model' => 'CHG-S', 'category' => 'charger', 'status' => 'available', 'description' => 'Inteligentna ładowarka wielokanałowa'],
-            ['name' => 'Tor transportowy', 'model' => 'BAG-XL', 'category' => 'bag', 'status' => 'available', 'description' => 'Duży tor na sprzęt'],
-            ['name' => 'Kamera GoPro', 'model' => 'GP12', 'category' => 'camera', 'status' => 'available', 'description' => 'Kamera akcji do nagrań'],
-            ['name' => 'Śmigła zapasowe', 'model' => 'PROP-S', 'category' => 'parts', 'status' => 'available', 'description' => 'Zestaw śmigieł'],
-            ['name' => 'Kontroler RC Pro', 'model' => 'RC-PRO', 'category' => 'controller', 'status' => 'available', 'description' => 'Kontroler profesjonalny'],
-            ['name' => 'Akumulator LiPo 2', 'model' => 'LIPO-5200', 'category' => 'battery', 'status' => 'available', 'description' => 'Akumulator 5200mAh #2'],
-        ];
+        $miniCodes = ['ARES', 'MARS', 'ZEUS', 'HERCULES', 'ACHILLES', 'PERSEUS', 'AJAX'];
+        $avataCodes = ['ODIN', 'THOR', 'TYR', 'JUPITER', 'HADES', 'KRONOS', 'VULCAN'];
+
+        $equipments = [];
+
+        foreach ($miniCodes as $code) {
+            $equipments[] = ['name' => "Dron DJI Mini 5 Pro - {$code}", 'model' => "DJI-M5P-{$code}", 'category' => 'drone', 'status' => 'available', 'description' => "Dron DJI Mini 5 Pro Fly More Combo (RC2) - {$code}"];
+            $equipments[] = ['name' => "Inteligentny akumulator Plus BWXNN5-4680-7.16 - {$code}", 'model' => "BWXNN5-4680-{$code}", 'category' => 'battery', 'status' => 'available', 'description' => "Akumulator Plus do DJI Mini 5 Pro - {$code}"];
+            $equipments[] = ['name' => "Inteligentny akumulator BWXNN5-2788-7.0 - {$code}", 'model' => "BWXNN5-2788-{$code}", 'category' => 'battery', 'status' => 'available', 'description' => "Akumulator standardowy do DJI Mini 5 Pro - {$code}"];
+            $equipments[] = ['name' => "Zestaw filtrów ND (ND 8/32/128) - {$code}", 'model' => "FILTER-ND-{$code}", 'category' => 'parts', 'status' => 'available', 'description' => "Filtry ND do DJI Mini 5 Pro - {$code}"];
+            $equipments[] = ['name' => "Torba transportowa DJI Mini 5 Pro - {$code}", 'model' => "BAG-M5P-{$code}", 'category' => 'bag', 'status' => 'available', 'description' => "Torba do przechowywania zestawu - {$code}"];
+            $equipments[] = ['name' => "Kontroler RC2 - {$code}", 'model' => "RC2-{$code}", 'category' => 'controller', 'status' => 'available', 'description' => "Kontroler RC2 do DJI Mini 5 Pro - {$code}"];
+            $equipments[] = ['name' => "Zestaw śmigieł - {$code}", 'model' => "PROPS-M5P-{$code}", 'category' => 'parts', 'status' => 'available', 'description' => "Zapasowe śmigła do DJI Mini 5 Pro - {$code}"];
+        }
+
+        foreach ($avataCodes as $code) {
+            $equipments[] = ['name' => "Dron DJI Avata 2 - {$code}", 'model' => "DJI-AVT2-{$code}", 'category' => 'drone', 'status' => 'available', 'description' => "Dron DJI Avata 2 Fly More Combo - {$code}"];
+            $equipments[] = ['name' => "Inteligentny akumulator Avata 2570mAh - {$code} 1", 'model' => "AVT2-BAT-{$code}-1", 'category' => 'battery', 'status' => 'available', 'description' => "Akumulator do DJI Avata 2 - {$code}"];
+            $equipments[] = ['name' => "Inteligentny akumulator Avata 2570mAh - {$code} 2", 'model' => "AVT2-BAT-{$code}-2", 'category' => 'battery', 'status' => 'available', 'description' => "Akumulator do DJI Avata 2 - {$code}"];
+            $equipments[] = ['name' => "Inteligentny akumulator Avata 2570mAh - {$code} 3", 'model' => "AVT2-BAT-{$code}-3", 'category' => 'battery', 'status' => 'available', 'description' => "Akumulator do DJI Avata 2 - {$code}"];
+            $equipments[] = ['name' => "Gogle FPV DJI Avata 2 - {$code}", 'model' => "FPV-AVT2-{$code}", 'category' => 'fpv', 'status' => 'available', 'description' => "Gogle FPV do DJI Avata 2 - {$code}"];
+            $equipments[] = ['name' => "Torba transportowa DJI Avata 2 - {$code}", 'model' => "BAG-AVT2-{$code}", 'category' => 'bag', 'status' => 'available', 'description' => "Torba do przechowywania zestawu - {$code}"];
+            $equipments[] = ['name' => "Zestaw śmigieł DJI Avata 2 - {$code}", 'model' => "PROPS-AVT2-{$code}", 'category' => 'parts', 'status' => 'available', 'description' => "Zapasowe śmigła do DJI Avata 2 - {$code}"];
+        }
 
         $createdEquipment = [];
         foreach ($equipments as $index => $data) {
-            // Create with temporary barcode first
             $data['barcode'] = 'E-TEMP-' . $index;
             $eq = Equipment::create($data);
-            // Then update with proper ID-based barcode
             $eq->update(['barcode' => BarcodeResolver::generateEquipmentBarcode($eq->id)]);
             $createdEquipment[] = $eq;
         }
 
         $this->command->info('   - ' . count($equipments) . ' sprzętów z kodami EXXXXXXXXXX');
 
-        // Create equipment sets
-        $this->seedEquipmentSets($createdEquipment);
+        $this->seedEquipmentSets($createdEquipment, $miniCodes, $avataCodes);
     }
 
-    protected function seedEquipmentSets(array $equipments): void
+    protected function seedEquipmentSets(array $equipments, array $miniCodes, array $avataCodes): void
     {
-        // Zestaw 1: DJI Mavic 3 Complete
-        $set1 = \App\Models\EquipmentSet::create([
-            'barcode' => 'Z-TEMP-1',
-            'name' => 'DJI Mavic 3 - Zestaw kompletny',
-            'description' => 'Kompletny zestaw do lotów - dron, kontroler, 2x akumulator, ładowarka, torba',
-            'active' => true,
-        ]);
-        $set1->update(['barcode' => BarcodeResolver::generateSetBarcode($set1->id)]);
+        $miniSets = [];
+        foreach ($miniCodes as $i => $code) {
+            $offset = $i * 7;
+            $miniSets[] = [
+                'name' => "Dron DJI Mini 5 Pro Fly More Combo (RC2) - {$code}",
+                'indices' => [
+                    $offset + 0, // dron
+                    $offset + 5, // kontroler
+                    $offset + 1, // bateria plus
+                    $offset + 2, // bateria standard
+                    $offset + 3, // filtry
+                    $offset + 4, // torba
+                    $offset + 6, // smigla
+                ],
+            ];
+        }
 
-        // Attach: Mavic 3, Kontroler RC, 2x Akumulator, Ładowarka, Torba
-        $set1->equipments()->attach([
-            $equipments[0]->id, // DJI Mavic 3
-            $equipments[3]->id, // Kontroler RC
-            $equipments[5]->id, // Akumulator 1
-            $equipments[11]->id, // Akumulator 2
-            $equipments[6]->id, // Ładowarka
-            $equipments[7]->id, // Torba
-        ]);
+        foreach ($miniSets as $setData) {
+            $set = \App\Models\EquipmentSet::create([
+                'barcode' => 'Z-TEMP-' . uniqid(),
+                'name' => $setData['name'],
+                'description' => 'Kompletny zestaw DJI Mini 5 Pro Fly More Combo (RC2) zawierający drona, kontroler RC2, dwa akumulatory, filtry, torbę i zapasowe śmigła',
+                'active' => true,
+            ]);
+            $set->update(['barcode' => BarcodeResolver::generateSetBarcode($set->id)]);
 
-        // Zestaw 2: DJI Mini 4 Pro Basic
-        $set2 = \App\Models\EquipmentSet::create([
-            'barcode' => 'Z-TEMP-2',
-            'name' => 'DJI Mini 4 Pro - Zestaw podstawowy',
-            'description' => 'Zestaw podstawowy - dron, kontroler pro, kamera GoPro',
-            'active' => true,
-        ]);
-        $set2->update(['barcode' => BarcodeResolver::generateSetBarcode($set2->id)]);
+            $equipmentIds = [];
+            foreach ($setData['indices'] as $idx) {
+                if (isset($equipments[$idx])) {
+                    $equipmentIds[] = $equipments[$idx]->id;
+                }
+            }
+            $set->equipments()->attach($equipmentIds);
+        }
 
-        $set2->equipments()->attach([
-            $equipments[1]->id, // DJI Mini 4 Pro
-            $equipments[10]->id, // Kontroler RC Pro
-            $equipments[8]->id, // Kamera GoPro
-        ]);
+        $avataSets = [];
+        $base = count($miniCodes) * 7;
+        foreach ($avataCodes as $i => $code) {
+            $offset = $base + ($i * 7);
+            $avataSets[] = [
+                'name' => "Dron DJI Avata 2 Fly More Combo - {$code}",
+                'indices' => [
+                    $offset + 0, // dron
+                    $offset + 1, // bateria 1
+                    $offset + 2, // bateria 2
+                    $offset + 3, // bateria 3
+                    $offset + 4, // gogle FPV
+                    $offset + 5, // torba
+                    $offset + 6, // smigla
+                ],
+            ];
+        }
 
-        // Zestaw 3: FPV Training
-        $set3 = \App\Models\EquipmentSet::create([
-            'barcode' => 'Z-TEMP-3',
-            'name' => 'Zestaw szkoleniowy FPV',
-            'description' => 'Gogle FPV i akcesoria',
-            'active' => true,
-        ]);
-        $set3->update(['barcode' => BarcodeResolver::generateSetBarcode($set3->id)]);
+        foreach ($avataSets as $setData) {
+            $set = \App\Models\EquipmentSet::create([
+                'barcode' => 'Z-TEMP-' . uniqid(),
+                'name' => $setData['name'],
+                'description' => 'Kompletny zestaw DJI Avata 2 Fly More Combo zawierający drona, gogle FPV, trzy akumulatory, torbę i zapasowe śmigła',
+                'active' => true,
+            ]);
+            $set->update(['barcode' => BarcodeResolver::generateSetBarcode($set->id)]);
 
-        $set3->equipments()->attach([
-            $equipments[4]->id, // Gogle FPV
-            $equipments[9]->id, // Śmigła zapasowe
-        ]);
+            $equipmentIds = [];
+            foreach ($setData['indices'] as $idx) {
+                if (isset($equipments[$idx])) {
+                    $equipmentIds[] = $equipments[$idx]->id;
+                }
+            }
+            $set->equipments()->attach($equipmentIds);
+        }
 
-        $this->command->info('   - 3 zestawy z kodami ZXXXXXXXXXX');
+        $this->command->info('   - 7 zestawów DJI Mini 5 Pro Fly More Combo (RC2): ' . implode(', ', $miniCodes));
+        $this->command->info('   - 7 zestawów DJI Avata 2 Fly More Combo: ' . implode(', ', $avataCodes));
+        $this->command->info('   - Łącznie 14 zestawów z kodami ZXXXXXXXXXX');
     }
 }

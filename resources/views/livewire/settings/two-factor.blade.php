@@ -7,7 +7,6 @@
             </div>
         </div>
 
-        <!-- Taby nawigacyjne -->
         <div class="border-b border-neutral-200 dark:border-neutral-700">
             <div class="flex gap-1">
                 <a href="{{ route('profile.edit') }}" wire:navigate class="px-4 py-3 text-sm font-medium border-b-2 {{ request()->routeIs('profile.edit') ? 'border-neutral-900 dark:border-white text-neutral-900 dark:text-white' : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white' }} transition-colors">
@@ -29,51 +28,56 @@
 
         <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 p-6 max-w-2xl">
             <div class="flex flex-col w-full space-y-6 text-sm" wire:cloak>
-            @if ($twoFactorEnabled)
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3">
-                        <flux:badge color="green">{{ __('Enabled') }}</flux:badge>
+                <div>
+                    <h2 class="text-xl font-semibold text-neutral-900 dark:text-white">{{ __('Two Factor Authentication') }}</h2>
+                </div>
+
+                @if ($twoFactorEnabled)
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <flux:badge color="green">{{ __('Enabled') }}</flux:badge>
+                        </div>
+
+                        <flux:text>
+                            {{ __('With two-factor authentication enabled, you will be prompted for a secure, random pin during login, which you can retrieve from the TOTP-supported application on your phone.') }}
+                        </flux:text>
+
+                        <livewire:settings.two-factor.recovery-codes :$requiresConfirmation/>
+
+                        <div class="flex justify-start">
+                            <flux:button
+                                variant="danger"
+                                icon="shield-exclamation"
+                                icon:variant="outline"
+                                wire:click="disable"
+                            >
+                                {{ __('Disable 2FA') }}
+                            </flux:button>
+                        </div>
                     </div>
+                @else
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <flux:badge color="red">{{ __('Disabled') }}</flux:badge>
+                        </div>
 
-                    <flux:text>
-                        {{ __('With two-factor authentication enabled, you will be prompted for a secure, random pin during login, which you can retrieve from the TOTP-supported application on your phone.') }}
-                    </flux:text>
+                        <flux:text variant="subtle">
+                            {{ __('When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a TOTP-supported application on your phone.') }}
+                        </flux:text>
 
-                    <livewire:settings.two-factor.recovery-codes :$requiresConfirmation/>
-
-                    <div class="flex justify-start">
                         <flux:button
-                            variant="danger"
-                            icon="shield-exclamation"
+                            variant="primary"
+                            icon="shield-check"
                             icon:variant="outline"
-                            wire:click="disable"
+                            wire:click="enable"
                         >
-                            {{ __('Disable 2FA') }}
+                            {{ __('Enable 2FA') }}
                         </flux:button>
                     </div>
-                </div>
-            @else
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3">
-                        <flux:badge color="red">{{ __('Disabled') }}</flux:badge>
-                    </div>
-
-                    <flux:text variant="subtle">
-                        {{ __('When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a TOTP-supported application on your phone.') }}
-                    </flux:text>
-
-                    <flux:button
-                        variant="primary"
-                        icon="shield-check"
-                        icon:variant="outline"
-                        wire:click="enable"
-                    >
-                        {{ __('Enable 2FA') }}
-                    </flux:button>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
-    </x-settings.layout>
+    </div>
 
     <flux:modal
         name="two-factor-setup-modal"
@@ -226,9 +230,6 @@
                     </div>
                 </div>
             @endif
-            </div>
         </div>
-    </div>
-</flux:main>
-
     </flux:modal>
+</flux:main>
