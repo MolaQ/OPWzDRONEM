@@ -80,7 +80,15 @@ class Members extends Component
             'editingUser.name' => 'required|string|max:255',
             'editingUser.email' => 'required|email|unique:users,email,' . ($this->editingUser['id'] ?? 'NULL'),
             'editingUser.role' => ['required','string', Rule::in($availableRoles)],
-            'editingUser.group_id' => 'nullable|exists:groups,id',
+            'editingUser.group_id' => [
+                'nullable',
+                'exists:groups,id',
+                function ($attribute, $value, $fail) {
+                    if ($value && $this->editingUser['role'] !== 'student') {
+                        $fail('Tylko studenci mogą być przypisani do grupy.');
+                    }
+                },
+            ],
             'editingUser.active' => 'required|boolean',
         ];
 
@@ -93,6 +101,11 @@ class Members extends Component
         }
 
         $this->validate($rules);
+
+        // Automatycznie usuń group_id jeśli użytkownik nie jest studentem
+        if ($this->editingUser['role'] !== 'student') {
+            $this->editingUser['group_id'] = null;
+        }
 
         if ($this->editingUser['id']) {
             $user = User::find($this->editingUser['id']);

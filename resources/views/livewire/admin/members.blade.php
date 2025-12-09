@@ -77,14 +77,14 @@
                                 </span>
                             </td>
                             <td class="py-2 px-3 flex gap-2">
-                                <a href="{{ route('admin.member.detail', $user->id) }}" class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 border-2 border-neutral-300 hover:border-neutral-400 hover:text-neutral-700 rounded transition-all dark:text-neutral-400 dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:text-neutral-300" title="Szczegóły">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.658 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                                <a href="{{ route('admin.member.detail', $user->id) }}" class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded transition-all dark:text-neutral-400 dark:hover:text-neutral-100 dark:hover:bg-neutral-800" title="Szczegóły">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
                                 </a>
-                                <button type="button" wire:click="editUser({{ $user->id }})" class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 border-2 border-neutral-300 hover:border-neutral-400 hover:text-neutral-700 rounded transition-all dark:text-neutral-400 dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:text-neutral-300" title="Edytuj">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
+                                <button type="button" wire:click="editUser({{ $user->id }})" class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded transition-all dark:text-neutral-400 dark:hover:text-neutral-100 dark:hover:bg-neutral-800" title="Edytuj">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
                                 </button>
-                                <button type="button" wire:click="deleteUser({{ $user->id }})" wire:confirm="Czy na pewno usunąć tego użytkownika?" class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 border-2 border-neutral-300 hover:border-neutral-400 hover:text-neutral-700 rounded transition-all dark:text-neutral-400 dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:text-neutral-300" title="Usuń">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                                <button type="button" wire:click="deleteUser({{ $user->id }})" wire:confirm="Czy na pewno usunąć tego użytkownika?" class="inline-flex items-center justify-center w-7 h-7 text-red-600 hover:text-red-700 hover:bg-red-50 rounded transition-all dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950" title="Usuń">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                 </button>
                             </td>
                         </tr>
@@ -116,11 +116,15 @@
                             </h3>
                             @if($editingUser['id'] && $editingUser['barcode'])
                             <div
-                                class="inline-block bg-white dark:bg-neutral-100 rounded-lg px-4 py-3"
+                                class="inline-block bg-white dark:bg-neutral-800 rounded-lg px-4 py-3 border border-neutral-200 dark:border-neutral-700"
                                 x-data="{
                                     render() {
                                         const el = document.getElementById('barcode-top-{{ $editingUser['id'] }}');
-                                        if (!el || typeof JsBarcode === 'undefined') { setTimeout(()=>this.render(), 100); return; }
+                                        if (!el || typeof JsBarcode === 'undefined') { 
+                                            setTimeout(() => this.render(), 100); 
+                                            return; 
+                                        }
+                                        const isDark = document.documentElement.classList.contains('dark');
                                         try {
                                             JsBarcode(el, '{{ $editingUser['barcode'] }}', {
                                                 format: 'CODE128',
@@ -128,18 +132,20 @@
                                                 height: 50,
                                                 displayValue: false,
                                                 margin: 6,
-                                                lineColor: '#000000',
+                                                lineColor: isDark ? '#ffffff' : '#000000',
                                                 background: 'transparent'
                                             });
-                                        } catch(e) { console.error(e); }
+                                        } catch(e) { 
+                                            console.error(e); 
+                                        }
                                     }
-                                }
-                                x-init="$nextTick(()=>render())"
+                                }"
+                                x-init="$nextTick(() => render())"
                                 @showModal.window="render()"
                             >
                                 <div class="text-center" wire:ignore>
                                     <svg id="barcode-top-{{ $editingUser['id'] }}"></svg>
-                                    <p class="mt-1 text-xs font-mono text-neutral-900">{{ $editingUser['barcode'] }}</p>
+                                    <p class="mt-1 text-xs font-mono text-neutral-900 dark:text-neutral-100">{{ $editingUser['barcode'] }}</p>
                                 </div>
                             </div>
                             @endif
@@ -206,16 +212,22 @@
                             <label for="group_id" class="block mb-2 text-sm font-semibold text-neutral-700 dark:text-neutral-200">
                                 Grupa
                             </label>
-                            <select
-                                id="group_id"
-                                wire:model.defer="editingUser.group_id"
-                                class="w-full rounded-lg bg-white border border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700 px-4 py-3 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
-                            >
-                                <option value="">Brak przypisania</option>
-                                @foreach($groups as $g)
-                                    <option value="{{ $g->id }}">{{ $g->name }}</option>
-                                @endforeach
-                            </select>
+                            @if($editingUser['role'] === 'student')
+                                <select
+                                    id="group_id"
+                                    wire:model.defer="editingUser.group_id"
+                                    class="w-full rounded-lg bg-white border border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700 px-4 py-3 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                                >
+                                    <option value="">Brak przypisania</option>
+                                    @foreach($groups as $g)
+                                        <option value="{{ $g->id }}">{{ $g->name }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                <div class="w-full rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 px-4 py-3 text-neutral-500 dark:text-neutral-400 text-sm">
+                                    Tylko studenci mogą być przypisani do grupy
+                                </div>
+                            @endif
                             @error('editingUser.group_id')<p class="mt-1.5 text-sm text-red-400">{{ $message }}</p>@enderror
                         </div>
 
@@ -318,6 +330,7 @@
                 const renderBarcode = () => {
                     const barcodeElement = document.getElementById('barcode-{{ $editingUser['id'] }}');
                     if (barcodeElement && typeof JsBarcode !== 'undefined') {
+                        const isDark = document.documentElement.classList.contains('dark');
                         try {
                             JsBarcode(barcodeElement, '{{ $editingUser['barcode'] }}', {
                                 format: 'CODE128',
@@ -325,7 +338,7 @@
                                 height: 80,
                                 displayValue: false,
                                 margin: 10,
-                                lineColor: '#000000',
+                                lineColor: isDark ? '#ffffff' : '#000000',
                                 background: 'transparent'
                             });
                             console.log('Barcode rendered successfully');
