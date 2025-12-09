@@ -50,14 +50,14 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     // Main dashboard
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
-    
+
     // Content management
     Route::get('/dashboard/members', Members::class)->name('admin.members');
     Route::get('/dashboard/members/{id}', MemberDetail::class)->name('admin.member.detail');
     Route::get('/dashboard/groups', Groups::class)->name('admin.groups');
     Route::get('/dashboard/posts', Posts::class)->name('admin.posts');
     Route::get('/dashboard/comments', Comments::class)->name('admin.comments');
-    
+
     // Equipment management
     Route::get('/dashboard/rentals', Rentals::class)->name('admin.rentals');
     Route::get('/dashboard/returns', Returns::class)->name('admin.returns');
@@ -66,17 +66,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/equipment-sets', EquipmentSets::class)->name('admin.equipment-sets');
     Route::get('/dashboard/equipment-sets/{id}', EquipmentSetDetail::class)->name('admin.equipment-set.detail');
     Route::get('/dashboard/barcodes', QrCodes::class)->name('admin.qr-codes');
-    
+
     // Courses
     Route::get('/dashboard/courses', Courses::class)->name('admin.courses');
     Route::get('/dashboard/course-materials', CourseMaterials::class)->name('admin.course-materials');
     Route::get('/dashboard/awards', Awards::class)->name('admin.awards');
-    
+
     // Admin tools
     Route::get('/dashboard/roles', Roles::class)->name('admin.roles');
     Route::get('/dashboard/permissions', Permissions::class)->name('admin.permissions');
     Route::get('/dashboard/search', GlobalSearch::class)->name('admin.search');
-    
+
     // Settings
     Route::get('/settings', AllSettings::class)->name('settings.all');
     Route::get('/settings/profile', Profile::class)->name('profile.edit');
