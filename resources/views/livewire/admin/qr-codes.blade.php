@@ -114,7 +114,7 @@
         barcodes.forEach(el => {
             const code = el.dataset.barcode;
             if (!code) return;
-            
+
             // Skip if already rendered and hasn't changed
             if (el.dataset.rendered === code && el.dataset.renderedSize === String(size)) {
                 return;
@@ -149,7 +149,7 @@
         }
         renderBarcodes();
     };
-    
+
     setTimeout(initRender, 100);
 
     // Listen for Livewire updates - this runs on every component update
