@@ -41,7 +41,7 @@
                             <h3 class="text-sm font-semibold text-green-700 dark:text-green-400">Wychowawcy</h3>
                             <div class="mt-2 space-y-1">
                                 @foreach($supervisors as $supervisor)
-                                    <a href="{{ route('admin.instructor.detail', $supervisor['id']) }}" 
+                                    <a href="{{ route('admin.instructor.detail', $supervisor['id']) }}"
                                        class="block text-blue-600 dark:text-blue-400 hover:underline text-sm">
                                         {{ $supervisor['name'] }}
                                     </a>
@@ -56,7 +56,7 @@
                             <h3 class="text-sm font-semibold text-purple-700 dark:text-purple-400">Instruktorzy</h3>
                             <div class="mt-2 space-y-1">
                                 @foreach($instructors as $instructor)
-                                    <a href="{{ route('admin.instructor.detail', $instructor['id']) }}" 
+                                    <a href="{{ route('admin.instructor.detail', $instructor['id']) }}"
                                        class="block text-blue-600 dark:text-blue-400 hover:underline text-sm">
                                         {{ $instructor['name'] }}
                                     </a>
@@ -92,7 +92,7 @@
                     <h2 class="text-lg font-bold text-neutral-900 dark:text-white mb-4">Studenci w grupie ({{ count($students) }})</h2>
                     <div class="space-y-2">
                         @foreach($students as $student)
-                            <a href="{{ route('admin.member.detail', $student['id']) }}" 
+                            <a href="{{ route('admin.member.detail', $student['id']) }}"
                                class="block p-3 bg-neutral-50 dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-700 hover:border-blue-500 dark:hover:border-blue-400 transition">
                                 <p class="font-medium text-neutral-900 dark:text-white">{{ $student['name'] }}</p>
                                 <p class="text-sm text-neutral-600 dark:text-neutral-400">{{ $student['email'] }}</p>

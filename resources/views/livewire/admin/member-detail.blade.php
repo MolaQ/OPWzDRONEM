@@ -133,7 +133,7 @@
                                         <p class="text-xs font-semibold text-neutral-600 dark:text-neutral-400">Wychowawca</p>
                                         <div class="mt-1 space-y-1">
                                             @foreach($supervisors as $supervisor)
-                                                <a href="{{ route('admin.instructor.detail', $supervisor['id']) }}" 
+                                                <a href="{{ route('admin.instructor.detail', $supervisor['id']) }}"
                                                    class="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                                                     {{ $supervisor['name'] }}
                                                 </a>
@@ -147,7 +147,7 @@
                                         <p class="text-xs font-semibold text-neutral-600 dark:text-neutral-400">Instruktor</p>
                                         <div class="mt-1 space-y-1">
                                             @foreach($instructors as $instructor)
-                                                <a href="{{ route('admin.instructor.detail', $instructor['id']) }}" 
+                                                <a href="{{ route('admin.instructor.detail', $instructor['id']) }}"
                                                    class="block text-sm text-blue-600 dark:text-blue-400 hover:underline">
                                                     {{ $instructor['name'] }}
                                                 </a>
@@ -203,7 +203,7 @@
                 try {
                     // Wyczyść element przed renderowaniem
                     barcodeElement.innerHTML = '';
-                    
+
                     // Użyj elementu DOM zamiast selektora
                     JsBarcode(barcodeElement, '{{ $barcode }}', {
                         format: 'CODE128',
