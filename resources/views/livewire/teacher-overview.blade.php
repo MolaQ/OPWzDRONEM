@@ -48,7 +48,10 @@
                                 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white border-neutral-300 dark:border-neutral-600 hover:border-neutral-900 dark:hover:border-white
                             @endif
                             ">
-                            📊 Wyniki całej grupy
+                            <svg class="w-4 h-4 inline mr-1 text-neutral-700 dark:text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            Wyniki całej grupy
                         </button>
                         <button
                             wire:click="setViewMode('corrections')"
@@ -59,7 +62,10 @@
                                 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white border-neutral-300 dark:border-neutral-600 hover:border-neutral-900 dark:hover:border-white
                             @endif
                             ">
-                            🔧 Poprawki
+                            <svg class="w-4 h-4 inline mr-1 text-neutral-700 dark:text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                            </svg>
+                            Poprawki
                         </button>
                     </div>
                 </div>
@@ -233,7 +239,12 @@
                             @foreach($correctionsData as $blockData)
                                 <div class="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
                                     <div class="bg-red-50 dark:bg-red-900/20 px-4 py-3 border-b border-red-200 dark:border-red-800">
-                                        <h3 class="font-semibold text-neutral-900 dark:text-white">📚 {{ $blockData['block']->title }}</h3>
+                                        <div class="flex items-center gap-2">
+                                            <svg class="w-5 h-5 text-red-700 dark:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C6.228 6.228 2 10.228 2 15s4.228 8.772 10 8.772c5.772 0 10-3.772 10-8.772 0-4.772-4.228-8.747-10-8.747z" />
+                                            </svg>
+                                            <h3 class="font-semibold text-neutral-900 dark:text-white">{{ $blockData['block']->title }}</h3>
+                                        </div>
                                     </div>
                                     <div class="divide-y divide-neutral-200 dark:divide-neutral-700">
                                         @foreach($blockData['topics'] as $topicData)
@@ -250,9 +261,13 @@
                                                             </div>
                                                             <div class="flex-1 min-w-0">
                                                                 <p class="text-sm font-medium text-neutral-900 dark:text-white truncate">{{ $achievement->user->name }}</p>
-                                                                <p class="text-xs text-neutral-500 dark:text-neutral-400">
-                                                                    @if($achievement->star_type === 'failed') Szary ⭐
-                                                                    @else Brąz ⭐
+                                                                <p class="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
+                                                                    @if($achievement->star_type === 'failed') 
+                                                                        <span>Szary</span>
+                                                                        <svg class="w-3 h-3 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                                                    @else 
+                                                                        <span>Brąz</span>
+                                                                        <svg class="w-3 h-3 text-orange-600 dark:text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                                                                     @endif
                                                                 </p>
                                                             </div>
@@ -280,7 +295,12 @@
                 <!-- Filtry i wyszukiwanie -->
                 <div class="bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 space-y-4">
                     <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-neutral-900 dark:text-white">🔍 Wyszukaj ucznia</label>
+                        <label class="block text-sm font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+                            <svg class="w-4 h-4 text-neutral-700 dark:text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            Wyszukaj ucznia
+                        </label>
                         <div class="flex gap-2">
                             <input
                                 wire:model.live="searchStudent"
@@ -300,7 +320,12 @@
                     </div>
 
                     <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-neutral-900 dark:text-white">⭐ Filtruj po gwiazdach</label>
+                        <label class="block text-sm font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+                            <svg class="w-4 h-4 text-neutral-700 dark:text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            Filtruj po gwiazdach
+                        </label>
                         <div class="flex flex-wrap gap-2">
                             <button
                                 wire:click="setFilterStar('gold')"

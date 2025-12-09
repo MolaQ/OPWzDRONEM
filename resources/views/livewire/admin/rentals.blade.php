@@ -7,9 +7,20 @@
                     <h1 class="text-3xl font-bold text-neutral-900 dark:text-white">Wypożyczenia</h1>
                     <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Zarządzaj aktywnymi i historycznymi wypożyczeniami</p>
                 </div>
-                <div class="text-sm text-neutral-600 dark:text-neutral-400 flex gap-4">
-                    <span>Grupy: <strong class="text-neutral-900 dark:text-white">{{ $totalGroups }}</strong></span>
-                    <span>Przedmioty: <strong class="text-neutral-900 dark:text-white">{{ $totalItems }}</strong></span>
+                <div class="flex items-center gap-4">
+                    <button
+                        wire:click="openNewRentalModal"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-[#880000] text-white rounded-lg font-medium transition hover:bg-[#660000]"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Nowe wypożyczenie
+                    </button>
+                    <div class="text-sm text-neutral-600 dark:text-neutral-400 flex gap-4">
+                        <span>Grupy: <strong class="text-neutral-900 dark:text-white">{{ $totalGroups }}</strong></span>
+                        <span>Przedmioty: <strong class="text-neutral-900 dark:text-white">{{ $totalItems }}</strong></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -166,4 +177,197 @@
             </div>
         @endif
     </div>
+
+    <!-- New Rental Modal -->
+    @if($showNewRentalModal)
+        <div class="fixed inset-0 z-50 overflow-y-auto bg-black/50 py-6" wire:click="closeNewRentalModal">
+            <div class="flex items-start justify-center min-h-full px-4">
+                <div class="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all my-8" wire:click.stop>
+                    <!-- Header -->
+                    <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-700 flex items-center justify-between rounded-t-2xl">
+                        <h3 class="text-xl font-bold text-neutral-900 dark:text-white">
+                            Nowe wypożyczenie
+                        </h3>
+                        <button wire:click="closeNewRentalModal" type="button" class="text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 rounded-lg p-2 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="px-6 py-5 space-y-5">
+                        <!-- Barcode Scanner Input -->
+                        <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-4">
+                            <label class="block text-sm font-semibold text-amber-900 dark:text-amber-200 mb-2">
+                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Skanuj kody kreskowe
+                            </label>
+                            <input
+                                type="text"
+                                wire:model="barcodeInput"
+                                wire:keydown.enter="handleBarcode"
+                                placeholder="Skanuj kod ucznia, sprzętu lub zestawu..."
+                                autocomplete="off"
+                                class="w-full px-4 py-2 rounded-lg border border-amber-300 dark:border-amber-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                autofocus
+                            >
+                            <p class="text-xs text-amber-700 dark:text-amber-300 mt-2">
+                                Wpisz kod i naciśnij Enter, lub wyszukaj ręcznie poniżej
+                            </p>
+                        </div>
+
+                        <!-- Student Search -->
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                                Wyszukaj ucznia
+                            </label>
+                            <input
+                                type="text"
+                                wire:model.live.debounce.300ms="studentSearch"
+                                placeholder="Imię, email lub kod kreskowy..."
+                                class="w-full px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-[#880000] focus:border-transparent"
+                            >
+
+                            @if(!empty($searchResults))
+                                <div class="mt-2 bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 max-h-48 overflow-y-auto">
+                                    @foreach($searchResults as $student)
+                                        <button
+                                            type="button"
+                                            wire:click="addStudent({{ $student['id'] }})"
+                                            class="w-full px-4 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-700 border-b border-neutral-200 dark:border-neutral-700 last:border-0 transition"
+                                        >
+                                            <div class="font-medium text-neutral-900 dark:text-white">{{ $student['name'] }}</div>
+                                            <div class="text-xs text-neutral-500">{{ $student['email'] }}</div>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Selected Students -->
+                        @if(!empty($selectedStudents))
+                            <div>
+                                <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                                    Wybrani uczniowie
+                                </label>
+                                <div class="space-y-1">
+                                    @foreach($selectedStudents as $studentId)
+                                        @php
+                                            $student = \App\Models\User::find($studentId);
+                                        @endphp
+                                        @if($student)
+                                            <div class="flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 px-3 py-2 rounded-lg">
+                                                <span class="text-sm text-neutral-900 dark:text-white">{{ $student->name }}</span>
+                                                <button
+                                                    type="button"
+                                                    wire:click="removeStudent({{ $studentId }})"
+                                                    class="text-red-600 hover:text-red-700"
+                                                >
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Equipment Search -->
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                                Wyszukaj sprzęt
+                            </label>
+                            <input
+                                type="text"
+                                wire:model.live.debounce.300ms="equipmentSearch"
+                                placeholder="Nazwa lub kod kreskowy..."
+                                class="w-full px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-[#880000] focus:border-transparent"
+                            >
+
+                            @if(!empty($availableEquipment))
+                                <div class="mt-2 bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 max-h-48 overflow-y-auto">
+                                    @foreach($availableEquipment as $equip)
+                                        <button
+                                            type="button"
+                                            wire:click="addEquipment({{ $equip['id'] }})"
+                                            class="w-full px-4 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-700 border-b border-neutral-200 dark:border-neutral-700 last:border-0 transition"
+                                        >
+                                            <div class="font-medium text-neutral-900 dark:text-white">{{ $equip['name'] }}</div>
+                                            <div class="text-xs text-neutral-500">{{ $equip['barcode'] }} - {{ $equip['model'] }}</div>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Selected Equipment -->
+                        @if(!empty($selectedEquipment))
+                            <div>
+                                <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                                    Wybrany sprzęt
+                                </label>
+                                <div class="space-y-1">
+                                    @foreach($selectedEquipment as $equipmentId)
+                                        @php
+                                            $equip = \App\Models\Equipment::find($equipmentId);
+                                        @endphp
+                                        @if($equip)
+                                            <div class="flex items-center justify-between bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded-lg">
+                                                <span class="text-sm text-neutral-900 dark:text-white">{{ $equip->name }} ({{ $equip->barcode }})</span>
+                                                <button
+                                                    type="button"
+                                                    wire:click="removeEquipment({{ $equipmentId }})"
+                                                    class="text-red-600 hover:text-red-700"
+                                                >
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Notes -->
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                                Uwagi (opcjonalne)
+                            </label>
+                            <textarea
+                                wire:model="rentalNotes"
+                                placeholder="Dodaj notatki dotyczące tego wypożyczenia..."
+                                class="w-full px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-[#880000] focus:border-transparent"
+                                rows="3"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="px-6 py-4 border-t border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 rounded-b-2xl flex items-center justify-end gap-2">
+                        <button
+                            type="button"
+                            wire:click="closeNewRentalModal"
+                            class="px-4 py-2 rounded-lg text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700 transition"
+                        >
+                            Anuluj
+                        </button>
+                        <button
+                            type="button"
+                            wire:click="createRental"
+                            class="px-4 py-2 rounded-lg bg-[#880000] text-white hover:bg-[#660000] transition font-medium"
+                        >
+                            Wypożycz
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </flux:main>

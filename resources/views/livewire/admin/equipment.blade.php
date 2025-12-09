@@ -150,6 +150,16 @@
                                             $isRented = $equipment->rentals()->whereNull('returned_at')->exists();
                                         @endphp
 
+                                        <a
+                                            href="{{ route('admin.equipment.detail', $equipment->id) }}"
+                                            class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded transition-colors"
+                                            title="Szczegóły"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.658 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                            </svg>
+                                        </a>
+
                                         <button
                                             type="button"
                                             wire:click="edit({{ $equipment->id }})"

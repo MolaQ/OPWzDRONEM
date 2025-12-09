@@ -19,6 +19,9 @@ use App\Livewire\Admin\Rentals;
 use App\Livewire\Admin\Returns;
 use App\Livewire\Admin\Equipment;
 use App\Livewire\Admin\EquipmentSets;
+use App\Livewire\Admin\EquipmentDetail;
+use App\Livewire\Admin\EquipmentSetDetail;
+use App\Livewire\Admin\MemberDetail;
 use App\Livewire\Admin\Courses;
 use App\Livewire\Admin\CourseMaterials;
 use App\Livewire\Admin\Awards;
@@ -46,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', Dashboard::class)->name('admin.dashboard');
     Route::get('/admin/members', Members::class)->name('admin.members');
+    Route::get('/admin/members/{id}', MemberDetail::class)->name('admin.member.detail');
     Route::get('/admin/groups', Groups::class)->name('admin.groups');
     Route::get('/admin/posts', Posts::class)->name('admin.posts');
     Route::get('/admin/comments', Comments::class)->name('admin.comments');
@@ -53,7 +57,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/rentals', Rentals::class)->name('admin.rentals');
     Route::get('/admin/returns', Returns::class)->name('admin.returns');
     Route::get('/admin/equipment', Equipment::class)->name('admin.equipment');
+    Route::get('/admin/equipment/{id}', EquipmentDetail::class)->name('admin.equipment.detail');
     Route::get('/admin/equipment-sets', EquipmentSets::class)->name('admin.equipment-sets');
+    Route::get('/admin/equipment-sets/{id}', EquipmentSetDetail::class)->name('admin.equipment-set.detail');
     Route::get('/admin/courses', Courses::class)->name('admin.courses');
     Route::get('/admin/course-materials', CourseMaterials::class)->name('admin.course-materials');
     Route::get('/admin/awards', Awards::class)->name('admin.awards');
