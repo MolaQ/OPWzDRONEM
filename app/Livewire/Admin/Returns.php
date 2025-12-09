@@ -4,14 +4,19 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\WithPagination;
 use App\Services\BarcodeResolver;
-use App\Services\RentalService;
 use App\Models\Rental;
+use App\Models\RentalGroup;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 #[Layout('components.layouts.app.sidebar')]
 class Returns extends Component
 {
+    use WithPagination;
+
+    public string $search = '';
     public string $barcode = '';
     public ?array $result = null;
     public ?string $error = null;
@@ -20,17 +25,24 @@ class Returns extends Component
 
     // Return details
     public ?array $activeRental = null;
-    public array $studentRentals = []; // List of student's active rentals
+    public array $studentRentals = [];
     public string $returnNotes = '';
-    public string $noteType = 'info'; // info, warning, damage, maintenance
+    public string $noteType = 'info';
+
+    // Modal states
+    public bool $showReturnModal = false;
+    public ?int $selectedRentalId = null;
 
     protected BarcodeResolver $resolver;
-    protected RentalService $rentalService;
 
-    public function boot(BarcodeResolver $resolver, RentalService $rentalService)
+    public function boot(BarcodeResolver $resolver)
     {
         $this->resolver = $resolver;
-        $this->rentalService = $rentalService;
+    }
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
     }
 
     public function updatedBarcode()
@@ -71,7 +83,7 @@ class Returns extends Component
         try {
             $result = $this->resolver->resolve($this->barcode);
 
-            if (!$result) {
+            if (!$result['found']) {
                 $this->error = 'Nie rozpoznano kodu kreskowego';
                 return;
             }
@@ -161,28 +173,71 @@ class Returns extends Component
         $this->scanForReturn();
     }
 
+    public function openReturnModal(int $rentalId)
+    {
+        $this->selectedRentalId = $rentalId;
+        $this->showReturnModal = true;
+        $this->returnNotes = '';
+        $this->noteType = 'info';
+    }
+
+    public function closeReturnModal()
+    {
+        $this->showReturnModal = false;
+        $this->selectedRentalId = null;
+    }
+
     public function processReturn()
     {
-        if (!$this->activeRental) {
+        if (!$this->selectedRentalId) {
             $this->error = 'Nie wybrano wypożyczenia do zwrotu';
             return;
         }
 
         try {
-            $this->rentalService->returnItem(
-                $this->activeRental['barcode'],
-                Auth::id(),
-                $this->returnNotes,
-                $this->noteType
-            );
+            $rental = Rental::findOrFail($this->selectedRentalId);
 
-            session()->flash('success', 'Zwrot został zarejestrowany pomyślnie');
+            if ($rental->returned_at) {
+                session()->flash('error', 'To wypożyczenie zostało już zwrócone');
+                $this->closeReturnModal();
+                return;
+            }
 
-            // Reset form
-            $this->reset(['barcode', 'activeRental', 'studentRentals', 'returnNotes', 'noteType', 'result', 'error']);
+            DB::beginTransaction();
+
+            /** @var \App\Models\User|null $user */
+            $user = auth()->guard('web')->user();
+            $rental->update([
+                'returned_at' => now(),
+                'returned_by_user_id' => $user?->id,
+                'return_notes' => $this->returnNotes,
+            ]);
+
+            // If this was the last active rental, mark equipment as available
+            if ($rental->equipment_id) {
+                $otherRentals = Rental::where('equipment_id', $rental->equipment_id)
+                    ->whereNull('returned_at')
+                    ->exists();
+
+                if (!$otherRentals) {
+                    $rental->equipment->update(['status' => 'available']);
+                }
+            }
+
+            // Check if entire group was returned
+            $activeRentals = $rental->rentalGroup->rentals()->whereNull('returned_at')->exists();
+            if (!$activeRentals) {
+                $rental->rentalGroup->update(['returned_at' => now()]);
+            }
+
+            DB::commit();
+            session()->flash('success', 'Sprzęt został zwrócony');
+            $this->closeReturnModal();
+            $this->resetForm();
 
         } catch (\Exception $e) {
-            $this->error = 'Błąd podczas zwrotu: ' . $e->getMessage();
+            DB::rollBack();
+            session()->flash('error', 'Błąd podczas zwrotu: ' . $e->getMessage());
         }
     }
 
@@ -193,6 +248,35 @@ class Returns extends Component
 
     public function render()
     {
-        return view('livewire.admin.returns');
+        $query = RentalGroup::with(['rentals.equipment', 'rentals.equipmentSet', 'rentedByUser', 'users'])
+            ->whereHas('rentals', function ($q) {
+                $q->whereNull('returned_at');
+            })
+            ->orderBy('created_at', 'desc');
+
+        // Apply search
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->whereHas('users', function ($userQuery) {
+                    $userQuery->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%')
+                        ->orWhere('barcode', 'like', '%' . $this->search . '%');
+                })
+                ->orWhereHas('rentals.equipment', function ($equipQuery) {
+                    $equipQuery->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('barcode', 'like', '%' . $this->search . '%');
+                })
+                ->orWhereHas('rentals.equipmentSet', function ($setQuery) {
+                    $setQuery->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('barcode', 'like', '%' . $this->search . '%');
+                });
+            });
+        }
+
+        $rentalGroups = $query->paginate(20);
+
+        return view('livewire.admin.returns', [
+            'rentalGroups' => $rentalGroups,
+        ]);
     }
 }
