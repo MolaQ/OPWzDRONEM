@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Auth;
 class EquipmentDetail extends Component
 {
     public Equipment $equipment;
+    public $maintenanceLogs = [];
+    public $reservations = [];
+    public $showReservationModal = false;
+    public $showMaintenanceModal = false;
 
     public function mount($id)
     {
@@ -21,12 +25,63 @@ class EquipmentDetail extends Component
         }
 
         $this->equipment = Equipment::findOrFail($id);
+        $this->loadMaintenanceLogs();
+        $this->loadReservations();
+    }
+
+    public function loadMaintenanceLogs()
+    {
+        $this->maintenanceLogs = $this->equipment
+            ->maintenanceLogs()
+            ->with('performedBy')
+            ->orderByDesc('performed_at')
+            ->get()
+            ->toArray();
+    }
+
+    public function loadReservations()
+    {
+        $this->reservations = $this->equipment
+            ->reservations()
+            ->with(['user', 'group', 'confirmedBy'])
+            ->orderByDesc('reserved_from')
+            ->get()
+            ->toArray();
+    }
+
+    public function openReservationModal()
+    {
+        $this->showReservationModal = true;
+    }
+
+    public function closeReservationModal()
+    {
+        $this->showReservationModal = false;
+    }
+
+    public function openMaintenanceModal()
+    {
+        $this->showMaintenanceModal = true;
+    }
+
+    public function closeMaintenanceModal()
+    {
+        $this->showMaintenanceModal = false;
+    }
+
+    public function refreshData()
+    {
+        $this->equipment = $this->equipment->fresh();
+        $this->loadMaintenanceLogs();
+        $this->loadReservations();
     }
 
     public function render()
     {
         return view('livewire.admin.equipment-detail', [
             'equipment' => $this->equipment,
+            'maintenanceLogs' => $this->maintenanceLogs,
+            'reservations' => $this->reservations,
         ]);
     }
 }

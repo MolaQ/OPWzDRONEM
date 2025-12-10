@@ -18,7 +18,6 @@ class Equipment extends Component
     public $name = '';
     public $model = '';
     public $category = '';
-    public $status = 'available';
     public $description = '';
     public $search = '';
     public $statusFilter = '';
@@ -29,7 +28,6 @@ class Equipment extends Component
             'name' => 'required|string|max:255',
             'model' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:255',
-            'status' => 'required|string|in:available,rented,maintenance,under_service,damaged,retired',
             'description' => 'nullable|string|max:1000',
         ];
     }
@@ -46,8 +44,7 @@ class Equipment extends Component
 
     public function create()
     {
-        $this->reset(['editingEquipmentId', 'name', 'model', 'category', 'status', 'description']);
-        $this->status = 'available';
+        $this->reset(['editingEquipmentId', 'name', 'model', 'category', 'description']);
         $this->showModal = true;
     }
 
@@ -65,7 +62,6 @@ class Equipment extends Component
         $this->name = $equipment->name;
         $this->model = $equipment->model;
         $this->category = $equipment->category;
-        $this->status = $equipment->status;
         $this->description = $equipment->description;
         $this->showModal = true;
     }
@@ -85,7 +81,7 @@ class Equipment extends Component
                 'name' => $validated['name'],
                 'model' => $validated['model'],
                 'category' => $validated['category'],
-                'status' => $validated['status'],
+                'status' => 'available',
                 'description' => $validated['description'],
             ]);
 
@@ -98,7 +94,7 @@ class Equipment extends Component
         }
 
         $this->showModal = false;
-        $this->reset(['editingEquipmentId', 'name', 'model', 'category', 'status', 'description']);
+        $this->reset(['editingEquipmentId', 'name', 'model', 'category', 'description']);
 
         $this->dispatch('notify', type: 'success', message: $message);
     }
@@ -137,7 +133,7 @@ class Equipment extends Component
     public function closeModal()
     {
         $this->showModal = false;
-        $this->reset(['editingEquipmentId', 'name', 'model', 'category', 'status', 'description']);
+        $this->reset(['editingEquipmentId', 'name', 'model', 'category', 'description']);
         $this->resetValidation();
     }
 

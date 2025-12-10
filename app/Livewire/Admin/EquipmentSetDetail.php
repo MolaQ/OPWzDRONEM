@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Auth;
 class EquipmentSetDetail extends Component
 {
     public EquipmentSet $equipmentSet;
+    public bool $showReservationModal = false;
+
+    protected $listeners = ['close-modal' => 'closeReservationModal', 'refresh-data' => 'refreshData'];
 
     public function mount($id)
     {
@@ -21,6 +24,21 @@ class EquipmentSetDetail extends Component
         }
 
         $this->equipmentSet = EquipmentSet::findOrFail($id);
+    }
+
+    public function openReservationModal()
+    {
+        $this->showReservationModal = true;
+    }
+
+    public function closeReservationModal()
+    {
+        $this->showReservationModal = false;
+    }
+
+    public function refreshData()
+    {
+        $this->equipmentSet = $this->equipmentSet->fresh(['equipments']);
     }
 
     public function render()
