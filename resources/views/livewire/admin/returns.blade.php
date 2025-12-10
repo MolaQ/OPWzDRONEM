@@ -252,6 +252,50 @@
 
                         <!-- Content -->
                         <div class="px-6 py-5 space-y-5">
+                            @if(count($returnItems) > 0)
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="text-sm font-semibold text-neutral-700 dark:text-neutral-200">Wyposażenie w zwracanym wypożyczeniu</h4>
+                                        <span class="text-xs text-neutral-500">Zaznacz przyjęte elementy i ustaw status</span>
+                                    </div>
+
+                                    <div class="space-y-3">
+                                        @foreach($returnItems as $item)
+                                            <div class="p-3 border border-neutral-200 dark:border-neutral-700 rounded-lg bg-neutral-50 dark:bg-neutral-900" wire:key="return-item-{{ $item['id'] }}">
+                                                <div class="flex flex-wrap items-center gap-3">
+                                                    <label class="inline-flex items-center gap-2 text-sm font-medium text-neutral-800 dark:text-neutral-100">
+                                                        <input type="checkbox" class="rounded text-orange-600 focus:ring-orange-500" wire:model="itemSelected.{{ $item['id'] }}">
+                                                        {{ $item['name'] }}
+                                                    </label>
+                                                    <span class="text-xs text-neutral-500">{{ $item['barcode'] }}</span>
+                                                    @if(!empty($item['category']))
+                                                        <span class="text-xs px-2 py-1 rounded bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">{{ $item['category'] }}</span>
+                                                    @endif
+                                                </div>
+
+                                                <div class="mt-3 flex flex-wrap items-center gap-3">
+                                                    <div class="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+                                                        <span>Ustaw status:</span>
+                                                        <select
+                                                            wire:model="itemStatuses.{{ $item['id'] }}"
+                                                            class="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                                        >
+                                                            @foreach($statusOptions as $value => $label)
+                                                                <option value="{{ $value }}">{{ $label }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    @php
+                                                        $defaultStatus = $itemStatuses[$item['id']] ?? 'available';
+                                                    @endphp
+                                                    <span class="text-xs text-neutral-500">Domyślnie: {{ $statusOptions[$defaultStatus] ?? 'Dostępny' }}</span>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
                             <!-- Return Notes -->
                             <div>
                                 <label class="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">

@@ -30,4 +30,12 @@ class Group extends Model
         return $this->belongsToMany(User::class, 'group_instructors')
             ->withTimestamps();
     }
+
+    /**
+     * Rezerwacje sprzętu dla tej grupy
+     */
+    public function equipmentReservations()
+    {
+        return $this->hasMany(EquipmentReservation::class);
+    }
 }

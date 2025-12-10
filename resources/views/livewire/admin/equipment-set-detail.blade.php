@@ -15,6 +15,14 @@
                     <h1 class="text-3xl font-bold text-neutral-900 dark:text-white">{{ $equipmentSet->name }}</h1>
                     <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Szczegóły zestawu wyposażenia</p>
                 </div>
+                <div class="flex gap-2">
+                    <button
+                        wire:click="openReservationModal"
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition"
+                    >
+                        Zarezerwuj zestaw
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -62,4 +70,26 @@
             </div>
         </div>
     </div>
+
+    <!-- Reservation Modal -->
+    @if($showReservationModal)
+        <div class="fixed inset-0 z-50 overflow-y-auto bg-black/50 py-6" wire:click="closeReservationModal">
+            <div class="flex items-start justify-center min-h-full px-4">
+                <div class="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-2xl w-full max-w-2xl shadow-2xl transform transition-all my-8" wire:click.stop>
+                    <div class="px-6 py-4 border-b border-neutral-200 dark:border-neutral-700 flex items-center justify-between rounded-t-2xl">
+                        <h3 class="text-xl font-bold text-neutral-900 dark:text-white">Rezerwacja zestawu</h3>
+                        <button wire:click="closeReservationModal" type="button" class="text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 rounded-lg p-2 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="px-6 py-5">
+                        <livewire:admin.equipment-set-reservation-form :equipmentSet="$equipmentSet" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </flux:main>

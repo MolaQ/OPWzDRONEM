@@ -21,6 +21,9 @@ use App\Livewire\Admin\Equipment;
 use App\Livewire\Admin\EquipmentSets;
 use App\Livewire\Admin\EquipmentDetail;
 use App\Livewire\Admin\EquipmentSetDetail;
+use App\Livewire\Admin\EquipmentReservationForm;
+use App\Livewire\Admin\EquipmentMaintenanceLogForm;
+use App\Livewire\Admin\MyReservations;
 use App\Livewire\Admin\MemberDetail;
 use App\Livewire\Admin\GroupDetail;
 use App\Livewire\Admin\QrCodes;
@@ -65,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/rentals', Rentals::class)->name('admin.rentals');
     Route::get('/dashboard/returns', Returns::class)->name('admin.returns');
     Route::get('/dashboard/equipment', Equipment::class)->name('admin.equipment');
+    Route::get('/dashboard/equipment/reservations/my', MyReservations::class)->name('admin.equipment.my-reservations');
     Route::get('/dashboard/equipment/{id}', EquipmentDetail::class)->name('admin.equipment.detail');
     Route::get('/dashboard/equipment-sets', EquipmentSets::class)->name('admin.equipment-sets');
     Route::get('/dashboard/equipment-sets/{id}', EquipmentSetDetail::class)->name('admin.equipment-set.detail');

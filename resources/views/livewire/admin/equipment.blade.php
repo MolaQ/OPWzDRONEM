@@ -36,6 +36,7 @@
                 <select wire:model.live="statusFilter" class="rounded-lg border border-neutral-200 dark:border-neutral-700 px-4 py-2 focus:ring-2 focus:ring-[#880000] dark:bg-neutral-800 dark:text-neutral-100 text-sm">
                     <option value="">— Wszystkie statusy —</option>
                     <option value="available">✓ Dostępny</option>
+                    <option value="reserved">🔒 Zarezerwowany</option>
                     <option value="rented">✗ Wypożyczony</option>
                     <option value="maintenance">🔧 W naprawie</option>
                     <option value="under_service">🛠️ Konserwacja</option>
@@ -62,6 +63,12 @@
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                                 Status
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
+                                Koszt
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
+                                Następny serwis
                             </th>
                             <th class="px-6 py-3 text-right text-xs font-medium text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                                 Akcje
@@ -123,6 +130,7 @@
                                         ];
                                         $statusColors = [
                                             'available' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+                                            'reserved' => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200',
                                             'rented' => 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
                                             'maintenance' => 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
                                             'under_service' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
@@ -131,6 +139,7 @@
                                         ];
                                         $statusLabels = [
                                             'available' => 'Dostępny',
+                                            'reserved' => 'Zarezerwowany',
                                             'rented' => 'Wypożyczony',
                                             'maintenance' => 'W naprawie',
                                             'under_service' => 'Konserwacja',
@@ -144,6 +153,31 @@
                                         </span>
                                     </div>
                                 </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-neutral-900 dark:text-neutral-100">
+                                        @if($equipment->cost)
+                                            <div class="font-medium">{{ number_format($equipment->cost, 2, '.', ' ') }} zł</div>
+                                        @else
+                                            <span class="text-neutral-400">—</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm">
+                                        @if($equipment->next_maintenance_due)
+                                            <span @class([
+                                                'font-semibold',
+                                                'text-red-600 dark:text-red-400' => now()->isAfter($equipment->next_maintenance_due),
+                                                'text-amber-600 dark:text-amber-400' => now()->diffInDays($equipment->next_maintenance_due) <= 7 && now()->isBefore($equipment->next_maintenance_due),
+                                                'text-green-600 dark:text-green-400' => now()->diffInDays($equipment->next_maintenance_due) > 7,
+                                            ])>
+                                                {{ $equipment->next_maintenance_due->format('d.m.Y') }}
+                                            </span>
+                                        @else
+                                            <span class="text-neutral-400">—</span>
+                                        @endif
+                                    </div>
+                                </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
                                         @php
@@ -152,18 +186,23 @@
 
                                         <a
                                             href="{{ route('admin.equipment.detail', $equipment->id) }}"
-                                            class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded transition-colors"
+                                            class="inline-flex items-center justify-center w-8 h-8 text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20 border border-blue-300 dark:border-blue-700 rounded-lg transition-all shadow-sm hover:shadow"
                                             title="Szczegóły"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.658 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                             </svg>
                                         </a>
 
                                         <button
                                             type="button"
                                             wire:click="edit({{ $equipment->id }})"
-                                            class="inline-flex items-center justify-center w-7 h-7 {{ $isRented ? 'text-neutral-400 dark:text-neutral-600 cursor-not-allowed' : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 border border-neutral-300 dark:border-neutral-600' }} rounded transition-colors"
+                                            @class([
+                                                'inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all shadow-sm hover:shadow border',
+                                                'text-neutral-400 dark:text-neutral-600 cursor-not-allowed border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800' => $isRented,
+                                                'text-amber-600 hover:text-amber-800 hover:bg-amber-50 dark:text-amber-400 dark:hover:text-amber-300 dark:hover:bg-amber-900/20 border-amber-300 dark:border-amber-700' => !$isRented,
+                                            ])
                                             title="{{ $isRented ? 'Nie można edytować wypożyczonego wyposażenia' : 'Edytuj' }}"
                                             @if($isRented) disabled @endif
                                         >
@@ -171,11 +210,12 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                             </svg>
                                         </button>
+
                                         <button
                                             type="button"
                                             wire:click="delete({{ $equipment->id }})"
                                             wire:confirm="Czy na pewno chcesz usunąć to wyposażenie?"
-                                            class="inline-flex items-center justify-center w-7 h-7 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:text-white dark:hover:bg-neutral-700 rounded transition-colors border border-neutral-300 dark:border-neutral-600"
+                                            class="inline-flex items-center justify-center w-8 h-8 text-red-600 hover:text-red-800 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20 rounded-lg transition-all shadow-sm hover:shadow border border-red-300 dark:border-red-700"
                                             title="Usuń"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -187,7 +227,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
+                                <td colspan="7" class="px-6 py-12 text-center text-neutral-500 dark:text-neutral-400">
                                     <svg class="w-12 h-12 mx-auto mb-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                     </svg>
@@ -278,42 +318,6 @@
                             >
                             @error('category')
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Status -->
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3">
-                                Status <span class="text-red-600 dark:text-red-400">*</span>
-                            </label>
-                            <div class="grid grid-cols-2 gap-3">
-                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-green-500 transition has-[:checked]:border-green-500 has-[:checked]:bg-green-50 dark:has-[:checked]:bg-green-950/20">
-                                    <input type="radio" wire:model="status" value="available" class="w-4 h-4">
-                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-green-400 bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-200 dark:border-green-600">Dostępny</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-cyan-500 transition has-[:checked]:border-cyan-500 has-[:checked]:bg-cyan-50 dark:has-[:checked]:bg-cyan-950/20">
-                                    <input type="radio" wire:model="status" value="rented" class="w-4 h-4">
-                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-cyan-400 bg-cyan-50 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-200 dark:border-cyan-600">Wypożyczony</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-orange-500 transition has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50 dark:has-[:checked]:bg-orange-950/20">
-                                    <input type="radio" wire:model="status" value="maintenance" class="w-4 h-4">
-                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-orange-400 bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-200 dark:border-orange-600">W naprawie</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-yellow-500 transition has-[:checked]:border-yellow-500 has-[:checked]:bg-yellow-50 dark:has-[:checked]:bg-yellow-950/20">
-                                    <input type="radio" wire:model="status" value="under_service" class="w-4 h-4">
-                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-yellow-400 bg-yellow-50 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-200 dark:border-yellow-600">Konserwacja</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-red-500 transition has-[:checked]:border-red-500 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-950/20">
-                                    <input type="radio" wire:model="status" value="damaged" class="w-4 h-4">
-                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-red-400 bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-200 dark:border-red-600">Uszkodzony</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-neutral-500 transition has-[:checked]:border-neutral-500 has-[:checked]:bg-neutral-50 dark:has-[:checked]:bg-neutral-700/20">
-                                    <input type="radio" wire:model="status" value="retired" class="w-4 h-4">
-                                    <span class="px-2.5 py-1 text-xs font-semibold rounded-full border border-neutral-400 bg-neutral-100 text-neutral-700 dark:bg-neutral-700/40 dark:text-neutral-200 dark:border-neutral-600">Wycofany</span>
-                                </label>
-                            </div>
-                            @error('status')
-                                <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
 

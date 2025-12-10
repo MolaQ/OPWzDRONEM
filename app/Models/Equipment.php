@@ -15,16 +15,28 @@ class Equipment extends Model
 
     protected $fillable = [
         'barcode',
+        'serial_number',
         'name',
         'model',
         'category',
         'status',
         'description',
+        'purchase_date',
+        'warranty_expiry_date',
+        'cost',
+        'location',
+        'condition_status',
+        'last_maintenance_date',
+        'next_maintenance_due',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'purchase_date' => 'date',
+        'warranty_expiry_date' => 'date',
+        'last_maintenance_date' => 'datetime',
+        'next_maintenance_due' => 'datetime',
     ];
 
     /**
@@ -50,6 +62,22 @@ class Equipment extends Model
     public function notes(): HasMany
     {
         return $this->hasMany(EquipmentNote::class)->latest();
+    }
+
+    /**
+     * Maintenance logs for this equipment
+     */
+    public function maintenanceLogs(): HasMany
+    {
+        return $this->hasMany(EquipmentMaintenanceLog::class)->latest();
+    }
+
+    /**
+     * Reservations for this equipment
+     */
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(EquipmentReservation::class);
     }
 
     /**

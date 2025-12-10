@@ -45,6 +45,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'equipment.assign-to-set',
             'equipment.import',
             'equipment.export',
+            'equipment.maintenance',
+            'equipment.confirm-reservation',
+            'equipment.cancel-any-reservation',
+            'equipment.view-all-reservations',
 
             // Equipment sets
             'equipment-sets.view',
@@ -129,7 +133,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'admin.panel.access', 'dashboard.view',
                 'users.view',
                 'groups.view',
-                'equipment.view', 'equipment.create', 'equipment.update', 'equipment.change-status', 'equipment.assign-to-set',
+                'equipment.view', 'equipment.create', 'equipment.update', 'equipment.change-status', 'equipment.assign-to-set', 'equipment.maintenance', 'equipment.confirm-reservation', 'equipment.view-all-reservations',
                 'equipment-sets.view', 'equipment-sets.create', 'equipment-sets.update', 'equipment-sets.manage-items', 'equipment-sets.change-status', 'equipment-sets.rent-out', 'equipment-sets.close-rental',
                 'rentals.view', 'rentals.create', 'rentals.extend', 'rentals.close', 'rentals.mark-damage', 'rentals.manage-groups',
                 'posts.view', 'posts.create', 'posts.update', 'posts.delete', 'posts.publish',

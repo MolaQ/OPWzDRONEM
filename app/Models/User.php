@@ -92,6 +92,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Rezerwacje sprzętu dokonane przez użytkownika
+     */
+    public function equipmentReservations()
+    {
+        return $this->hasMany(EquipmentReservation::class);
+    }
+
+    /**
+     * Konserwacje sprzętu wykonane przez użytkownika
+     */
+    public function maintenanceLogsPerformed()
+    {
+        return $this->hasMany(EquipmentMaintenanceLog::class, 'performed_by_user_id');
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>

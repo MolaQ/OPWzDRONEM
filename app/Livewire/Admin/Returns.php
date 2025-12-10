@@ -10,6 +10,7 @@ use App\Models\Rental;
 use App\Models\RentalGroup;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\EquipmentNote;
 
 #[Layout('components.layouts.app.sidebar')]
 class Returns extends Component
@@ -28,6 +29,19 @@ class Returns extends Component
     public array $studentRentals = [];
     public string $returnNotes = '';
     public string $noteType = 'info';
+
+    // Return items and statuses
+    public array $returnItems = [];
+    public array $itemStatuses = [];
+    public array $itemSelected = [];
+
+    public array $statusOptions = [
+        'available' => 'Dostępny',
+        'maintenance' => 'Konserwacja (ładowanie)',
+        'damaged' => 'Uszkodzony',
+        'in_repair' => 'W naprawie',
+        'retired' => 'Wycofany',
+    ];
 
     // Modal states
     public bool $showReturnModal = false;
@@ -179,6 +193,8 @@ class Returns extends Component
         $this->showReturnModal = true;
         $this->returnNotes = '';
         $this->noteType = 'info';
+
+        $this->loadReturnItems($rentalId);
     }
 
     public function closeReturnModal()
@@ -191,6 +207,12 @@ class Returns extends Component
     {
         if (!$this->selectedRentalId) {
             $this->error = 'Nie wybrano wypożyczenia do zwrotu';
+            return;
+        }
+
+        $selectedCount = collect($this->itemSelected)->filter(fn($v) => (bool)$v)->count();
+        if ($selectedCount === 0) {
+            $this->error = 'Zaznacz przynajmniej jeden element do zwrotu';
             return;
         }
 
@@ -213,14 +235,22 @@ class Returns extends Component
                 'return_notes' => $this->returnNotes,
             ]);
 
-            // If this was the last active rental, mark equipment as available
+            // Apply status updates for equipment or entire set
             if ($rental->equipment_id) {
-                $otherRentals = Rental::where('equipment_id', $rental->equipment_id)
-                    ->whereNull('returned_at')
-                    ->exists();
+                $status = $this->itemStatuses[$rental->equipment_id] ?? 'available';
+                $this->updateEquipmentStatus($rental->equipment, $status, $rental);
+            }
 
-                if (!$otherRentals) {
-                    $rental->equipment->update(['status' => 'available']);
+            if ($rental->equipment_set_id) {
+                $equipments = $rental->equipmentSet->equipments;
+                foreach ($equipments as $equipment) {
+                    // Skip unchecked items if user deselected
+                    if (isset($this->itemSelected[$equipment->id]) && !$this->itemSelected[$equipment->id]) {
+                        continue;
+                    }
+
+                    $status = $this->itemStatuses[$equipment->id] ?? $this->defaultStatus($equipment);
+                    $this->updateEquipmentStatus($equipment, $status, $rental);
                 }
             }
 
@@ -243,7 +273,75 @@ class Returns extends Component
 
     public function resetForm()
     {
-        $this->reset(['barcode', 'result', 'error', 'activeRental', 'studentRentals', 'returnNotes', 'noteType', 'suggestions', 'showSuggestions']);
+        $this->reset(['barcode', 'result', 'error', 'activeRental', 'studentRentals', 'returnNotes', 'noteType', 'suggestions', 'showSuggestions', 'returnItems', 'itemStatuses', 'itemSelected']);
+    }
+
+    private function loadReturnItems(int $rentalId): void
+    {
+        $this->returnItems = [];
+        $this->itemStatuses = [];
+        $this->itemSelected = [];
+
+        $rental = Rental::with(['equipment', 'equipmentSet.equipments'])->find($rentalId);
+        if (!$rental) {
+            return;
+        }
+
+        if ($rental->equipment) {
+            $defaultStatus = $this->defaultStatus($rental->equipment);
+            $this->returnItems[] = [
+                'id' => $rental->equipment->id,
+                'name' => $rental->equipment->name,
+                'barcode' => $rental->equipment->barcode,
+                'category' => $rental->equipment->category,
+            ];
+            $this->itemStatuses[$rental->equipment->id] = $defaultStatus;
+            $this->itemSelected[$rental->equipment->id] = true;
+        }
+
+        if ($rental->equipmentSet) {
+            foreach ($rental->equipmentSet->equipments as $equipment) {
+                $defaultStatus = $this->defaultStatus($equipment);
+                $this->returnItems[] = [
+                    'id' => $equipment->id,
+                    'name' => $equipment->name,
+                    'barcode' => $equipment->barcode,
+                    'category' => $equipment->category,
+                ];
+                $this->itemStatuses[$equipment->id] = $defaultStatus;
+                $this->itemSelected[$equipment->id] = true;
+            }
+        }
+    }
+
+    private function defaultStatus($equipment): string
+    {
+        $text = strtolower(($equipment->category ?? '') . ' ' . ($equipment->name ?? ''));
+        if (str_contains($text, 'bat') || str_contains($text, 'aku')) {
+            return 'maintenance';
+        }
+
+        return 'available';
+    }
+
+    private function updateEquipmentStatus($equipment, string $status, Rental $rental): void
+    {
+        $allowed = array_keys($this->statusOptions);
+        if (!in_array($status, $allowed)) {
+            $status = 'available';
+        }
+
+        $equipment->update(['status' => $status]);
+
+        if ($this->returnNotes || $this->noteType !== 'info') {
+            EquipmentNote::create([
+                'equipment_id' => $equipment->id,
+                'rental_id' => $rental->id,
+                'note' => $this->returnNotes ?: 'Aktualizacja statusu przy zwrocie',
+                'type' => $this->noteType,
+                'created_by_user_id' => Auth::id(),
+            ]);
+        }
     }
 
     public function render()

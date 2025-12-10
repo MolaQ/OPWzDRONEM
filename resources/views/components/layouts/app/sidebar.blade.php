@@ -126,7 +126,7 @@
 
                 {{-- Sekcja Wyposażenie Pracowni --}}
                 @canany(['equipment.view', 'equipment-sets.view', 'rentals.view'])
-                <div x-data="{ open: {{ request()->routeIs(['admin.rentals', 'admin.returns', 'admin.equipment', 'admin.equipment-sets', 'admin.qr-codes']) ? 'true' : 'false' }} }" class="mb-2">
+                <div x-data="{ open: {{ request()->routeIs(['admin.rentals', 'admin.returns', 'admin.equipment', 'admin.equipment-sets', 'admin.qr-codes', 'admin.equipment.my-reservations', 'admin.equipment.detail']) ? 'true' : 'false' }} }" class="mb-2">
                     <button @click="open = !open" class="flex w-full items-center justify-between px-2 py-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition">
                         <span class="flex items-center gap-2">
                             <svg class="w-4 h-4 text-zinc-600 dark:text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h2l2 10h10l2-10h2M9 7V4h6v3"/></svg>
@@ -142,6 +142,7 @@
                         @endcan
                         @can('equipment.view')
                         <flux:navlist.item icon="cube" :href="route('admin.equipment')" :current="request()->routeIs('admin.equipment')" wire:navigate>Wyposażenie</flux:navlist.item>
+                        <flux:navlist.item icon="calendar" :href="route('admin.equipment.my-reservations')" :current="request()->routeIs('admin.equipment.my-reservations')" wire:navigate>Moje rezerwacje</flux:navlist.item>
                         @endcan
                         @can('equipment-sets.view')
                         <flux:navlist.item icon="cube" :href="route('admin.equipment-sets')" :current="request()->routeIs('admin.equipment-sets')" wire:navigate>Zestawy</flux:navlist.item>
